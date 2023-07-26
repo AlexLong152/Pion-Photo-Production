@@ -39,7 +39,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     Aug-Oct 2016/hgrie Feb 2017: Arman added OQ4 diagrams
 c====================================================================
 
-      subroutine CalcPionPhoto2BAx(Pion2Bxx,factor,
+      subroutine CalcPionPhoto2BAx(PiPhoto2Bx,factor,
      &     Ax,Ay,Az,Sp,S,verbosity)
 c     
 c********************************************************************
@@ -62,7 +62,8 @@ c********************************************************************
 c     
 c     INPUT/OUTPUT VARIABLE:
 c     
-      complex*16 Pion2Bxx(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
+      complex*16 PiPhoto2Bx(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
+      complex*16 PiPhoto2By(0:1,-1:1,0:1,-1:1)
 c     
 c********************************************************************
 c     
@@ -73,7 +74,7 @@ c
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
-c     hold-contains sig1.A sig.2B structure, symmetric part
+c     singlesigma contains (sig_1+sig_2).A structure, symmetric part
 c     factor-contains meson propagator, overall factor
 c     Sp,S-final- and initial-state total spin of pair
 c     
@@ -82,7 +83,7 @@ c
       call singlesigma(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
-            Pion2Bxx(Sp,Msp,S,Ms)=Pion2Bxx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+            PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
          end do
       end do
 c     

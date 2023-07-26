@@ -17,7 +17,7 @@ c     hgrie May 2018: more extensive description of changes in main.*.f
 c                     rewritten such that magnetic quantum numbers are "2*Mz" etc
 c
       subroutine twobodyfinalstatesumsvia2Ndensity(
-     &     Resultxx,Resultxy,Resultyx,Resultyy,
+     &     Resultx,Resulty,
      &     Anucl,twoSnucl,twoMzplimit,j12,m12,l12,s12,t12,mt12,
      &     k,thetacm,
      &     ip12,p12,wp12,
@@ -49,15 +49,14 @@ c
       integer,intent(in) :: Nth12,Nphi12
       integer,intent(in) :: Anucl,twoSnucl,twoMzplimit
 c
-      complex*16,intent(out) :: Resultxx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl),Resultxy(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
-      complex*16,intent(out) :: Resultyx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl),Resultyy(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
+      complex*16,intent(out) :: Resultx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl),Resulty(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
 c      
       integer alpha2N,alpha2Np,rindx
       
       integer mt12p,j12p,s12p,l12p,t12p,m12p ! quantum #s of (12) system -- integer already, so no factor 2
       integer ip12,ip12p
-      complex*16 Int2Bxx,Int2Bxy,Int2Byx,Int2Byy,Int3
-      complex*16 Int2Bx,Int2By,Int2Bpx,Int2Bpy
+c     complex*16 Int2Bxx,Int2Bxy,Int2Byx,Int2Byy
+      complex*16 Int2Bx,Int2By, Int3
       complex*16 Int3x, Int3y, Int3px, Int3py
       complex*16 fact, factx, facty, factpx,factpy,f 
       integer twoMz,twoMzp
@@ -81,8 +80,7 @@ c
                   do ip12p=1,NP12 ! mag of momentum (12) subsystem
 c                    
 c                    write(*,*) "In finalstatesums k=", k
-                     call Calculate2BIntegralI2(Int2Bxx,Int2Bxy,Int2Byx,Int2Byy,
-     &                    Int2Bx,Int2By,Int2Bpx,Int2Bpy,
+                     call Calculate2BIntegralI2(Int2Bx,Int2By,
      &                    j12p,m12p,l12p,s12p,t12p,mt12p,
      &                    j12,m12,l12,s12,t12,mt12,
      &                    p12*HC,P12MAG(ip12p)*HC,th12,
@@ -124,22 +122,24 @@ c     next line replaces Int3 by 2Ndensity ρ
 c     following only for OQ4 -- NOT YET IMPLEMENTED !!!!!!!!!!!!!!!!!!!!!!!!!!!!
                            factx=f*Int3x
                            facty=f*Int3y                                    
-                           factpx=f*Int3px
-                           factpy=f*Int3py
+c                          factpx=f*Int3px
+c                          factpy=f*Int3py
                            
 c                           write(*,*) fact, factx, facty, factpx, factpy
 c                           write(*,*) Int2Bxx, Int2Bxy, Int2Byx, Int2Byy 
 c                           write(*,*) Int2Bpx, Int2Bpy, Int2Bx, Int2By
-                           
-                           Resultxx(twoMzp,twoMz)=Resultxx(twoMzp,twoMz)+fact*Int2Bxx+factx*Int2Bpx+factpx*Int2Bx
-                           Resultyy(twoMzp,twoMz)=Resultyy(twoMzp,twoMz)+fact*Int2Byy+facty*Int2Bpy+factpy*Int2By
+
+c ALong July2023:  Commented out Int2Bpx, which has to do with OQ4 contributions                          
+                           Resultx(twoMzp,twoMz)=Resultx(twoMzp,twoMz)+fact*Int2Bx!+factx*Int2Bpx+factpx*Int2Bx
+                           Resulty(twoMzp,twoMz)=Resulty(twoMzp,twoMz)+fact*Int2By!+facty*Int2Bpy+factpy*Int2By
+c ALong July 2023: Commented all the below out, since its (probably) not relevent for pion photoproduction
 c hgrie Aug 2020: now cure: for Mzp=Mz=0, only calculate xx and yy, since xy and yx must be zero               
-                           if ((twoMzplimit.eq.0).and.(twoMzp.eq.0).and.(twoMz.eq.0)) then
-                              continue
-                           else
-                              Resultxy(twoMzp,twoMz)=Resultxy(twoMzp,twoMz)+fact*Int2Bxy+factx*Int2Bpy+factpy*Int2Bx
-                              Resultyx(twoMzp,twoMz)=Resultyx(twoMzp,twoMz)+fact*Int2Byx+facty*Int2Bpx+factpx*Int2By
-                           end if
+c                          if ((twoMzplimit.eq.0).and.(twoMzp.eq.0).and.(twoMz.eq.0)) then
+c                             continue
+c                          else
+c                             Resultxy(twoMzp,twoMz)=Resultxy(twoMzp,twoMz)+fact*Int2Bxy+factx*Int2Bpy+factpy*Int2Bx
+c                             Resultyx(twoMzp,twoMz)=Resultyx(twoMzp,twoMz)+fact*Int2Byx+facty*Int2Bpx+factpx*Int2By
+c                          end if
 c      end cure
                         end do  !twoMz
                      end do     !twoMzp

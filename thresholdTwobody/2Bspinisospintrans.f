@@ -1,7 +1,7 @@
 c     hgrie Aug 2020: v1.0 fewbody-Compton
 c     new Aug 2020, based on 3He density codes with the following datings/changes:
 
-      subroutine Calc2Bspinisospintrans(Pion2Bx,Pion2By,
+      subroutine Calc2Bspinisospintrans(PiPhoto2Bx,PiPhoto2By,
      &     t12,mt12,t12p,mt12p,l12,s12,
      &     l12p,s12p,thetacm,k,px,py,pz,ppx,ppy,ppz,calctype,Mnucl,verbosity)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -52,17 +52,17 @@ c
       include '../common-densities/params.def'
       include '../common-densities/calctype.def'
 c     Only care about neutral pion photoproduction 
-      complex*16,intent(out) :: Pion2By(0:1,-1:1,0:1,-1:1)
-      complex*16,intent(out) :: Pion2Bx(0:1,-1:1,0:1,-1:1)
+      complex*16,intent(out) :: PiPhoto2By(0:1,-1:1,0:1,-1:1)
+      complex*16,intent(out) :: PiPhoto2Bx(0:1,-1:1,0:1,-1:1)
 
-c     complex*16,intent(out) :: Pion2Bxx(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: Pion2Bxy(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: Pion2Byx(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: Pion2Byy(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: Pion2Bx(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: Pion2By(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: Pion2Bpx(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: Pion2Bpy(0:1,-1:1,0:1,-1:1)
+c     complex*16,intent(out) :: PiPhoto2Bxx(0:1,-1:1,0:1,-1:1)
+c     complex*16,intent(out) :: PiPhoto2Bxy(0:1,-1:1,0:1,-1:1)
+c     complex*16,intent(out) :: PiPhoto2Byx(0:1,-1:1,0:1,-1:1)
+c     complex*16,intent(out) :: PiPhoto2Byy(0:1,-1:1,0:1,-1:1)
+c     complex*16,intent(out) :: PiPhoto2Bx(0:1,-1:1,0:1,-1:1)
+c     complex*16,intent(out) :: PiPhoto2By(0:1,-1:1,0:1,-1:1)
+c     complex*16,intent(out) :: PiPhoto2Bpx(0:1,-1:1,0:1,-1:1)
+c     complex*16,intent(out) :: PiPhoto2Bpy(0:1,-1:1,0:1,-1:1)
 c     
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     Note that Comp2Bab computes the amplitude for polarization a->polarization b
@@ -84,15 +84,15 @@ c
       real*8 qpppx,qpppy,qpppz,qppp12x,qppp12y,qppp12z
       real*8 qpppsq,qppp12sq
       real*8 dl12by2
-      real*8 factorA,factorB,factorC,factorD,factorE
+      real*8 factorA!,factorB,factorC,factorD,factorE
       real*8 factorAasy,factorC12,factorD12,factorE12
-      real*8 factorfg, factorfg12, factorfg2
-      real*8 factorfg212, factorhi, factorhi12
-      real*8 factorhi2, factorhi212        
-      real*8 factorjm, factorjm12, factorno, factorno12  
+c     real*8 factorfg, factorfg12, factorfg2
+c     real*8 factorfg212, factorhi, factorhi12
+c     real*8 factorhi2, factorhi212        
+c     real*8 factorjm, factorjm12, factorno, factorno12  
       real*8 K2n
       real*8 mPion
-      real*8 denom(0:3)
+      real*8 q(3), kp(3)
 c     
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     
@@ -122,23 +122,28 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     
 c     First a little initialization:
 c     
-      Pion2Bx=c0
-      Pion2By=c0
-c     Pion2Bpx=c0
-c     Pion2Bpy=c0
+      PiPhoto2Bx=c0
+      PiPhoto2By=c0
+c     PiPhoto2Bpx=c0
+c     PiPhoto2Bpy=c0
       dl12by2=(l12-l12p)/2.d0   !to check if l12-l12p is  even or odd
 c     
 c     Calculate momenta q,q',q':
 c     
-      call calculateqs(qx,qy,qz,q12x,q12y,q12z,qpx,qpy,qpz,
-     &     qp12x,qp12y,qp12z,qppx,qppy,qppz,qpp12x,qpp12y,qpp12z,
-     &     qpppx,qpppy,qpppz,qppp12x,qppp12y,qppp12z,
-     &     qsq,qpsq,qppsq,qpppsq,q12sq,qp12sq,qpp12sq,qppp12sq,px,py,pz,
-     &     ppx,ppy,ppz,
-     &     k,thetacm,verbosity)
+c     call calculateqs(qx,qy,qz,q12x,q12y,q12z,qpx,qpy,qpz,
+c    &     qp12x,qp12y,qp12z,qppx,qppy,qppz,qpp12x,qpp12y,qpp12z,
+c    &     qpppx,qpppy,qpppz,qppp12x,qppp12y,qppp12z,
+c    &     qsq,qpsq,qppsq,qpppsq,q12sq,qp12sq,qpp12sq,qppp12sq,px,py,pz,
+c    &     ppx,ppy,ppz,
+c    &     k,thetacm,verbosity)
 
       mPion=134.97
-      call calculateqsmass(px,py,pz,ppx,ppy,ppz,k,thetacm,mPion,mNucl,verbosity)
+      write(*,*) "######################################################################"
+      write(*,*) ""
+      call calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,kp,thetacm,mPion,mNucl,verbosity)
+      write(*,*) "In 2Bspinisospintrans.f DOT_PRODUCT(q,q)=", DOT_PRODUCT(q,q)
+      write(*,*) ""
+      write(*,*) "######################################################################"
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     OQ3 MEC contributions
@@ -151,9 +156,6 @@ c     This is the only piece at OQ3.
 c     
 c     Define overall factors for spin-symmetric parts of matrix element
 c     
-         factorA=(-1)**(t12)*4.d0*Pi*gafac*0.5*
-     &        (1.d0/(k**2 - mpi2 - qsq)+
-     &        1.d0/(k**2 - mpi2 - q12sq))
          K2n=0.135*0.001 !in pion mass units
 c   denom = (p12 - p12' +k_gamma/2)^2 =denomVec^2
 c   denomVec = (k1-k2 + k2p-k1p+k_gamma)/2
@@ -164,8 +166,10 @@ c   \frac{3}{2} * epsilon \cdot(\vec{\sigma}_1  + \vec{sigma_2}) (\vec{\tau_1} \
 c   In the documentation they dont distinguish between k1 and k2
 c   
 c   In my derivation I just got 1/q^2 at threshold
-
-         factorA =1.5* K2n/qsq
+        if(DOT_PRODUCT(q,q).le.0.0001) then
+            write(*,*) "q is really small"
+        end if 
+        factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
 
 c     
 c     Note that factorE, factorE12 only work if used in concert with factor B
@@ -176,20 +180,20 @@ c
 c     Calculate two-body diagram A, symmetric part
 c     
 c----------------------------------------------------------------------
-            call CalcPionPhoto2BAx(Pion2Bx,factorA,
+            call CalcPionPhoto2BAx(PiPhoto2Bx,factorA,
      &           1.d0,0.d0,0.d0,s12p,s12,verbosity)
-            call CalcPionPhoto2BAy(Pion2Bx,factorA,
+            call CalcPionPhoto2BAy(PiPhoto2By,factorA,
      &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
-c           call CalcPionPhoto2BAxx(Pion2Bxx,factorA,
+c           call CalcPionPhoto2BAxx(PiPhoto2Bxx,factorA,
 c    &           1.d0,0.d0,0.d0,dcos(thetacm),0.d0
 c    &           ,-dsin(thetacm),s12p,s12,verbosity)
-c           call CalcPionPhoto2BAxy(Pion2Bxy,factorA,
+c           call CalcPionPhoto2BAxy(PiPhoto2Bxy,factorA,
 c    &           1.d0,0.d0,0.d0,0.d0,1.d0,0.d0,
 c    &           s12p,s12,verbosity)
-c           call CalcPionPhoto2BAyx(Pion2Byx,factorA,
+c           call CalcPionPhoto2BAyx(PiPhoto2Byx,factorA,
 c    &           0.d0,1.d0,0.d0,dcos(thetacm),0.d0,
 c    &           -dsin(thetacm),s12p,s12,verbosity)
-c           call CalcPionPhoto2BAyy(Pion2Byy,factorA,
+c           call CalcPionPhoto2BAyy(PiPhoto2Byy,factorA,
 c    &           0.d0,1.d0,0.d0,0.d0,1.d0,0.d0,
 c    &           s12p,s12,verbosity)
 c----------------------------------------------------------------------
@@ -207,20 +211,17 @@ c
 c     Calculate two-body diagram A, anti-symmetric part
 c     
 c----------------------------------------------------------------------
-c           factorAasy=(-1)**(t12)*4.d0*Pi*gafac*0.5*
-c    &           (1.d0/(k**2 - mpi2 - qsq)-
-c    &           1.d0/(k**2 - mpi2 - q12sq))
+            factorAasy=factorA
 c           
-c           call CalcPionPhoto2BAxxasy(Pion2Bx,factorAasy,
-c    &           1.d0,0.d0,0.d0,dcos(thetacm),0.d0
-c    &           ,-dsin(thetacm),s12p,s12,verbosity)
-c           call CalcPionPhoto2BAxyasy(Pion2Bxy,factorAasy,
+            call CalcPionPhoto2BAxasy(PiPhoto2Bx,factorAasy,
+     &           1.d0,0.d0,0.d0,s12p,s12,verbosity)
+c           call CalcPionPhoto2BAxyasy(PiPhoto2Bxy,factorAasy,
 c    &           1.d0,0.d0,0.d0,0.d0,1.d0,0.d0,
 c    &           s12p,s12,verbosity)
-c           call CalcPionPhoto2BAyxasy(Pion2Byx,factorAasy,
+c           call CalcPionPhoto2BAyxasy(PiPhoto2Byx,factorAasy,
 c    &           0.d0,1.d0,0.d0,dcos(thetacm),0.d0,
 c    &           -dsin(thetacm),s12p,s12,verbosity)
-c           call CalcPionPhoto2BAyyasy(Pion2Byy,factorAasy,
+c           call CalcPionPhoto2BAyyasy(PiPhoto2Byy,factorAasy,
 c    &           0.d0,1.d0,0.d0,0.d0,1.d0,0.d0,
 c    &           s12p,s12,verbosity)
          end if                 ! s12 question

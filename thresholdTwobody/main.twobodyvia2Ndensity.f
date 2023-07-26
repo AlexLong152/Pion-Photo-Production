@@ -194,8 +194,7 @@ c     Value twoMzplimit = -twoSnucl calculates all amplitudes
 
       real*8 frac
 
-      complex*16, allocatable :: Resultxx(:,:),Resultxy(:,:) ! twoMz from -twoSnucl to twoSnucl, stepsize 2; rest blank.
-      complex*16, allocatable :: Resultyx(:,:),Resultyy(:,:) ! twoMz from -twoSnucl to twoSnucl, stepsize 2; rest blank.
+      complex*16, allocatable :: Resultx(:,:),Resulty(:,:) ! twoMz from -twoSnucl to twoSnucl, stepsize 2; rest blank.
 c     That means arrays are less than 2^2=4 times bigger than need be, but that's ok since quite small anyway. 
       
       logical cartesian         ! hgrie Oct 2014: for output in Cartesian basis of photon polarisations
@@ -354,14 +353,18 @@ c**********************************************************************
 c**********************************************************************
 c     be a good boy and initialise everything to 0, overwriting entries from previous ω/θ
 c**********************************************************************
-            allocate(Resultxx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
-            allocate(Resultxy(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
-            allocate(Resultyx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
-            allocate(Resultyy(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
-            Resultxx=c0
-            Resultxy=c0
-            Resultyx=c0
-            Resultyy=c0
+            allocate(Resultx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
+            allocate(Resulty(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
+c           allocate(Resultxx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
+c           allocate(Resultxy(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
+c           allocate(Resultyx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
+c           allocate(Resultyy(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
+            Resultx=c0
+            Resulty=c0
+c           Resultxx=c0
+c           Resultxy=c0
+c           Resultyx=c0
+c           Resultyy=c0
 c**********************************************************************
 c     hgrie June 2017: create name of 1Ndensity file for given energy and angle, unpack it
 c     define correct formats for energy and angle
@@ -396,7 +399,7 @@ c**********************************************************************
                         do m12=-j12,j12             ! spin projection (12)
                            do ip12=1,NP12           ! integration over momentum magnitude (12)
                               call twobodyfinalstatesumsvia2Ndensity(
-     &                             Resultxx,Resultxy,Resultyx,Resultyy,
+     &                             Resultx,Resulty,
      &                             Anucl,twoSnucl,twoMzplimit,j12,m12,l12,s12,t12,mt12,
      &                             k,thetacm,
      &                             ip12,P12MAG(ip12),AP12MAG(ip12),     
@@ -419,26 +422,27 @@ c         for Mzp=0, run only over Mz>=0 -- that's still 2 more than necessary, 
                      twoMzlimit = -twoSnucl
                   end if   
                   do twoMz=twoSnucl,twoMzlimit,-2
-                     write (*,*) "Resultxx(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultxx(twoMzp,twoMz)
+c                    write (*,*) "Resultx(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultx(twoMzp,twoMz)
 c hgrie Aug 2020: now cure: for Mzp=Mz=0, only calculate xx and yy, since xy and yx must be zero               
                      if ((twoMzplimit.eq.0).and.(twoMzp.eq.0).and.(twoMz.eq.0)) then
                         continue
                      else
-                        write (*,*) "Resultxy(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultxy(twoMzp,twoMz)
-                        write (*,*) "Resultyx(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultyx(twoMzp,twoMz)
+                        write (*,*) "Resultx(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultx(twoMzp,twoMz)
+                        write (*,*) "Resulty(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resulty(twoMzp,twoMz)
                      end if
 c      end cure
-                     write (*,*) "Resultyy(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultyy(twoMzp,twoMz)
+c                    write (*,*) "Resultyy(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultyy(twoMzp,twoMz)
                   end do
                end do
             end if
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     hgrie May 2018: symmetry and output
+c     TODO: rewrite output routine
             call outputroutine(outUnitno,cartesian,twoSnucl,twoMzplimit,
-     &           Resultxx,Resultxy,Resultyx,Resultyy,verbosity)
+     &           Resultx,Resulty,Resultx,Resulty,verbosity)
             
 c     be a good boy and deallocate arrays. Compilers do that automatically for simple programs. Better safe than sorry.
-            deallocate (Resultxx,Resultxy,Resultyx,Resultyy, STAT=test ) ! test becomes nonzero if this fails
+            deallocate (Resultx,Resulty, STAT=test ) ! test becomes nonzero if this fails
             if (test .ne. 0) stop "*** ERROR: Arrays ResultAB: Deallocation error. Abort."
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
