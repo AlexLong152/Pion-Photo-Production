@@ -436,10 +436,9 @@ c                    write (*,*) "Resultyy(twoMzp=",twoMzp,", twoMz=",twoMz,"): 
                end do
             end if
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c     hgrie May 2018: symmetry and output
-c     TODO: rewrite output routine
+c      found in usesymmetry+writeoutput-densities.f
             call outputPiPhoto(outUnitno,cartesian,twoSnucl,twoMzplimit,
-     &           Resultx,Resulty,verbosity)
+     &           Resultx,Resulty,verbosity) 
             
 c     be a good boy and deallocate arrays. Compilers do that automatically for simple programs. Better safe than sorry.
             deallocate (Resultx,Resulty, STAT=test ) ! test becomes nonzero if this fails
