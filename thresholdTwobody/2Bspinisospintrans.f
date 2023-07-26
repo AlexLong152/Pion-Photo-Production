@@ -138,12 +138,7 @@ c    &     ppx,ppy,ppz,
 c    &     k,thetacm,verbosity)
 
       mPion=134.97
-      write(*,*) "######################################################################"
-      write(*,*) ""
       call calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,kp,thetacm,mPion,mNucl,verbosity)
-      write(*,*) "In 2Bspinisospintrans.f DOT_PRODUCT(q,q)=", DOT_PRODUCT(q,q)
-      write(*,*) ""
-      write(*,*) "######################################################################"
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     OQ3 MEC contributions
@@ -228,6 +223,6 @@ c    &           s12p,s12,verbosity)
       end if                    !t12 question
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-      return 
+      return
       if (verbosity.eq.1000) continue
       end

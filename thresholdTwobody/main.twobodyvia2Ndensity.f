@@ -347,9 +347,9 @@ c     hgrie Sep 2014: if thetaL is ZERO degrees, actual calculated at 1 Degree
 c**********************************************************************
             call calcphotonmomenta(k,kth,kphi,t,kp,kpth,kpphi,omega,
      &           Qk,Qkth,Qkphi,kgamma,thetacm,verbosity)
-            write(*,*) "In main"
-            write(*,*) "Egamma=", Egamma
-            write(*,*) "k=", k
+c           write(*,*) "In main"
+c           write(*,*) "Egamma=", Egamma
+c           write(*,*) "k=", k
 c**********************************************************************
 c     be a good boy and initialise everything to 0, overwriting entries from previous ω/θ
 c**********************************************************************
@@ -438,8 +438,8 @@ c                    write (*,*) "Resultyy(twoMzp=",twoMzp,", twoMz=",twoMz,"): 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     hgrie May 2018: symmetry and output
 c     TODO: rewrite output routine
-            call outputroutine(outUnitno,cartesian,twoSnucl,twoMzplimit,
-     &           Resultx,Resulty,Resultx,Resulty,verbosity)
+c           call outputroutine(outUnitno,cartesian,twoSnucl,twoMzplimit,
+c    &           Resultx,Resulty,Resultx,Resulty,verbosity)
             
 c     be a good boy and deallocate arrays. Compilers do that automatically for simple programs. Better safe than sorry.
             deallocate (Resultx,Resulty, STAT=test ) ! test becomes nonzero if this fails
