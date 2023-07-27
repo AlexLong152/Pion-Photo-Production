@@ -436,7 +436,7 @@ c                    write (*,*) "Resultyy(twoMzp=",twoMzp,", twoMz=",twoMz,"): 
                end do
             end if
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c      found in usesymmetry+writeoutput-densities.f
+c      found in usesymmetry+writeoutput-densities.f, and calls outputtomathPiPhoto found in 
             call outputPiPhoto(outUnitno,cartesian,twoSnucl,twoMzplimit,
      &           Resultx,Resulty,verbosity) 
             

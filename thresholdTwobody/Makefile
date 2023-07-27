@@ -118,10 +118,6 @@ FFLAGS= -O -fopenmp -g -c -Wall -Wno-tabs -ffixed-line-length-132  \
 	-ffpe-summary=none  -mcmodel=large \
  	-I../common-densities/density-modules -I../common-densities -I /usr/include 
 
-# FFLAGS= -O -fopenmp -g -c -Wall -Wno-tabs -ffixed-line-length-132  \
-# 	-ffpe-summary=none  -mcmodel=large \
-# 	-I../common-densities/density-modules -I../common-densities -I /usr/include/
-
 # library for density
      LIBSTD1 = -L../common-densities/density-modules -ldensity
      LIBSTD2 = -llapack
@@ -152,6 +148,7 @@ all: $(MODS) MODFILES $(COMMAND)
 $(COMMAND):	$(OBJS)
 	$(CFT) -o $(COMMAND) $(OBJS) $(MODS) $(LDFLAGS) $(LIBS) 
 	chmod go+x $(COMMAND)
+
 
 #
 # INCLUDE DEPENDENCIES: Dependencies on include files, Edit as needed.  
@@ -184,6 +181,9 @@ global:
 	$(CFT) $(O3FFLAGS) -o $(COMMAND) $(SRCS) $(LDFLAGS) $(LIBS) 
 	chmod go+x $(COMMAND)
  
+# debugmake:
+# 	$(CFT) $(FFLAGSDEBUG) $(COMMAND) $(SRCS) $(LDFLAGS) $(LIBS) 
+# 	chmod go+x $(COMMAND)
 # tar -- makefile is name of this makefile.
 # choice 1) tar everything of use in THIS directory.
 # choice 2) tar files related to COMMAND, from whatever directory.
