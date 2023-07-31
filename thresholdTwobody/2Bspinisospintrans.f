@@ -84,8 +84,9 @@ c
       real*8 qpppx,qpppy,qpppz,qppp12x,qppp12y,qppp12z
       real*8 qpppsq,qppp12sq
       real*8 dl12by2
-      real*8 factorA!,factorB,factorC,factorD,factorE
-      real*8 factorAasy,factorC12,factorD12,factorE12
+      real*8 factorA,factorB!,factorC,factorD,factorE
+      real*8 factorAasy, factorBasy
+      real*8 Bnumer
 c     real*8 factorfg, factorfg12, factorfg2
 c     real*8 factorfg212, factorhi, factorhi12
 c     real*8 factorhi2, factorhi212        
@@ -152,19 +153,12 @@ c
 c     Define overall factors for spin-symmetric parts of matrix element
 c     
          K2n=0.135*0.001 !in pion mass units
-c   denom = (p12 - p12' +k_gamma/2)^2 =denomVec^2
-c   denomVec = (k1-k2 + k2p-k1p+k_gamma)/2
 
-c   DiagramA, Lenkewitz
-c   ---------------
-c   \frac{3}{2} * epsilon \cdot(\vec{\sigma}_1  + \vec{sigma_2}) (\vec{\tau_1} \cdot \vec{\tau_2} - \tau_1^z \tau_2^z)/denomVec^22
-c   In the documentation they dont distinguish between k1 and k2
 c   
 c   In my derivation I just got 1/q^2 at threshold
-        if(DOT_PRODUCT(q,q).le.0.0001) then
-            write(*,*) "q is really small"
-        end if 
-        factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
+c       if(DOT_PRODUCT(q,q).le.0.0001) then
+c           write(*,*) "q is really small"
+c       end if 
 
 c     
 c     Note that factorE, factorE12 only work if used in concert with factor B
@@ -174,31 +168,46 @@ c----------------------------------------------------------------------
 c     
 c     Calculate two-body diagram A, symmetric part
 c     
+c     DiagramA, Lenkewitz
+c     ---------------
+c     &F_{T/L}^{(a)} \vec{\epsilon}_{\lambda,\text{T/L}}\cdot\vec{S}=
+c     &= \frac{3}{2}  \langle M_J'|
+c     \frac{
+c     \vec{\epsilon}_{\lambda,\text{T/L}}\cdot (\vec \sigma_1 + \vec \sigma_2)}{
+c     \left(\vec{p}_{12}-\vec{p}_{12}^{\;\prime}+\vec{k}_\gamma/2\right)^2}}
+c     | M_J\rangle
+c     In the documentation they dont distinguish between k1 and k2
+c     In my derivation (Alex Long) though I just got 1/q^2
 c----------------------------------------------------------------------
+            factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
             call CalcPionPhoto2BAx(PiPhoto2Bx,factorA,
      &           1.d0,0.d0,0.d0,s12p,s12,verbosity)
             call CalcPionPhoto2BAy(PiPhoto2By,factorA,
      &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
-c           call CalcPionPhoto2BAxx(PiPhoto2Bxx,factorA,
-c    &           1.d0,0.d0,0.d0,dcos(thetacm),0.d0
-c    &           ,-dsin(thetacm),s12p,s12,verbosity)
-c           call CalcPionPhoto2BAxy(PiPhoto2Bxy,factorA,
-c    &           1.d0,0.d0,0.d0,0.d0,1.d0,0.d0,
-c    &           s12p,s12,verbosity)
-c           call CalcPionPhoto2BAyx(PiPhoto2Byx,factorA,
-c    &           0.d0,1.d0,0.d0,dcos(thetacm),0.d0,
-c    &           -dsin(thetacm),s12p,s12,verbosity)
-c           call CalcPionPhoto2BAyy(PiPhoto2Byy,factorA,
-c    &           0.d0,1.d0,0.d0,0.d0,1.d0,0.d0,
-c    &           s12p,s12,verbosity)
 c----------------------------------------------------------------------
 c     
 c     Calculate two-body diagram B, symmetric part
-c     
+
+c     Diagram B Lenkewtiz
+c     -------------------------------------------------
+c     F_{T/L}^{(b)} \vec{\epsilon}_{\lambda,\text{T/L}}\cdot\vec{S}_{M_J^\prime  M_J} =3 \langle M_J' |
+c     \frac{
+c     (\vec{p}_{12}-\vec{p}_{12}^{\prime}-\vec{k}_\gamma/2)\cdot (\vec \sigma_1 + \vec \sigma_2 )\vec{\epsilon}\cdot (\vec{p}_{12}-\vec{p}_{12}^{\;\prime})
+c     }
+c     { \\denom of fraction
+c     [(\vec{p}_{12}-\vec{p}_{12}^{\;\prime}- \vec{k}_\gamma/2 )^2+M_\pi^2 ]
+c     \big[\vec{p}_{12}-\vec{p}_{12}^{\;\prime}+\vec{k}_\gamma/2 \big]^2
+c     } 
+c     |M_J\rangle_\psi,
 c----------------------------------------------------------------------
-c           call CalcCompton2BB(Comp2Bxx,Comp2Byy,
-c    &           factorB,thetacm,qpx,qpy,qpz,qppx,qppy,qppz,
-c    &           s12p,s12,verbosity)     
+
+c           call CalcPionPhoto2Bx(PiPhoto2By,factorA,
+c    &           1.d0,0.d0,0.d0,s12p,s12,verbosity)
+c           call CalcPionPhoto2By(PiPhoto2By,factorA,
+c    &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c       BEING ASYMMETRIC PART
          else                   !l12-l12p is odd;  s12-s12p=+/- 1 => spin asymmetric part of operator.               
 ************************************************************************************************
 c----------------------------------------------------------------------
@@ -210,15 +219,18 @@ c----------------------------------------------------------------------
 c           
             call CalcPionPhoto2BAxasy(PiPhoto2Bx,factorAasy,
      &           1.d0,0.d0,0.d0,s12p,s12,verbosity)
-c           call CalcPionPhoto2BAxyasy(PiPhoto2Bxy,factorAasy,
-c    &           1.d0,0.d0,0.d0,0.d0,1.d0,0.d0,
-c    &           s12p,s12,verbosity)
-c           call CalcPionPhoto2BAyxasy(PiPhoto2Byx,factorAasy,
-c    &           0.d0,1.d0,0.d0,dcos(thetacm),0.d0,
-c    &           -dsin(thetacm),s12p,s12,verbosity)
-c           call CalcPionPhoto2BAyyasy(PiPhoto2Byy,factorAasy,
-c    &           0.d0,1.d0,0.d0,0.d0,1.d0,0.d0,
-c    &           s12p,s12,verbosity)
+            
+            call CalcPionPhoto2BAyasy(PiPhoto2Bx,factorAasy,
+     &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
+
+c----------------------------------------------------------------------
+c     
+c     Calculate two-body diagram B, anti-symmetric part
+c     
+c----------------------------------------------------------------------
+c           Bnumer=
+c           call CalcPionPhoto2BAyasy(PiPhoto2Bx,factorAasy,
+c    &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
          end if                 ! s12 question
       end if                    !t12 question
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

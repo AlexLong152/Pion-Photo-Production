@@ -453,12 +453,14 @@ c     temporary variables
     
       real*8 Epion, mandalS, ENuc, kpsq, kpAbs
       real*8 pp(3), kp(3), q(3), p(3)
+      real*8 k1(3), k2(3), k1p(3),k2p(3), kVec(3)
+      real*8 p12(3), p12p(3)
       real*8 qx,qy,qz
 
 c**********************************************************************      
 c
-c s =(p+k)^2=[(E_nuc, 0,0,-omega) + (omega, 0,0,omega)]^2
-c s = (E_nuc+omega)^2
+c     s =(p+k)^2=[(E_nuc, 0,0,-omega) + (omega, 0,0,omega)]^2
+c     s = (E_nuc+omega)^2
 c     mpi and mpi0 are pion mass in MeV defined in ../common-densities/constants.def
 c     Internal Variables first     
 c     write(*,*) "In calcmomenta, k=",k
@@ -466,16 +468,19 @@ c     write(*,*) "In calcmomenta, k=",k
       mandalS=(ENuc + k)**2 !lab frame
       kpsq=(((mandalS+mPion**2-Mnucl**2)**2)/(4*mandalS))-mPion**2
       kpAbs=sqrt(kpsq)
-      kp=(/0.d0,kpAbs*sin(thetacm), kpAbs*cos(thetacm)/)
 
-c     Variables for return
+      kVec=(/0.d0,0.d0,REAL(k,8)/)
+      kp=(/0.d0,kpAbs*sin(thetacm), kpAbs*cos(thetacm)/)
       p=(/px,py,pz/)
       pp=(/ppx,ppy,ppz/)
-
-      qx=px - ppx + k*dsin(thetacm)/2.d0
-      qy=py - ppy
-      qz=pz - ppz + k*(1.d0 + dcos(thetacm))/2.d0
-      q= (/qx,qy,qz/)
+      k1=p-(kVec/2)
+      k2=(-1*p)-(kVec/2)
+      k1p=pp-kp/2
+      k2p=(-1*pp)-kp/2
+c     qx=px - ppx + k*dsin(thetacm)/2.d0
+c     qy=py - ppy
+c     qz=pz - ppz + k*(1.d0 + dcos(thetacm))/2.d0
+      q = (p-pp)+((kVec+kp)/2)
 c     write(*,*) "#################################################################################"
 c     write(*,*) "In calcmomenta kpAbs=", kpAbs
 c     write(*,*) "In calcmomenta q=", q

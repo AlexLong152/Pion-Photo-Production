@@ -69,6 +69,57 @@ c
       if (verbosity.eq.1000) continue
       return
       end
+
+      subroutine CalcPionPhoto2BAyasy(PiPhoto2Bx,factor,
+     &     Ax,Ay,Az,Sp,S,verbosity)
+c     
+c********************************************************************
+c     
+c     Calculates anti-symmetric part of diagram A for x->x.
+c     
+c     Indices in Comp2Bab are that first index gives NN spin state:
+c     S=0 or S=1, second index gives spin projection. This is for final
+c     state. Third and fourth indices give same for initial state. 
+c     
+c********************************************************************
+c     
+      implicit none
+c     
+c********************************************************************
+c     
+      include '../common-densities/constants.def'
+c     
+c********************************************************************
+c     
+c     INPUT/OUTPUT VARIABLE:
+c     
+      complex*16 PiPhoto2Bx(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
+c     
+c********************************************************************
+c     
+c     INPUT VARIABLES:
+c     
+      real*8 factor
+      real*8 Ax,Ay,Az,Bx,By,Bz
+      integer Ms,Msp,Sp,S
+      integer verbosity
+c     
+c     singlesigma contains (sig_1+sig_2).A structure, antisymmetric part
+c     factor-contains meson propagator, overall factor
+c     Sp,S-final- and initial-state total spin of pair: 0 or 1
+c     
+c********************************************************************
+c     
+      call singlesigmaasy(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
+      do Msp=-Sp,Sp
+         do Ms=-S,S
+            PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+         end do
+      end do
+c     
+      if (verbosity.eq.1000) continue
+      return
+      end
 c
 c
       subroutine Calcholdasy(hold,Ax,Ay,Az,Bx,By,Bz,factor,Sp,S,verbosity)   
