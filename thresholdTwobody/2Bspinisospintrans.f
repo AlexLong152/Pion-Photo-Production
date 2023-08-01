@@ -81,6 +81,7 @@ c
       real*8 K2n
       real*8 mPion
       real*8 q(3), kp(3)
+      real*8 eps(3)
 c     
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     
@@ -126,7 +127,8 @@ c    &     ppx,ppy,ppz,
 c    &     k,thetacm,verbosity)
 
       mPion=134.97
-      call calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,kp,thetacm,mPion,mNucl,verbosity)
+      call calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,kp, q1,q2
+      &    thetacm,mPion,mNucl,verbosity)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     OQ3 MEC contributions
@@ -143,9 +145,9 @@ c
 
 c   
 c   In my derivation I just got 1/q^2 at threshold
-        if(DOT_PRODUCT(q,q).le.0.0001) then
-            write(*,*) "q is really small"
-        end if 
+c       if(DOT_PRODUCT(q,q).le.0.0001) then
+c           write(*,*) "q is really small"
+c       end if 
 
 c     
 c     Note that factorE, factorE12 only work if used in concert with factor B
@@ -181,7 +183,7 @@ c     Diagram B Lenkewtiz
 c     -------------------------------------------------
 c     F_{T/L}^{(b)} \vec{\epsilon}_{\lambda,\text{T/L}}\cdot\vec{S}_{M_J^\prime  M_J} =3 \langle M_J' |
 c     \frac{
-c     (\vec{p}_{12}-\vec{p}_{12}^{\prime}-\vec{k}_\gamma/2)\cdot (\vec \sigma_1 + \vec \sigma_2 )\vec{\epsilon}\cdot (\vec{p}_{12}-\vec{p}_{12}^{\;\prime})
+c     (\vec{p}_{12}-\vec{p}_{12}'-\vec{k}_\gamma/2)\cdot (\vec\sigma_1 + \vec\sigma_2)\vec{\epsilon}\cdot(\vec{p}_{12}-\vec{p}_{12}')
 c     }
 c     { \\denom of fraction
 c     [(\vec{p}_{12}-\vec{p}_{12}^{\;\prime}- \vec{k}_\gamma/2 )^2+M_\pi^2 ]
@@ -189,12 +191,16 @@ c     \big[\vec{p}_{12}-\vec{p}_{12}^{\;\prime}+\vec{k}_\gamma/2 \big]^2
 c     } 
 c     |M_J\rangle_\psi,
 c----------------------------------------------------------------------
+            eps=(/1.d0,0.d0,0.d0/)
+            factorB=((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q2)/(
+     &          (DOT_PRODUCT(q1,q1)+mPion**2)*(DOT_PRODUCT(q2,q2)))
 
-c           call CalcPionPhoto2Bx(PiPhoto2By,factorA,
-c    &           1.d0,0.d0,0.d0,s12p,s12,verbosity)
-c           call CalcPionPhoto2By(PiPhoto2By,factorA,
-c    &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+            call CalcPionPhoto2BB(Pion2Bx,factor,eps,
+     &             q1,Sp,S,verbosity)
+
+            eps=(/0.d0,1.d0,0.d0/)
+            call CalcPionPhoto2BB(Pion2By,factor,eps,
+     &             q1,Sp,S,verbosity)
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c        BEGIN ASYMMETRIC PART
          else                   !l12-l12p is odd;  s12-s12p=+/- 1 => spin asymmetric part of operator.               
