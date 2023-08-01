@@ -98,6 +98,9 @@ c
 c*********************************************************************
       integer NP12A,NP12B,NP12
       real*8  P12A,P12B,P12C
+      real*8 mPion
+      real*8 tmpRandom
+      real*8 omegaThreshold
       real*8 P12MAG(Npmax),AP12MAG(Npmax)
 c     
 c**********************************************************************
@@ -213,10 +216,11 @@ c     end OF VARIABLE DECLARATIONS, BEGINNING OF CODING
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       write(*,*) 
-      write(*,*) "================================================================================"
-      write(*,*) "Twobody Contributions to Few-Nucleon Compton Scattering Calculated Via 2N-Density Matrix"
-      write(*,*) "================================================================================"
-      write(*,*) "   Version 1.0"
+      write(*,*) "==================================================================================================="
+      write(*,*) "Twobody Contributions to Few-Nucleon Neutral Pion photoproduction Calculated Via 2N-Density Matrix"
+      write(*,*) "==================================================================================================="
+      write(*,*) "Alexander Long started 2023, modified from Compton scattering"
+      write(*,*) "   Compton code Version 1.0"
       write(*,*) "      D. Phillips/A. Nogga/hgrie starting August 2020   "
       write(*,*) "      based on 3He codes: D. Phillips/A. Nogga/hgrie starting May 2018"
       write(*,*) "                          D. Phillips/B. Strasberg/hgrie starting June 2014"
@@ -301,6 +305,9 @@ c     Set up angular quadratures for (12) integration
 c**********************************************************************
       open(unit=outUnitno, file=outfile,iostat=test)
       if (test .ne. 0) stop "*** ERROR: Could not open output file!!! Aborting."
+      
+      mPion=134.97
+      omegaThreshold=(mPion*(mPion+2*Mnucl))/(2*(mPion+Mnucl))
 c**********************************************************************
 c     Loop over Energies
 c**********************************************************************
@@ -350,21 +357,22 @@ c**********************************************************************
 c           write(*,*) "In main"
 c           write(*,*) "Egamma=", Egamma
 c           write(*,*) "k=", k
+
+c           if (k.lt.omegaThreshold) stop "Energy is below pion photoproduction threshold"
+            if (k.lt.omegaThreshold) then
+                write(*,*) "Below Pion photoproduction threshold, should abort"
+                write(*,*) "Continuing with threshold energy instead for debugging"
+                call RANDOM_NUMBER(tmpRandom)
+                k=omegaThreshold*(1+tmpRandom)
+                write(*,*) "Assigned k=", k
+            end if
 c**********************************************************************
 c     be a good boy and initialise everything to 0, overwriting entries from previous ω/θ
 c**********************************************************************
             allocate(Resultx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
             allocate(Resulty(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
-c           allocate(Resultxx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
-c           allocate(Resultxy(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
-c           allocate(Resultyx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
-c           allocate(Resultyy(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
             Resultx=c0
             Resulty=c0
-c           Resultxx=c0
-c           Resultxy=c0
-c           Resultyx=c0
-c           Resultyy=c0
 c**********************************************************************
 c     hgrie June 2017: create name of 1Ndensity file for given energy and angle, unpack it
 c     define correct formats for energy and angle

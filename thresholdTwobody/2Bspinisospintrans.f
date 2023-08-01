@@ -54,15 +54,6 @@ c
 c     Only care about neutral pion photoproduction 
       complex*16,intent(out) :: PiPhoto2By(0:1,-1:1,0:1,-1:1)
       complex*16,intent(out) :: PiPhoto2Bx(0:1,-1:1,0:1,-1:1)
-
-c     complex*16,intent(out) :: PiPhoto2Bxx(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: PiPhoto2Bxy(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: PiPhoto2Byx(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: PiPhoto2Byy(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: PiPhoto2Bx(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: PiPhoto2By(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: PiPhoto2Bpx(0:1,-1:1,0:1,-1:1)
-c     complex*16,intent(out) :: PiPhoto2Bpy(0:1,-1:1,0:1,-1:1)
 c     
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     Note that Comp2Bab computes the amplitude for polarization a->polarization b
@@ -87,10 +78,6 @@ c
       real*8 factorA,factorB!,factorC,factorD,factorE
       real*8 factorAasy, factorBasy
       real*8 Bnumer
-c     real*8 factorfg, factorfg12, factorfg2
-c     real*8 factorfg212, factorhi, factorhi12
-c     real*8 factorhi2, factorhi212        
-c     real*8 factorjm, factorjm12, factorno, factorno12  
       real*8 K2n
       real*8 mPion
       real*8 q(3), kp(3)
@@ -156,9 +143,9 @@ c
 
 c   
 c   In my derivation I just got 1/q^2 at threshold
-c       if(DOT_PRODUCT(q,q).le.0.0001) then
-c           write(*,*) "q is really small"
-c       end if 
+        if(DOT_PRODUCT(q,q).le.0.0001) then
+            write(*,*) "q is really small"
+        end if 
 
 c     
 c     Note that factorE, factorE12 only work if used in concert with factor B
@@ -180,6 +167,8 @@ c     In the documentation they dont distinguish between k1 and k2
 c     In my derivation (Alex Long) though I just got 1/q^2
 c----------------------------------------------------------------------
             factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
+c           write(*,*) "DOT_PRODUCT(q,q)=",DOT_PRODUCT(q,q)
+c           write(*,*) "q=", q
             call CalcPionPhoto2BAx(PiPhoto2Bx,factorA,
      &           1.d0,0.d0,0.d0,s12p,s12,verbosity)
             call CalcPionPhoto2BAy(PiPhoto2By,factorA,
@@ -207,7 +196,7 @@ c           call CalcPionPhoto2By(PiPhoto2By,factorA,
 c    &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c       BEING ASYMMETRIC PART
+c        BEGIN ASYMMETRIC PART
          else                   !l12-l12p is odd;  s12-s12p=+/- 1 => spin asymmetric part of operator.               
 ************************************************************************************************
 c----------------------------------------------------------------------

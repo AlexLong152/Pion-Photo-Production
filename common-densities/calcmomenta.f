@@ -444,14 +444,14 @@ c**********************************************************************
 c
 c  Input variables:
 c
-      real*8 px,py,pz,ppx,ppy,ppz,k,thetacm, mPion, Mnucl
+      real*8 px,py,pz,ppx,ppy,ppz,k,thetacm, mPion, mNucl
       integer verbosity 
 c
 c**********************************************************************
 c
 c     temporary variables
     
-      real*8 Epion, mandalS, ENuc, kpsq, kpAbs
+      real*8 Epion, mandalS, ENuc, kpsq, kpAbs, omegaThreshold
       real*8 pp(3), kp(3), q(3), p(3)
       real*8 k1(3), k2(3), k1p(3),k2p(3), kVec(3)
       real*8 p12(3), p12p(3)
@@ -464,12 +464,14 @@ c     s = (E_nuc+omega)^2
 c     mpi and mpi0 are pion mass in MeV defined in ../common-densities/constants.def
 c     Internal Variables first     
 c     write(*,*) "In calcmomenta, k=",k
-      ENuc=sqrt((Mnucl**2) + (k**2))
+      omegaThreshold=(mPion*(mPion+2*mNucl))/(2*(mPion+mNucl))
+      ENuc=sqrt((mNucl**2) + (k**2))
       mandalS=(ENuc + k)**2 !lab frame
-      kpsq=(((mandalS+mPion**2-Mnucl**2)**2)/(4*mandalS))-mPion**2
+      Epion=(mandalS+(mPion**2)-(mNucl**2))/(2*sqrt(mandalS))
+      kpsq=(((mandalS+mPion**2-mNucl**2)**2)/(4*mandalS))-mPion**2
       kpAbs=sqrt(kpsq)
 
-      kVec=(/0.d0,0.d0,REAL(k,8)/)
+      kVec=(/0.d0,0.d0,k/)
       kp=(/0.d0,kpAbs*sin(thetacm), kpAbs*cos(thetacm)/)
       p=(/px,py,pz/)
       pp=(/ppx,ppy,ppz/)
@@ -482,6 +484,11 @@ c     qy=py - ppy
 c     qz=pz - ppz + k*(1.d0 + dcos(thetacm))/2.d0
       q = (p-pp)+((kVec+kp)/2)
 c     write(*,*) "#################################################################################"
+c     write(*,*) "In calcmomenta.f: Epion=",Epion 
+c     write(*,*) "In calcmomenta.f: mandalS=",mandalS 
+c     write(*,*) "In calcmomenta.f: kpsq=",kpsq 
+c     write(*,*) "kp=",kp 
+c     write(*,*) "#################################################################################"
 c     write(*,*) "In calcmomenta kpAbs=", kpAbs
 c     write(*,*) "In calcmomenta q=", q
 c     write(*,*) ""
@@ -490,11 +497,11 @@ c     write(*,*) "Check equality of the next few"
 c     write(*,*) "Check from density: k?=omega:  k=", k
 c     write(*,*) ""
 c     write(*,*) "omega check with mandal: omega = k= s-M^2/(2sqrt(s))"
-c     write(*,*) "k?=(mandalS-M*M)/(2*sqrt(s))",k,"?=",(mandalS-Mnucl*Mnucl)/(2*sqrt(mandalS))
+c     write(*,*) "k?=(mandalS-M*M)/(2*sqrt(s))",k,"?=",(mandalS-mNucl*mNucl)/(2*sqrt(mandalS))
 c     write(*,*) ""
 c     write(*,*) "E_pion check with mandalstam"
 c     write(*,*) "E_pi= sqrt(m^2+k'^2)=(s+m^2-M^2)/(2sqrt(s)) -- Next line"
-c     write(*,*) sqrt(mPion**2+kpsq),"?=",(mandalS+mPion**2-Mnucl**2)/(2*sqrt(mandalS))
+c     write(*,*) sqrt(mPion**2+kpsq),"?=",(mandalS+mPion**2-mNucl**2)/(2*sqrt(mandalS))
 c     write(*,*) "#################################################################################"
 c     write(*,*) ""
       if (verbosity.eq.1000) continue
