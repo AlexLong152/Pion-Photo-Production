@@ -264,18 +264,14 @@ c
       
       integer,intent(in) :: verbosity
       
-      complex*16 Result11(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)     
-      complex*16 Result1m1(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
-      complex*16 Resultm11(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
-      complex*16 Resultm1m1(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
-
       integer :: twoMzp,twoMz,twoMzlimit
 c     
 c**********************************************************************
 c     
        write(outUnitno,*) "x polarization - epsilon=<1,0,0>"
-       write(*,*) ""
        write(*,*) "x polarization - epsilon=<1,0,0>"
+       write(*,*) ""
+       write(outUnitno,*) ""
        do twoMzp=twoSnucl,-twoSnucl,-2
           do twoMz=twoSnucl,-twoSnucl,-2
              write(outUnitno,*) Resultx(twoMzp,twoMz)

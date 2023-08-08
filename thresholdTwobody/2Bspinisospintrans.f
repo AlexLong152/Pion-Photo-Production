@@ -1,9 +1,13 @@
 c     hgrie Aug 2020: v1.0 fewbody-Compton
 c     new Aug 2020, based on 3He density codes with the following datings/changes:
-
+c     TODO: Get prefactors right
+c     TODO: Get Diagram B asymmetric part working
       subroutine Calc2Bspinisospintrans(PiPhoto2Bx,PiPhoto2By,
      &     t12,mt12,t12p,mt12p,l12,s12,
      &     l12p,s12p,thetacm,k,px,py,pz,ppx,ppy,ppz,calctype,Mnucl,verbosity)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     Alex July 2023: 
+c     Converted to pion photoproduction
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     hgrie May 2018: used to be part of 3HeCompt/twobody/
 c     now part of twobodyvia2Ndensity/, backward compatibility deliberately broken
@@ -70,18 +74,20 @@ c
                
       integer,intent(in) :: verbosity
       real*8 qpx,qpy,qpz,qppx,qppy,qppz,qx,qy,qz
-      real*8 q12x,q12y,q12z,qp12x,qp12y,qp12z,qpp12x,qpp12y,qpp12z
-      real*8 qsq,qpsq,qppsq,q12sq,qp12sq,qpp12sq
-      real*8 qpppx,qpppy,qpppz,qppp12x,qppp12y,qppp12z
-      real*8 qpppsq,qppp12sq
+c     real*8 q12x,q12y,q12z,qp12x,qp12y,qp12z,qpp12x,qpp12y,qpp12z
+c     real*8 qsq,qpsq,qppsq,q12sq,qp12sq,qpp12sq
+c     real*8 qpppx,qpppy,qpppz,qppp12x,qppp12y,qppp12z
+c     real*8 qpppsq,qppp12sq
       real*8 dl12by2
       real*8 factorA,factorB!,factorC,factorD,factorE
       real*8 factorAasy, factorBasy
-      real*8 Bnumer
+c     real*8 Bnumer
       real*8 K2n
       real*8 mPion
-      real*8 q(3), kp(3)
+      real*8 q(3), q1(3)
       real*8 eps(3)
+c     debugging variables
+      real*8 p(3),tmp1(3), tmp2(3), kVec(3), kp(3)
 c     
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     
@@ -118,17 +124,14 @@ c     PiPhoto2Bpy=c0
       dl12by2=(l12-l12p)/2.d0   !to check if l12-l12p is  even or odd
 c     
 c     Calculate momenta q,q',q':
-c     
-c     call calculateqs(qx,qy,qz,q12x,q12y,q12z,qpx,qpy,qpz,
-c    &     qp12x,qp12y,qp12z,qppx,qppy,qppz,qpp12x,qpp12y,qpp12z,
-c    &     qpppx,qpppy,qpppz,qppp12x,qppp12y,qppp12z,
-c    &     qsq,qpsq,qppsq,qpppsq,q12sq,qp12sq,qpp12sq,qppp12sq,px,py,pz,
-c    &     ppx,ppy,ppz,
-c    &     k,thetacm,verbosity)
 
       mPion=134.97
-      call calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,kp, q1,q2
-      &    thetacm,mPion,mNucl,verbosity)
+      call calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,q1,kp,thetacm,mPion,Mnucl,verbosity)
+c     write(*,*) "In 2Bspinisospintrans.f: (/px,py,pz)=",(/px,py,pz/) 
+c     write(*,*) "In 2Bspinisospintrans.f: (/ppx,ppy,ppz)=",(/ppx,ppy,ppz/) 
+c     kVec=(/0.d0,0.d0,k/)
+c     p=(/px,py,pz/)
+c     write(*,*) "In 2Bspinisospintrans.f: p-kVec/2=",p-kVec/2 
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     OQ3 MEC contributions
@@ -140,22 +143,16 @@ c     Here we calculate the non-isospin-changing part of the matrix element.
 c     This is the only piece at OQ3.
 c     
 c     Define overall factors for spin-symmetric parts of matrix element
-c     
          K2n=0.135*0.001 !in pion mass units
 
 c   
-c   In my derivation I just got 1/q^2 at threshold
-c       if(DOT_PRODUCT(q,q).le.0.0001) then
-c           write(*,*) "q is really small"
-c       end if 
-
 c     
-c     Note that factorE, factorE12 only work if used in concert with factor B
 ************************************************************************************************
          if (s12p .eq. s12) then ! s12-s12p=0 => l12-l12p is even; spin symmetric part only
 c----------------------------------------------------------------------
 c     
 c     Calculate two-body diagram A, symmetric part
+c     In my derivation I just got 1/q^2 at threshold
 c     
 c     DiagramA, Lenkewitz
 c     ---------------
@@ -169,12 +166,13 @@ c     In the documentation they dont distinguish between k1 and k2
 c     In my derivation (Alex Long) though I just got 1/q^2
 c----------------------------------------------------------------------
             factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
-c           write(*,*) "DOT_PRODUCT(q,q)=",DOT_PRODUCT(q,q)
-c           write(*,*) "q=", q
+
+            eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BAx(PiPhoto2Bx,factorA,
-     &           1.d0,0.d0,0.d0,s12p,s12,verbosity)
+     &           eps,s12p,s12,verbosity)
+
             call CalcPionPhoto2BAy(PiPhoto2By,factorA,
-     &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
+     &           eps,s12p,s12,verbosity)
 c----------------------------------------------------------------------
 c     
 c     Calculate two-body diagram B, symmetric part
@@ -192,15 +190,22 @@ c     }
 c     |M_J\rangle_\psi,
 c----------------------------------------------------------------------
             eps=(/1.d0,0.d0,0.d0/)
-            factorB=((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q2)/(
-     &          (DOT_PRODUCT(q1,q1)+mPion**2)*(DOT_PRODUCT(q2,q2)))
+            factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
+     &          (DOT_PRODUCT(q1,q1)+mPion**2)
+     &          *(DOT_PRODUCT(q,q))
+     &          )
 
-            call CalcPionPhoto2BB(Pion2Bx,factor,eps,
-     &             q1,Sp,S,verbosity)
+            call CalcPionPhoto2BB(PiPhoto2Bx,factorB,
+     &          q1,s12p,s12,verbosity)
 
             eps=(/0.d0,1.d0,0.d0/)
-            call CalcPionPhoto2BB(Pion2By,factor,eps,
-     &             q1,Sp,S,verbosity)
+            factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
+     &          (DOT_PRODUCT(q1,q1)+mPion**2)
+     &          *(DOT_PRODUCT(q,q))
+     &          )
+
+            call CalcPionPhoto2BB(PiPhoto2By,factorB,
+     &          q1,s12p,s12,verbosity)
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c        BEGIN ASYMMETRIC PART
          else                   !l12-l12p is odd;  s12-s12p=+/- 1 => spin asymmetric part of operator.               
@@ -215,7 +220,7 @@ c
             call CalcPionPhoto2BAxasy(PiPhoto2Bx,factorAasy,
      &           1.d0,0.d0,0.d0,s12p,s12,verbosity)
             
-            call CalcPionPhoto2BAyasy(PiPhoto2Bx,factorAasy,
+            call CalcPionPhoto2BAyasy(PiPhoto2By,factorAasy,
      &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
 
 c----------------------------------------------------------------------
@@ -223,9 +228,24 @@ c
 c     Calculate two-body diagram B, anti-symmetric part
 c     
 c----------------------------------------------------------------------
-c           Bnumer=
-c           call CalcPionPhoto2BAyasy(PiPhoto2Bx,factorAasy,
-c    &           0.d0,1.d0,0.d0,s12p,s12,verbosity)
+
+            eps=(/1.d0,0.d0,0.d0/)
+            factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
+     &          (DOT_PRODUCT(q1,q1)+mPion**2)
+     &          *(DOT_PRODUCT(q,q))
+     &          )
+
+            call CalcPionPhoto2BBasy(PiPhoto2Bx,factorB,
+     &           q1,s12p,s12,verbosity)
+
+            eps=(/0.d0,1.d0,0.d0/)
+            factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
+     &          (DOT_PRODUCT(q1,q1)+mPion**2)
+     &          *(DOT_PRODUCT(q,q))
+     &          )
+
+            call CalcPionPhoto2BBasy(PiPhoto2By,factorB,
+     &           q1,s12p,s12,verbosity)
          end if                 ! s12 question
       end if                    !t12 question
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

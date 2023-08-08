@@ -20,7 +20,7 @@ c     Aug-Oct 2016/hgrie Feb 2017: Arman added OQ4 diagrams
 c====================================================================
 
       subroutine CalcPionPhoto2BAx(PiPhoto2Bx,factor,
-     &     Ax,Ay,Az,Sp,S,verbosity)
+     &     eps,Sp,S,verbosity)
 c     
 c********************************************************************
 c     
@@ -51,6 +51,7 @@ c     INPUT VARIABLES:
 c     
       real*8 factor
       real*8 Ax,Ay,Az
+      real*8 eps(3)
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
@@ -60,7 +61,8 @@ c     Sp,S-final- and initial-state total spin of pair
 c     
 c********************************************************************
 c     
-      call singlesigma(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
+
+      call S_Dot_A(hold,eps,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
             PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
@@ -72,7 +74,7 @@ c
       end
       
       subroutine CalcPionPhoto2BAy(PiPhoto2By,factor,
-     &     Ax,Ay,Az,Sp,S,verbosity)
+     &     eps,Sp,S,verbosity)
 c     
 c********************************************************************
 c     
@@ -103,6 +105,7 @@ c     INPUT VARIABLES:
 c     
       real*8 factor
       real*8 Ax,Ay,Az
+      real*8 eps(3)
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
@@ -112,7 +115,7 @@ c     Sp,S-final- and initial-state total spin of pair
 c     
 c********************************************************************
 c     
-      call singlesigma(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
+      call S_Dot_A(hold,eps,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
             PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
@@ -155,20 +158,18 @@ c
 c     INPUT VARIABLES:
 c     
       real*8 factor
-      real*8 eps(3), q1(3)
+      real*8 eps(3), q1(3), q2(3)
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
-c     hold-contains sig1.A sig.2B structure, symmetric part
-c     factor-contains meson propagator
 c     Sp,S-final- and initial-state total spin of pair      
 c     
 c********************************************************************
 c     
-      call singlesigma(hold,q1(1),q2(2),q3(3),factor,Sp,S,verbosity)
+      call singlesigma(hold,q1(1),q1(2),q1(3),factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
-            Pion2By(Sp,Msp,S,Ms)=Pion2By(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+            Pion2Bout(Sp,Msp,S,Ms)=Pion2Bout(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
          end do
       end do
 c     
@@ -176,56 +177,6 @@ c
       return
       end
 
-      subroutine CalcPionPhoto2BBx(Pion2Bxy,factor,
-     &     Ax,Ay,Az,Sp,S,verbosity)
-c     
-c********************************************************************
-c     
-c     Calculates symmetric part of diagram A for x->y.
-c     
-c     Indices in Pion2Bab are that first index gives NN spin state:
-c     S=0 or S=1, second index gives spin projection. This is for final
-c     state. Third and fourth indices give same for initial state. 
-c     
-c********************************************************************
-c     
-      implicit none
-c     
-c********************************************************************
-c     
-      include '../common-densities/constants.def'
-c     
-c********************************************************************
-c     
-c     INPUT/OUTPUT VARIABLE:
-c     
-      complex*16 Pion2Bxy(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
-c     
-c********************************************************************
-c     
-c     INPUT VARIABLES:
-c     
-      real*8 factor
-      real*8 Ax,Ay,Az
-      integer Ms,Msp,Sp,S
-      integer verbosity
-c     
-c     hold-contains sig1.A sig.2B structure, symmetric part
-c     factor-contains meson propagator
-c     Sp,S-final- and initial-state total spin of pair      
-c     
-c********************************************************************
-c     
-      call singlesigma(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
-      do Msp=-Sp,Sp
-         do Ms=-S,S
-            Pion2Bxy(Sp,Msp,S,Ms)=Pion2Bxy(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
-         end do
-      end do
-c     
-      if (verbosity.eq.1000) continue
-      return
-      end
 c
 c====================================================================
 c
@@ -301,7 +252,7 @@ c********************************************************************
       integer verbosity
       integer Sp,S
       factor=1.d0
-      subroutine(output,A(1),A(2),A(3),factor,Sp,S,verbosity)
+      call singlesigma(output,A(1),A(2),A(3),factor,Sp,S,verbosity)
 
       end subroutine
 

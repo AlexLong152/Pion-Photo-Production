@@ -434,8 +434,7 @@ c
       return
       end 
 
-      subroutine calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,kp,q1,q2,
-      &     thetacm,mPion,mNucl,verbosity)
+      subroutine calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,q1,kp,thetacm,mPion,mNucl,verbosity)
 
 c     Derivation for the kinematics can be found in pionpionAngle.pdf
 c     OneDrive/thesis/Kinematics/pionpionAngle.pdf
@@ -454,17 +453,21 @@ c     temporary variables
     
       real*8 Epion, mandalS, ENuc, kpsq, kpAbs, omegaThreshold
       real*8 pp(3), kp(3), q(3), p(3)
-      real*8 q1(3), q2(3)
+      real*8 q1(3)
       real*8 k1(3), k2(3), k1p(3),k2p(3), kVec(3)
       real*8 p12(3), p12p(3)
       real*8 qx,qy,qz
-
 c**********************************************************************      
 c
 c     s =(p+k)^2=[(E_nuc, 0,0,-omega) + (omega, 0,0,omega)]^2
 c     s = (E_nuc+omega)^2
 c     mpi and mpi0 are pion mass in MeV defined in ../common-densities/constants.def
 c     Internal Variables first     
+
+c     VARIABLE DESCRIPTIONS
+c     -----------------------------------------------
+c     q: propgator for diagram A, note q=q_2, the second propogator for diagram B
+c     q1:First propogatior for diagram B, q1=q-k
       omegaThreshold=(mPion*(mPion+2*mNucl))/(2*(mPion+mNucl))
       ENuc=sqrt((mNucl**2) + (k**2))
       mandalS=(ENuc + k)**2 !lab frame
@@ -481,9 +484,10 @@ c     Internal Variables first
       k2=(-1*p)-(kVec/2)
       k1p=pp-kp/2
       k2p=(-1*pp)-kp/2
+
       q = (p-pp)+((kVec+kp)/2)
-      q1 = (p-pp)+((kp-kVec)/2)
-      q2 = q1+k
+c     q1 = (p-pp)+((kp-kVec)/2)
+      q1 = q-k
 c     write(*,*) "#################################################################################"
 c     write(*,*) "In calcmomenta.f: Epion=",Epion 
 c     write(*,*) "In calcmomenta.f: mandalS=",mandalS 
