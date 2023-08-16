@@ -1,0 +1,3 @@
+See if we can reporoduce the magnetic moment, table 5.1
+Look into the momentum transfer at threshold
+Compare the printoff to my numbers

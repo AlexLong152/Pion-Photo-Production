@@ -1,0 +1,3 @@
+Changed line 204 of readinput-densities.f
+uncommented:
+         Mnucl = M6Li
