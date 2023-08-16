@@ -354,18 +354,18 @@ c     hgrie Sep 2014: if thetaL is ZERO degrees, actual calculated at 1 Degree
 c**********************************************************************
             call calcphotonmomenta(k,kth,kphi,t,kp,kpth,kpphi,omega,
      &           Qk,Qkth,Qkphi,kgamma,thetacm,verbosity)
-c           write(*,*) "In main"
-c           write(*,*) "Egamma=", Egamma
-c           write(*,*) "k=", k
-
-c           if (k.lt.omegaThreshold) stop "Energy is below pion photoproduction threshold"
-            if (k.lt.omegaThreshold) then
-                write(*,*) "Below Pion photoproduction threshold, should abort"
-                write(*,*) "Continuing with threshold energy instead for debugging"
-                call RANDOM_NUMBER(tmpRandom)
-                k=omegaThreshold*(1+tmpRandom)
-                write(*,*) "Assigned k=", k
+            if ((k.lt.omegaThreshold).and.(k+0.1.gt.omegaThreshold)) then
+                k=omegaThreshold+0.001
             end if
+
+            write(*,*) "In main.twobodyvia2Ndensity.f: k=",k 
+            write(*,*) "In main.twobodyvia2Ndensity.f: omegaThreshold=",omegaThreshold 
+c               write(*,*) "Below Pion photoproduction threshold, should abort"
+c               write(*,*) "Continuing with threshold energy instead for debugging"
+c               call RANDOM_NUMBER(tmpRandom)
+c               k=omegaThreshold*(1+tmpRandom)
+c               write(*,*) "Assigned k=", k
+c           end if
 c**********************************************************************
 c     be a good boy and initialise everything to 0, overwriting entries from previous ω/θ
 c**********************************************************************
