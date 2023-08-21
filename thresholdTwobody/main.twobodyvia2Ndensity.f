@@ -447,7 +447,13 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c      found in usesymmetry+writeoutput-densities.f, and calls outputtomathPiPhoto found in 
             call outputPiPhoto(outUnitno,cartesian,twoSnucl,twoMzplimit,
      &           Resultx,Resulty,verbosity) 
-            
+            write(*,*) "Full printing now"         
+            write(*,*) "Resultx"
+            write(*,*) Resultx
+            write(*,*) "#######################################################"
+            write(*,*) "#######################################################"
+            write(*,*) "Resulty"
+            write(*,*) Resulty
 c     be a good boy and deallocate arrays. Compilers do that automatically for simple programs. Better safe than sorry.
             deallocate (Resultx,Resulty, STAT=test ) ! test becomes nonzero if this fails
             if (test .ne. 0) stop "*** ERROR: Arrays ResultAB: Deallocation error. Abort."

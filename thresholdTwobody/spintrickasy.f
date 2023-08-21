@@ -20,7 +20,7 @@ c     This is presently taken care of through the "factor" factors
 c====================================================================
 c     
       subroutine CalcPionPhoto2BAxasy(PiPhoto2Bx,factor,
-     &     Ax,Ay,Az,Sp,S,verbosity)
+     &     eps,Sp,S,verbosity)
 c     
 c********************************************************************
 c     
@@ -49,7 +49,7 @@ c
 c     INPUT VARIABLES:
 c     
       real*8 factor
-      real*8 Ax,Ay,Az,Bx,By,Bz
+      real*8 eps(3)
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
@@ -59,7 +59,7 @@ c     Sp,S-final- and initial-state total spin of pair: 0 or 1
 c     
 c********************************************************************
 c     
-      call singlesigmaasy(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
+      call singlesigmaasy(hold,eps(1),eps(2),eps(3),factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
             PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
@@ -71,7 +71,7 @@ c
       end
 
       subroutine CalcPionPhoto2BAyasy(PiPhoto2Bx,factor,
-     &     Ax,Ay,Az,Sp,S,verbosity)
+     &     eps,Sp,S,verbosity)
 c     
 c********************************************************************
 c     
@@ -100,7 +100,7 @@ c
 c     INPUT VARIABLES:
 c     
       real*8 factor
-      real*8 Ax,Ay,Az,Bx,By,Bz
+      real*8 eps(3)
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
@@ -110,7 +110,7 @@ c     Sp,S-final- and initial-state total spin of pair: 0 or 1
 c     
 c********************************************************************
 c     
-      call singlesigmaasy(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
+      call singlesigmaasy(hold,eps(1),eps(2),eps(3),factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
             PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)

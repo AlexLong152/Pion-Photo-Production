@@ -459,6 +459,7 @@ c     temporary variables
       real*8 qx,qy,qz
 c**********************************************************************      
 c
+c     
 c     s =(p+k)^2=[(E_nuc, 0,0,-omega) + (omega, 0,0,omega)]^2
 c     s = (E_nuc+omega)^2
 c     mpi and mpi0 are pion mass in MeV defined in ../common-densities/constants.def
