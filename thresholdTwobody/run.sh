@@ -7,8 +7,8 @@ make clean
 make
 chmod +x run.twobodyvia2Ndensity
 
-if [ -z "$var" ]
-then # if no arguments then run input.dat
+if [ $# -eq 0 ]; then
+# if no arguments then run input.dat
 ./run.twobodyvia2Ndensity input.dat
 fi
 

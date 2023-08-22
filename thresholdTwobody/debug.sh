@@ -20,4 +20,4 @@ echo "Step into function with---------------s or step"
 echo ""
 echo "More infor here: https://cs.baylor.edu/~donahoo/tools/gdb/tutorial.html"
 echo ""
-gdb --args twobodyvia2Ndensity input.dat
+gdb --args twobodyvia2Ndensity testInput.dat

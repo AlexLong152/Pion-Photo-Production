@@ -447,19 +447,17 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c      found in usesymmetry+writeoutput-densities.f, and calls outputtomathPiPhoto found in 
             call outputPiPhoto(outUnitno,cartesian,twoSnucl,twoMzplimit,
      &           Resultx,Resulty,verbosity) 
-            write(*,*) "Full printing now"         
-            write(*,*) "Resultx"
-            write(*,*) Resultx
-            write(*,*) "#######################################################"
-            write(*,*) "#######################################################"
-            write(*,*) "Resulty"
-            write(*,*) Resulty
 c     be a good boy and deallocate arrays. Compilers do that automatically for simple programs. Better safe than sorry.
             deallocate (Resultx,Resulty, STAT=test ) ! test becomes nonzero if this fails
             if (test .ne. 0) stop "*** ERROR: Arrays ResultAB: Deallocation error. Abort."
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
          end do                 !Nangles
+         write(*,*) ""
+         write(*,*) "Lenkewitz Results at threshold https://arxiv.org/pdf/1103.3400.pdf"
+         write(*,*) "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+         write(*,*) "F_T^a-F_T^b=-29.3 fm^-1=-5780.89 MeV for 3He"
+         write(*,*) "F_L^a-F_L^b=-22.9 fm^-1=-4518.18 MeV for 3H "
          write(*,*) "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
          write(*,*) "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
       end do                    !Nenergy

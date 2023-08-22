@@ -245,6 +245,7 @@ c
 c     OUTPUT VARIABLE:
 c     
       complex*16 hold(0:1,-1:1,0:1,-1:1)
+c     arguments for hold are (Sp,Msp,S,Ms)
 c     
 c********************************************************************
 c     
