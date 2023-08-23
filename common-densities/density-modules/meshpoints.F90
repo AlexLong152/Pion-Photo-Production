@@ -767,7 +767,7 @@ contains
    &          ' p2=',p12p2_temp,' p3=',p12p3_temp,&
    &          ' n1=',p12n1_temp,' n2=',p12n2_temp,' n_ges=',nsize
    do ip=1,nsize
- !   write(*,'(A,I4,2E15.6)') 'p12_read:',ip,meshp(ip),meshw(ip)
+    write(*,'(A,I4,2E15.6)') 'p12_read:',ip,meshp(ip),meshw(ip)
    end do
    
   END IF 

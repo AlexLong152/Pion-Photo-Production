@@ -183,7 +183,6 @@ c
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc      
 c     hgrie June/Oct 2014: use symmetry when specified, output to file
 c
-            write(*,*) "cartesian Q=",cartesian
             if (cartesian) then 
 c     for output in CARTESIAN BASIS of photon polarisation   
 c     let twoMzp only run over half of indices when symmetry is used: up to twoMzplimit
@@ -237,58 +236,5 @@ c     output to file
             end if
 c     hgrie Aug 2020: if so wanted, output first independent MEs also to screen in a form that can directly be pasted into mathematica
             if (verbosity.ge.0) call outputtomath(Result11,Result1m1,Resultm11,Resultm1m1,twoSnucl,verbosity)
-      return
-      end                       ! outputroutine
-
-      subroutine outputPiPhoto(outUnitno,cartesian,twoSnucl,twoMzplimit,
-     &     Resultx,Resulty,verbosity)
-c     hgrie May 2018: new routines, outsourced from main.*.f
-c
-c     construct symmetry-partners if necessary and outpout in cartesian or spherical coordinates
-c**********************************************************************
-c     
-      implicit none
-c     
-c**********************************************************************
-c     
-c     INPUT/OUTPUT VARIABLE:
-c     
-c     amplitudes with photon helicities 
-c     
-      complex*16,intent(in) :: Resultx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
-      complex*16,intent(in) :: Resulty(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
-      
-      integer,intent(in) :: twoSnucl,twoMzplimit
-      integer,intent(in) :: outUnitno
-      logical,intent(in) :: cartesian
-      
-      integer,intent(in) :: verbosity
-      
-      integer :: twoMzp,twoMz,twoMzlimit
-c     
-c**********************************************************************
-c     
-       write(outUnitno,*) "x polarization - epsilon=<1,0,0>"
-       write(*,*) "x polarization - epsilon=<1,0,0>"
-       write(*,*) ""
-       write(outUnitno,*) ""
-       do twoMzp=twoSnucl,-twoSnucl,-2
-          do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,*) Resultx(twoMzp,twoMz)
-             write(*,*) Resultx(twoMzp,twoMz)
-          end do
-       end do
-       
-       write(outUnitno,*) "y polarization - epsilon=<0,1,0>"
-       write(*,*) ""
-       write(*,*) "y polarization - epsilon=<0,1,0>"
-       do twoMzp=twoSnucl,-twoSnucl,-2
-          do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,*) Resulty(twoMzp,twoMz)
-             write(*,*) Resulty(twoMzp,twoMz)
-          end do
-       end do
-c     hgrie Aug 2020: if so wanted, output first independent MEs also to screen in a form that can directly be pasted into mathematica
-            if (verbosity.ge.0) call outputtomathPiPhoto(Resultx,Resulty,twoSnucl,verbosity)
       return
       end                       ! outputroutine

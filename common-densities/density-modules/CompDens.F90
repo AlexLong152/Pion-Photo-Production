@@ -1602,7 +1602,7 @@ SUBROUTINE printrhochan
   DO alpha=1,num2Nchan
     CALL getalpha2N(alpha,l12,s12,j12,t12,mt12,m12,mjtot)
     alpha2N=get2Nchannum(l12,s12,j12,mt12,m12,mjtot)
- !!   WRITE(*,'(A,2I5,2X,4I5,2X,3I6)') 'ALPHA2N: ',alpha,alpha2N,l12,s12,j12,t12,mt12,m12,mjtot
+    WRITE(*,'(A,2I5,2X,4I5,2X,3I6)') 'ALPHA2N: ',alpha,alpha2N,l12,s12,j12,t12,mt12,m12,mjtot
   END DO ! alpha2N
  END IF ! master 
  

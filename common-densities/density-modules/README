@@ -9,5 +9,4 @@ make
 in order to see usage of the array rho containing the
 density, please see comments in file testcompdens.F90
 
-ALPH2N print was commented out in CompDens.F90 line 1605
-p12_read print was commented out in meshpoints.F90 line 770
+
