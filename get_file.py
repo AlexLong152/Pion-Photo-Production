@@ -13,7 +13,7 @@ def main():
 
     # connect to database, choose working directory for downloading densities
     # workdir = os.environ["HOME"]+"/work/densitywork"
-    workdir = os.environ["HOME"] + '/OneDrive/'
+    workdir = os.environ["HOME"]+r"/OneDrive/"
     densdf = access.database(workdir=workdir)
     # select a specific set of densities, here the one and two body densities
     # for 3He with angle 59.98 deg
@@ -155,10 +155,9 @@ def main():
     densName = name + "-"+str(angle)+"=theta-"+str(omega)\
         + "=MeV-"+kind+"body.h5"
     path = "densities-"+name+r"/"+subfolder+r"/"
-    print("path=",path)
     if not os.path.exists(path):
-        print("Directory named\n"+workdir+path+"\nDoes not exist, creating one now")
-        os.makedirs(workdir+path)
+        print("Directory named\n"+path+"\nDoes not exist, creating one now")
+        os.makedirs(path)
 
     fullPath = path+densName
     if os.path.isfile(fullPath):

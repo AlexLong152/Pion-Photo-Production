@@ -39,13 +39,11 @@ MODULE hdf_tool
 ! called once 
  
   SUBROUTINE init_hdf
-
    IMPLICIT NONE 
    INTEGER ierr
    INTEGER(SIZE_T) re_size,im_size,complex_t_size,offset ! 4-b
    INTEGER(HSIZE_T) size ! long integer
 
-   write(*,*) "In hdf_tool.F90 SUBROUTINE init_hdf "
    IF(master) THEN
     WRITE(*,*) 'hdf tools version: ',VERREV
 !    WRITE(*,*) 'Date             : ',VERDATE
@@ -58,20 +56,12 @@ MODULE hdf_tool
    
 !     set up property for collective read transfer
    CALL h5pcreate_f (H5P_DATASET_XFER_F, pcollectread_id, ierr)
-
 #ifdef HDF_MPIO
    IF(master) THEN
-    WRITE(*,*) "In hdf_tool.F90 SUBROUTINE init_hdf: location 2 "
     WRITE(*,*) 'HDFinit: Using MPIO in HDF for collective read.'
-    WRITE(*,*) "In hdf_tool.F90 SUBROUTINE init_hdf: error occurs in h5pset_dxpl_mpio_f"
    END IF 
 !   CALL h5pset_dxpl_mpio_f (pcollectxfer_id,H5FD_MPIO_INDEPENDENT_F,ierr)
-
-c grep -r "h5pset_dxpl_mpio_f" *
    CALL h5pset_dxpl_mpio_f (pcollectread_id,H5FD_MPIO_COLLECTIVE_F,ierr)
-   IF(master) THEN
-    WRITE(*,*) "In hdf_tool.F90 SUBROUTINE init_hdf: h5pset_dxpl_mpio_f suceeded "
-   END IF 
 #else
    IF(master) THEN
     WRITE(*,*) 'HDFinit: Using standard driver in HDF for all reading.'

@@ -12,9 +12,9 @@ ifeq ($(UNAME), Linux)
      # ubuntu 16.04
      LIBSTD1 = -llapack
      # LIBSTD2 = -L /usr/lib/x86_64-linux-gnu/hdf5/openmpi/ 
-     LIBSTD2 = -L /usr/lib/ -L /usr/include/
+     LIBSTD2 =
      LIBSTD3 = -lhdf5hl_fortran -lhdf5_hl -lhdf5_fortran -lhdf5
-     LIBSTD4 = -llapack -lgomp -ldl -lz -lsz -h5fc
+     LIBSTD4 = -llapack -lgomp -ldl -lz -lsz
 else
      # macbook pro
      LIBSTD1 = -L  /opt/local/lib -llapack 
@@ -41,7 +41,7 @@ COMPILE_OPT2= -ffixed-line-length-0
 ifeq ($(UNAME), Linux)
      #############################################
      # ubuntu 16.04
-     COMPILE_OPT3= -I /usr/include/ -I /usr/bin/
+     #COMPILE_OPT3= -I /usr/include/hdf5/openmpi/
 else
      # macbook pro
      COMPILE_OPT3= -I /opt/local/include/

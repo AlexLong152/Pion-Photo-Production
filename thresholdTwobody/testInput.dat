@@ -4,8 +4,8 @@
 '/home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5'
 cm_ymmetry_verbos                     frame, symmetry, verbosity of STDOUT
 Odelta2_j12max=1 		    Calctype, maximal total ang mom in (12) subsystem
-16 7 		    		    NP12A, NP12B
+3 7 		    		    NP12A, NP12B
 1.1 5.0 15.0 			    P12A, P12B, P12C
-2 50     			    AngularType12,(Nordth12 OR Nanggrid12),Nthbins12,Nordphi12,Nphibins12
+2 4     			    AngularType12,(Nordth12 OR Nanggrid12),Nthbins12,Nordphi12,Nphibins12
 COMMENTS:_v2.0
 # in density filename, code replaces XXX and YYY automatically by energy and angle.

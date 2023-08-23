@@ -1,10 +1,6 @@
 # no arguments ---------------------------- runs input.dat
 # argument "test", or "t", just passes ---- runs testInput.dat
 # argument "physical" or "p" -------------- runs physicalInput.dat
-cd ../common-densities/density-modules
-make clean
-make
-cd ../../thresholdTwobody
 rm *.tmp
 clear
 make clean

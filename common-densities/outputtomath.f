@@ -132,3 +132,55 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       end ! subroutine StripSpaces
 
       
+      subroutine outputtomathPiPhoto(Resultx,Resulty,twoSnucl,verbosity)
+c**********************************************************************
+      IMPLICIT NONE
+c**********************************************************************
+c     input variables
+
+      integer,intent(in)    :: twoSnucl
+      complex*16,intent(in) :: Resultx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)     
+      complex*16,intent(in) :: Resulty(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
+      
+      integer,intent(in)    :: verbosity
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     intrinsic variables
+
+      integer :: twoMzp,twoMz,twoMzlimit
+c     for mathematica-friendly output, define numbers as strings. not elegant, but works
+      character(len=64) string
+      character(len=2*(twoSnucl+1)**2*68) longstring
+      longstring = "" ! initialise auxiliary
+c
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc      
+      
+      if (verbosity.eq.1000) continue
+      
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc    
+      string = ""               ! initialise
+      
+      write(*,*) "Note the following code has not been checked for a full output to mathematica, and might need fixing"
+      do  twoMzp=twoSnucl,0,-2
+c        if (twoMzp.eq.0) then
+c           twoMzlimit = 0
+c        else
+c           twoMzlimit = -twoSnucl
+c        end if   
+         do twoMz=twoSnucl,twoMzlimit,-2
+            write(string,'(SP,"(",E24.18,",",E24.18,")")') Resultx(twoMzp,twoMz)
+            call ConvertComplexToMath(string)
+            longstring = trim(adjustl(longstring)) // string // ","
+            call StripSpaces(longstring)
+            write(string,'(SP,"(",E24.18,",",E24.18,")")') Resulty(twoMzp,twoMz)
+            call ConvertComplexToMath(string)
+            longstring = trim(adjustl(longstring)) // string // ","
+            call StripSpaces(longstring)
+         end do
+      end do
+      longstring = '{' // trim(adjustl(longstring)) // '}'    
+      longstring = longstring(:index(longstring,",}")-1) // "}"
+      write(*,*) '        ',trim(adjustl(longstring))    
+      
+      return
+      
+      end
