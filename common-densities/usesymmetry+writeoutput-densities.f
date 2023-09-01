@@ -265,30 +265,117 @@ c
       integer,intent(in) :: verbosity
       
       integer :: twoMzp,twoMz,twoMzlimit
+      character(len=25) ::str
+
+      complex*16 :: sigmax(-1:1,-1:1)  ! (ms3p,ms3): sigma-x
+      complex*16 :: sigmay(-1:1,-1:1) ! (ms3p,ms3): sigma-y
+      complex*16 :: sigmaz(-1:1,-1:1)  ! (ms3p,ms3): sigma-z
+      complex*16 :: SVec(3,-1:1,-1:1)
 c     
 c**********************************************************************
 c     
+
+       sigmax=0.d0
+       sigmay=0.d0
+       sigmaz=0.d0
+      
+       sigmax(1,-1)=dcmplx(1.d0,0)
+       sigmax(-1,1)=dcmplx(1.d0,0)
+ 
+       sigmay(1,-1)=dcmplx(0, -1.d0)
+       sigmay(-1,1)=dcmplx (0, 1.d0) 
+ 
+       sigmaz(1,1)=dcmplx(1.d0,0)
+       sigmaz(-1,-1)=dcmplx(-1.d0,0)
+
+       SVec(1,:,:)=sigmax
+       SVec(2,:,:)=sigmay
+       SVec(3,:,:)=sigmaz
+
+       write(outUnitno,*) ""
+       write(*,*) ""
+
        write(outUnitno,*) "x polarization - epsilon=<1,0,0>"
        write(*,*) "x polarization - epsilon=<1,0,0>"
-       write(*,*) ""
-       write(outUnitno,*) ""
        do twoMzp=twoSnucl,-twoSnucl,-2
           do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,*) Resultx(twoMzp,twoMz)
-             write(*,*) Resultx(twoMzp,twoMz)
+             write(outUnitno,*) Resultx(twoMzp,twoMz)!, "for (Mzp, Mz)=",twoMzp, twoMz
+             write(*,*) Resultx(twoMzp,twoMz)!,"for (Mzp, Mz)=",twoMzp,twoMz
+             write(*,*) "In usesymmetry+writeoutput-densities.f: sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz) 
           end do
        end do
        
-       write(outUnitno,*) "y polarization - epsilon=<0,1,0>"
+       write(outUnitno,*) ""
        write(*,*) ""
+       write(outUnitno,*) "y polarization - epsilon=<0,1,0>"
        write(*,*) "y polarization - epsilon=<0,1,0>"
        do twoMzp=twoSnucl,-twoSnucl,-2
           do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,*) Resulty(twoMzp,twoMz)
-             write(*,*) Resulty(twoMzp,twoMz)
+             write(outUnitno,*) Resulty(twoMzp,twoMz)!, "for (Mzp, Mz)=",twoMzp,twoMz
+             write(*,*) Resulty(twoMzp,twoMz)!,"for (Mzp, Mz)=",twoMzp,twoMz
+             write(*,*) "In usesymmetry+writeoutput-densities.f: sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
           end do
        end do
+
+       write(outUnitno,*) ""
+       write(*,*) ""
+       write(outUnitno,*) "Order of outputs is"
+       write(*,*) "Order of outputs is"
+       write(*,*) "       twoMzp       twoMz"
+       write(outUnitno,*) "       twoMzp       twoMz"
+
+       do twoMzp=twoSnucl,-twoSnucl,-2
+          do twoMz=twoSnucl,-twoSnucl,-2
+             write(outUnitno,*) twoMzp, twoMz
+             write(*,*) twoMzp, twoMz
+          end do
+       end do
+
+       write(outUnitno,*) ""
+       write(*,*) ""
 c     hgrie Aug 2020: if so wanted, output first independent MEs also to screen in a form that can directly be pasted into mathematica
             if (verbosity.ge.0) call outputtomathPiPhoto(Resultx,Resulty,twoSnucl,verbosity)
       return
       end                       ! outputroutine
+
+      subroutine SingleDiagramOutput(cartesian,twoSnucl,twoMzplimit,
+     &     DiagramX,label,verbosity)
+c     hgrie May 2018: new routines, outsourced from main.*.f
+c
+c     construct symmetry-partners if necessary and outpout in cartesian or spherical coordinates
+c**********************************************************************
+c     
+      implicit none
+c     
+c**********************************************************************
+c     
+c     INPUT/OUTPUT VARIABLE:
+c     
+c     amplitudes with photon helicities 
+c     
+      complex*16,intent(in) :: DiagramX(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
+      Character(len=40) :: label
+      integer,intent(in) :: twoSnucl,twoMzplimit
+      logical,intent(in) :: cartesian
+      
+      integer,intent(in) :: verbosity
+      
+      integer :: twoMzp,twoMz,twoMzlimit
+      character(len=25) ::str
+c     
+c**********************************************************************
+c     
+c      label=trim(label)    
+       write(*,*) ""
+
+       write(*,*) label
+       do twoMzp=twoSnucl,-twoSnucl,-2
+          do twoMz=twoSnucl,-twoSnucl,-2
+             write(*,*) DiagramX(twoMzp,twoMz)!,"for (Mzp, Mz)=",twoMzp,twoMz
+          end do
+       end do
+
+       write(*,*) ""
+c           if (verbosity.ge.0) call outputtomathPiPhoto(Resultx,Resulty,twoSnucl,verbosity)
+      return
+      end                       ! SingleDiagramOutput

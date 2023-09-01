@@ -59,6 +59,9 @@ c     Only care about neutral pion photoproduction
       complex*16,intent(out) :: PiPhoto2By(0:1,-1:1,0:1,-1:1)
       complex*16,intent(out) :: PiPhoto2Bx(0:1,-1:1,0:1,-1:1)
 c     
+
+      complex*16 DiagramA(0:1,-1:1,0:1,-1:1)
+      complex*16 DiagramB(0:1,-1:1,0:1,-1:1)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     Note that Comp2Bab computes the amplitude for polarization a->polarization b
 c     Indices in Comp2Bab are that first index gives NN spin state: S=0 or S=1,
@@ -90,6 +93,8 @@ c     real*8 Bnumer
 c     debugging variables
       real*8 p(3),tmp1(3), tmp2(3), kVec(3), kp(3)
       real*8 denomVec(3)
+c     real*8 mu
+c     mu=0.025
 c     
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     
@@ -185,6 +190,10 @@ c           factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
             call CalcPionPhoto2BAx(PiPhoto2Bx,factorA,
      &           eps,s12p,s12,verbosity)
 
+            eps=(/1.d0,0.d0,0.d0/)
+            call CalcPionPhoto2BAx(DiagramA,factorA,
+     &           eps,s12p,s12,verbosity)
+
             eps=(/0.d0,1.d0,0.d0/)
             call CalcPionPhoto2BAy(PiPhoto2By,factorA,
      &           eps,s12p,s12,verbosity)
@@ -231,12 +240,18 @@ c     Calculate two-body diagram A, anti-symmetric part
 c     
 c----------------------------------------------------------------------
 
-            factorAasy=factorA
+            denomVec=p12-p12p+(kVec/2)
+            factorAasy=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
 c           
+
+            eps=(/1.d0,0.d0,0.d0/)
+            call CalcPionPhoto2BAxasy(DiagramA,factorAasy,
+     &           eps,s12p,s12,verbosity)
+
             eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BAxasy(PiPhoto2Bx,factorAasy,
      &           eps,s12p,s12,verbosity)
-            
+
             eps=(/0.d0,1.d0,0.d0/)
             call CalcPionPhoto2BAyasy(PiPhoto2By,factorAasy,
      &           eps,s12p,s12,verbosity)
@@ -268,6 +283,7 @@ c    &           q1,s12p,s12,verbosity)
       end if                    !t12 question
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
       return
       if (verbosity.eq.1000) continue
       end

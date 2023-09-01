@@ -43,7 +43,7 @@ c
 c     INPUT/OUTPUT VARIABLE:
 c     
       complex*16 PiPhoto2Bx(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
-      complex*16 PiPhoto2By(0:1,-1:1,0:1,-1:1)
+c     complex*16 PiPhoto2By(0:1,-1:1,0:1,-1:1)
 c     
 c********************************************************************
 c     

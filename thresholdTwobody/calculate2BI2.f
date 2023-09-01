@@ -118,6 +118,7 @@ c     c   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                   do iphi=imin,imax
                      call calculatepvector(p12x,p12y,p12z,p12,
      &                    th12(ith),phi12(iphi),verbosity)
+                     
                      call getsphericalharmonics(Yl12,l12,th12(ith),phi12(iphi))
                      do jth=1,Nth12
 c     c   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -134,8 +135,10 @@ c     for LebedevLaikov, only sum over diagonal elements of angweight12 (all oth
                            stop
                         end if
                         do jphi=jmin,jmax
+c                          Calcualtes Cartesian components given spherical polar co-ordinates
                            call calculatepvector(p12px,p12py,p12pz,p12p,
      &                          th12(jth),phi12(jphi),verbosity)
+
                            call getsphericalharmonics(Yl12p,l12p,th12(jth),phi12(jphi))
                            Yl12pstar=Real(Yl12p(ml12p))-ci*Imag(Yl12p(ml12p))
 

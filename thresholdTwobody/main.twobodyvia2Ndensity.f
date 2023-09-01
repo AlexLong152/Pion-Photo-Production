@@ -102,6 +102,11 @@ c*********************************************************************
       real*8 tmpRandom
       real*8 omegaThreshold
       real*8 P12MAG(Npmax),AP12MAG(Npmax)
+
+      complex*16 :: sigmax(-1:1,-1:1)  ! (ms3p,ms3): sigma-x
+      complex*16 :: sigmay(-1:1,-1:1) ! (ms3p,ms3): sigma-y
+      complex*16 :: sigmaz(-1:1,-1:1)  ! (ms3p,ms3): sigma-z
+      complex*16 :: SVec(3,-1:1,-1:1)
 c     
 c**********************************************************************
 c     
@@ -123,7 +128,6 @@ c
       integer inUnitno,outUnitno
       
       real*8 Egamma,kgamma,thetaL,thetacm,Elow,Ehigh,Einterval
-      
       real*8 thetaLow,thetaHigh,thetaInterval
       integer calctype,frame,Nangles,Nenergy,ienergy,j ! number of energies/angles; index for energies/angles
       character*200 descriptors  ! additional descriptors of calculation
@@ -421,6 +425,24 @@ c**********************************************************************
                end do             !j12
             end do                !mt12
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc            
+
+            sigmax=0.d0
+            sigmay=0.d0
+            sigmaz=0.d0
+c     
+            sigmax(1,-1)=dcmplx(1.d0,0)
+            sigmax(-1,1)=dcmplx(1.d0,0)
+c
+            sigmay(1,-1)=dcmplx(0, -1.d0)
+            sigmay(-1,1)=dcmplx (0, 1.d0) 
+c
+            sigmaz(1,1)=dcmplx(1.d0,0)
+            sigmaz(-1,-1)=dcmplx(-1.d0,0)
+
+            SVec(1,:,:)=sigmax
+            SVec(2,:,:)=sigmay
+            SVec(3,:,:)=sigmaz
+
             if (verbosity.ge.3) then
                do twoMzp=twoSnucl,twoMzplimit,-2
 c         for Mzp=0, run only over Mz>=0 -- that's still 2 more than necessary, but good enough -- see cure below
@@ -443,6 +465,15 @@ c                    write (*,*) "Resultyy(twoMzp=",twoMzp,", twoMz=",twoMz,"): 
                   end do
                end do
             end if
+
+
+c           write(*,*) "Full printing Resultx"
+c           write(*,*) "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+c           write(*,*) Resultx
+
+c           write(*,*) "Full printing Resulty"
+c           write(*,*) "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+c           write(*,*) Resulty
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c      found in usesymmetry+writeoutput-densities.f, and calls outputtomathPiPhoto found in 
             call outputPiPhoto(outUnitno,cartesian,twoSnucl,twoMzplimit,
