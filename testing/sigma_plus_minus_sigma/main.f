@@ -35,8 +35,6 @@ c     line break
       a = "############################################################"
       vecs = reshape((/ 1, 0, 0, 0, 1, 0, 0, 0, 1 /), shape(vecs))!identity matrix
       hold=c0
-      Sp=1
-      S=1
       write(*,*) "Evaluating (\vec{sigma}_1+\vec{sigma}_2).vec"
       do i=1,3
           vec=vecs(i,:)
@@ -46,7 +44,7 @@ c     line break
           do sp=0,1
           do m=-1,1,1
           do mp=-1,1,1
-              call singlesigma(hold,vec,Sp,S)
+              call singlesigma(hold,vec,sp,s)
               if (hold(sp,mp,s,m).ne.cmplx(0.d0,0.d0)) then
                   write(*,*) ""
                   write(*,'(A11,I2,I2,I3,I3)') "s,sp,m,mp=",s,sp,m,mp
@@ -72,9 +70,9 @@ c     line break
           write(*,*) "vec=",int(vec)
           do s=0,1
           do sp=0,1
-          do m=-1,1,1
-          do mp=-1,1,1
-              call singlesigmaasy(hold,vec,Sp,S)
+          do m=-s,s,1
+          do mp=-sp,sp,1
+              call singlesigmaasy(hold,vec,sp,s)
               if (hold(sp,mp,s,m).ne.cmplx(0.d0,0.d0)) then
                   write(*,*) ""
                   write(*,'(A11,I2,I2,I3,I3)') "s,sp,m,mp=",s,sp,m,mp
@@ -178,7 +176,7 @@ c
 c     
 c********************************************************************
 c     
-
+      factor=1.d0
       c0=cmplx(0.d0,0.d0)
       ci=cmplx(0.d0,1.d0)
       hold=c0
