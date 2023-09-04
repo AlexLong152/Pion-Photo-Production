@@ -1,5 +1,4 @@
       program TEST
-
 c     hold(Sp,Msp,S,Ms)
       complex*16 hold(0:1,-1:1,0:1,-1:1)
       real*8 vec(3)
@@ -35,61 +34,74 @@ c     line break
       a = "############################################################"
       vecs = reshape((/ 1, 0, 0, 0, 1, 0, 0, 0, 1 /), shape(vecs))!identity matrix
       hold=c0
-      write(*,*) "Evaluating (\vec{sigma}_1+\vec{sigma}_2).vec"
+      write(*,'(A)') "Evaluating (\vec{sigma}_1+\vec{sigma}_2).vec"
       do i=1,3
           vec=vecs(i,:)
-          write(*,*) a,a
-          write(*,*) "vec=",int(vec)
+          write(*,'(A,I3,I3,I3)') "vec=",int(vec)
           do s=0,1
           do sp=0,1
-          do m=-1,1,1
-          do mp=-1,1,1
-              call singlesigma(hold,vec,sp,s)
-              if (hold(sp,mp,s,m).ne.cmplx(0.d0,0.d0)) then
-                  write(*,*) ""
-                  write(*,'(A11,I2,I2,I3,I3)') "s,sp,m,mp=",s,sp,m,mp
-                  write(*,*) hold(sp,mp,s,m)
-              end if
-          end do!mp
-          end do!m
+          call singlesigma(hold,vec,sp,s)
+          call holdOutput(hold,sp,s)
           end do!sp
           end do!s
 
       end do!i vecs loop
-      write(*,*) a,a
-      write(*,*) a,a
-      write(*,*) a,a
-      write(*,*) ""
+      write(*,'(A)') a,a
+      write(*,'(A)') a,a
+      write(*,'(A)') a,a
       write(*,*) ""
       write(*,*) ""
 
-      write(*,*) "Evaluating (\vec{sigma}_1-\vec{sigma}_2).vec"
+      write(*,'(A)') "Evaluating (\vec{sigma}_1-\vec{sigma}_2).vec"
+      write(*,*) ""
       do i=1,3
           vec=vecs(i,:)
-          write(*,*) a,a
-          write(*,*) "vec=",int(vec)
+          write(*,'(A,I3,I3,I3)') "vec=",int(vec)
           do s=0,1
           do sp=0,1
-          do m=-s,s,1
-          do mp=-sp,sp,1
-              call singlesigmaasy(hold,vec,sp,s)
-              if (hold(sp,mp,s,m).ne.cmplx(0.d0,0.d0)) then
-                  write(*,*) ""
-                  write(*,'(A11,I2,I2,I3,I3)') "s,sp,m,mp=",s,sp,m,mp
-                  write(*,*) hold(sp,mp,s,m)
-              end if
-          end do!mp
-          end do!m
+          call singlesigmaasy(hold,vec,sp,s)
+          call holdOutput(hold,sp,s)
           end do!sp
           end do!s
 
+        write(*,'(A)') a,a
       end do!i vecs loop
-      write(*,*) a,a
-      write(*,*) a,a
-      write(*,*) ""
-      write(*,*) ""
-
       end program TEST
+
+
+      subroutine holdOutput(hold,sp,s)
+      complex*16 hold(0:1,-1:1,0:1,-1:1)
+      integer sp,s
+      logical printflag
+      character(19) formt
+      printflag=.FALSE.
+
+      do m=-1,1
+      do mp=-1,1
+        if(hold(sp,mp,s,m).ne.cmplx(0.d0,0.d0)) then
+            printflag=.TRUE.
+        end if
+      end do!mp
+      end do!m
+
+      formt= '(F0.5,SP,F0.5,A3)'
+
+      if (printflag) then
+        write(*,*) ""
+        write(*,'(A5,I2,I2)') "s,sp=",s,sp
+        do mp=1,-1,-1
+        do m=1,-1,-1
+            write(*,formt,advance="no") hold(sp,mp,s,m), "  "
+        end do
+        write(*,*) ""
+        end do 
+        write(*,*) ""
+        write(*,*) ""
+      end if
+
+
+      end subroutine
+
 
       subroutine singlesigma(hold,vec,Sp,S)
 c     calculates 2*S.A, where S=(sigma1+sigma2)/2
