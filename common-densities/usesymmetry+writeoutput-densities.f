@@ -299,9 +299,8 @@ c
        write(*,*) "x polarization - epsilon=<1,0,0>"
        do twoMzp=twoSnucl,-twoSnucl,-2
           do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,*) Resultx(twoMzp,twoMz)!, "for (Mzp, Mz)=",twoMzp, twoMz
-             write(*,*) Resultx(twoMzp,twoMz)!,"for (Mzp, Mz)=",twoMzp,twoMz
-             write(*,*) "In usesymmetry+writeoutput-densities.f: sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz) 
+             write(outUnitno,*) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz) !, "for (Mzp, Mz)=",twoMzp, twoMz
+             write(*,*) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz)
           end do
        end do
        
@@ -311,23 +310,8 @@ c
        write(*,*) "y polarization - epsilon=<0,1,0>"
        do twoMzp=twoSnucl,-twoSnucl,-2
           do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,*) Resulty(twoMzp,twoMz)!, "for (Mzp, Mz)=",twoMzp,twoMz
-             write(*,*) Resulty(twoMzp,twoMz)!,"for (Mzp, Mz)=",twoMzp,twoMz
-             write(*,*) "In usesymmetry+writeoutput-densities.f: sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
-          end do
-       end do
-
-       write(outUnitno,*) ""
-       write(*,*) ""
-       write(outUnitno,*) "Order of outputs is"
-       write(*,*) "Order of outputs is"
-       write(*,*) "       twoMzp       twoMz"
-       write(outUnitno,*) "       twoMzp       twoMz"
-
-       do twoMzp=twoSnucl,-twoSnucl,-2
-          do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,*) twoMzp, twoMz
-             write(*,*) twoMzp, twoMz
+             write(outUnitno,*) Resulty(twoMzp,twoMz),"sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
+             write(*,*) Resulty(twoMzp,twoMz),"sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
           end do
        end do
 

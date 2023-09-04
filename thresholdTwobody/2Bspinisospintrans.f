@@ -190,10 +190,6 @@ c           factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
             call CalcPionPhoto2BAx(PiPhoto2Bx,factorA,
      &           eps,s12p,s12,verbosity)
 
-            eps=(/1.d0,0.d0,0.d0/)
-            call CalcPionPhoto2BAx(DiagramA,factorA,
-     &           eps,s12p,s12,verbosity)
-
             eps=(/0.d0,1.d0,0.d0/)
             call CalcPionPhoto2BAy(PiPhoto2By,factorA,
      &           eps,s12p,s12,verbosity)
@@ -244,9 +240,9 @@ c----------------------------------------------------------------------
             factorAasy=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
 c           
 
-            eps=(/1.d0,0.d0,0.d0/)
-            call CalcPionPhoto2BAxasy(DiagramA,factorAasy,
-     &           eps,s12p,s12,verbosity)
+c           eps=(/1.d0,0.d0,0.d0/)
+c           call CalcPionPhoto2BAxasy(DiagramA,factorAasy,
+c    &           eps,s12p,s12,verbosity)
 
             eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BAxasy(PiPhoto2Bx,factorAasy,
