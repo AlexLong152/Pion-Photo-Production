@@ -57,6 +57,7 @@ c
       include '../common-densities/calctype.def'
 c     Only care about neutral pion photoproduction 
       complex*16,intent(out) :: PiPhoto2By(0:1,-1:1,0:1,-1:1)
+      complex*16 diff(0:1,-1:1,0:1,-1:1)
       complex*16,intent(out) :: PiPhoto2Bx(0:1,-1:1,0:1,-1:1)
 c     
 
@@ -189,10 +190,23 @@ c           factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
             eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BA(PiPhoto2Bx,factorA,
      &           eps,s12p,s12,verbosity)
+            diff=c0
+            call CalcPionPhoto2BA(diff,factorA,
+     &           eps,s12p,s12,verbosity)
+            write(*,*) "x polarization diff"
+            call printDiff(diff)
+            diff=c0
 
             eps=(/0.d0,1.d0,0.d0/)
             call CalcPionPhoto2BA(PiPhoto2By,factorA,
      &           eps,s12p,s12,verbosity)
+
+            call CalcPionPhoto2BA(diff,factorA,
+     &           eps,s12p,s12,verbosity)
+            write(*,*) "y polarization diff"
+            call printDiff(diff)
+            write(*,*) ""
+            write(*,*) ""
 c----------------------------------------------------------------------
 c     
 c     Calculate two-body diagram B, symmetric part
@@ -238,20 +252,23 @@ c----------------------------------------------------------------------
 
             denomVec=p12-p12p+(kVec/2)
             factorAasy=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
-c           
-
-c           eps=(/1.d0,0.d0,0.d0/)
-c           call CalcPionPhoto2BAxasy(DiagramA,factorAasy,
-c    &           eps,s12p,s12,verbosity)
 
             eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BAasy(PiPhoto2Bx,factorAasy,
      &           eps,s12p,s12,verbosity)
+c           diff=c0
+c           call CalcPionPhoto2BAasy(diff,factorAasy,
+c    &           eps,s12p,s12,verbosity)
+c           call printDiff(diff)
 
             eps=(/0.d0,1.d0,0.d0/)
             call CalcPionPhoto2BAasy(PiPhoto2By,factorAasy,
      &           eps,s12p,s12,verbosity)
-
+c           diff=c0
+c           call CalcPionPhoto2BAasy(diff,factorAasy,
+c    &           eps,s12p,s12,verbosity)
+c           call printDiff(diff)
+c           diff=c0
 c----------------------------------------------------------------------
 c     
 c     Calculate two-body diagram B, anti-symmetric part
@@ -283,3 +300,25 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       return
       if (verbosity.eq.1000) continue
       end
+
+      subroutine printDiff(diff)
+      complex*16 diff(0:1,-1:1,0:1,-1:1)
+      character(19) formt
+      integer s,sp,m,mp
+      formt = '(F0.8,SP,F0.8,"i")'
+c     hold(Sp,Msp,S,Ms)
+      do s=0,1
+      do sp=0,1
+      do m=-1,1,1
+      do mp=-1,1,1
+        if (diff(sp,mp,s,m).ne.c0) then
+            write(*,'(A6)',advance='no') "diff="
+            write(*,formt,advance='no') diff(sp,mp,s,m)
+c           write(*,*) diff(sp,mp,s,m)
+            write(*,'(A19,I3,I3,I3,I3)') " for (sp,mp,s,m) ",sp,mp,s,m
+        end if
+      end do
+      end do
+      end do
+      end do
+      end subroutine
