@@ -19,7 +19,7 @@ c     in subroutine Calcholdasy, all hold(..) must be multiplied by 2.d0
 c     This is presently taken care of through the "factor" factors
 c====================================================================
 c     
-      subroutine CalcPionPhoto2BAxasy(PiPhoto2Bx,factor,
+      subroutine CalcPionPhoto2BAasy(PiPhoto2Bx,factor,
      &     eps,Sp,S,verbosity)
 c     
 c********************************************************************

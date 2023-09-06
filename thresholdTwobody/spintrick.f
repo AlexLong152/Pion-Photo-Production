@@ -19,7 +19,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     Aug-Oct 2016/hgrie Feb 2017: Arman added OQ4 diagrams
 c====================================================================
 
-      subroutine CalcPionPhoto2BAx(PiPhoto2Bx,factor,
+      subroutine CalcPionPhoto2BA(PiPhoto2B,factor,
      &     eps,Sp,S,verbosity)
 c     
 c********************************************************************
@@ -42,7 +42,7 @@ c********************************************************************
 c     
 c     INPUT/OUTPUT VARIABLE:
 c     
-      complex*16 PiPhoto2Bx(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
+      complex*16 PiPhoto2B(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
 c     complex*16 PiPhoto2By(0:1,-1:1,0:1,-1:1)
 c     
 c********************************************************************
@@ -65,7 +65,7 @@ c
       call S_Dot_A(hold,eps,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
-            PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+            PiPhoto2B(Sp,Msp,S,Ms)=PiPhoto2B(Sp,Msp,S,Ms)+factor*hold(Sp,Msp,S,Ms)
          end do
       end do
 c     
@@ -73,60 +73,6 @@ c
       return
       end
       
-      subroutine CalcPionPhoto2BAy(PiPhoto2By,factor,
-     &     eps,Sp,S,verbosity)
-c     
-c********************************************************************
-c     
-c     Calculates symmetric part of diagram A for 
-c     
-c     Indices in Pion2Bab are that first index gives NN spin state:
-c     S=0 or S=1, second index gives spin projection. This is for final
-c     state. Third and fourth indices give same for initial state. 
-c     
-c********************************************************************
-c     
-      implicit none
-c     
-c********************************************************************
-c     
-      include '../common-densities/constants.def'
-c     
-c********************************************************************
-c     
-c     INPUT/OUTPUT VARIABLE:
-c     
-      complex*16 PiPhoto2Bx(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
-      complex*16 PiPhoto2By(0:1,-1:1,0:1,-1:1)
-c     
-c********************************************************************
-c     
-c     INPUT VARIABLES:
-c     
-      real*8 factor
-      real*8 Ax,Ay,Az
-      real*8 eps(3)
-      integer Ms,Msp,Sp,S
-      integer verbosity
-c     
-c     singlesigma contains (sig_1+sig_2).A structure, symmetric part
-c     factor-contains meson propagator, overall factor
-c     Sp,S-final- and initial-state total spin of pair
-c     
-c********************************************************************
-c     
-      call S_Dot_A(hold,eps,Sp,S,verbosity)
-      do Msp=-Sp,Sp
-         do Ms=-S,S
-            PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
-         end do
-      end do
-c     
-      if (verbosity.eq.1000) continue
-      return
-      end
-c
-c====================================================================
 c
       subroutine CalcPionPhoto2BB(Pion2Bout,factor,
      &     q1,Sp,S,verbosity)
@@ -243,6 +189,7 @@ c
       if (verbosity.eq.1000) continue
       end
 c
+      
       subroutine S_Dot_A(output,A,Sp,S,verbosity)
 c     This is an interface to singlesigma thats more useful for my case
 c********************************************************************
@@ -253,14 +200,12 @@ c********************************************************************
       integer Sp,S
       factor=1.d0
       call singlesigma(output,A(1),A(2),A(3),factor,Sp,S,verbosity)
-
       end subroutine
+
 
 cccc  new subroutine to calculate the matrix elements of factor*A.S ccc
 cccc same should be created in spintrickasy.f for factor*A.(sigma1-sigma2)      
       subroutine singlesigma(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
-c     TODO: why is "factor" involved here? Im pretty sure this actually calcualtes
-c     TODO: factor*A.(sigma_1+sigma_2)
 c     calculates 2*S.A, where S=(sigma1+sigma2)/2
 c     
 c********************************************************************
@@ -305,8 +250,9 @@ c
          Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
          
          hold(1,1,1,1)=factor*2.d0*Az
+         hold(1,-1,1,-1)=-2.d0*factor*Az
 c     hold(1,0,1,0)=0
-         hold(1,-1,1,-1)=hold(1,1,1,1)
+c        hold(1,-1,1,-1)=hold(1,1,1,1)
          hold(1,0,1,1)=-factor*2.d0*Aplus
 c     hold(1,-1,1,1)=0
          hold(1,1,1,0)=factor*2.d0*Aminus   
@@ -317,4 +263,3 @@ c     hold(1,1,1,-1)=0
       
       if (verbosity.eq.1000) continue
       end
-c     
