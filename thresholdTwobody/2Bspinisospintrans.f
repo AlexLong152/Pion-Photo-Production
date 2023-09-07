@@ -75,7 +75,6 @@ c
       real*8 Mnucl
       integer,intent(in) :: t12,mt12,t12p,mt12p,l12,l12p,s12,s12p
       real*8  :: px,py,pz,ppx,ppy,ppz
-               
       integer,intent(in) :: verbosity
       real*8 qpx,qpy,qpz,qppx,qppy,qppz,qx,qy,qz
 c     real*8 q12x,q12y,q12z,qp12x,qp12y,qp12z,qpp12x,qpp12y,qpp12z
@@ -94,6 +93,7 @@ c     real*8 Bnumer
 c     debugging variables
       real*8 p(3),tmp1(3), tmp2(3), kVec(3), kp(3)
       real*8 denomVec(3)
+      logical :: allZerox, allZeroy
 c     real*8 mu
 c     mu=0.025
 c     
@@ -191,22 +191,43 @@ c           factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
             call CalcPionPhoto2BA(PiPhoto2Bx,factorA,
      &           eps,s12p,s12,verbosity)
             diff=c0
-            call CalcPionPhoto2BA(diff,factorA,
-     &           eps,s12p,s12,verbosity)
-            write(*,*) "x polarization diff"
-            call printDiff(diff)
-            diff=c0
 
             eps=(/0.d0,1.d0,0.d0/)
             call CalcPionPhoto2BA(PiPhoto2By,factorA,
      &           eps,s12p,s12,verbosity)
 
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c           The stuff below here is for debugging
+            eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BA(diff,factorA,
      &           eps,s12p,s12,verbosity)
-            write(*,*) "y polarization diff"
-            call printDiff(diff)
-            write(*,*) ""
-            write(*,*) ""
+            call check_all_zero(allZerox,diff)
+
+            eps=(/0.d0,1.d0,0.d0/)
+            call CalcPionPhoto2BA(diff,factorA,
+     &           eps,s12p,s12,verbosity)
+            call check_all_zero(allZeroy,diff)
+
+            if ((.not.(allZerox)).or.(.not.(allZeroy))) then
+                write(*,'(A,I3,I3,I3,I3,I3,I3)') "mt12,mt12p,s12,s12p,t12,t12p=",
+     &                  mt12,mt12p,s12,s12p,t12,t12p
+                write(*,*) "x polarization"
+
+                eps=(/1.d0,0.d0,0.d0/)
+                call CalcPionPhoto2BA(diff,factorA,
+     &                eps,s12p,s12,verbosity)
+                call printDiff(diff)
+
+                eps=(/0.d0,1.d0,0.d0/)
+                call CalcPionPhoto2BA(diff,factorA,eps,s12p,s12,verbosity)
+                write(*,*) "y polarization"
+                call printDiff(diff)
+
+                write(*,*) ""
+                write(*,*) ""
+            end if
+            diff=c0
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c----------------------------------------------------------------------
 c     
 c     Calculate two-body diagram B, symmetric part
@@ -322,3 +343,25 @@ c           write(*,*) diff(sp,mp,s,m)
       end do
       end do
       end subroutine
+
+      subroutine check_all_zero(allZero,diffs)
+      logical :: allZero 
+      complex*16 diffs(0:1,-1:1,0:1,-1:1)
+      integer s,sp,m,mp
+      allZero=.true.
+      do s=0,1
+      do sp=0,1
+      do m=-1,1,1
+      do mp=-1,1,1
+      if (diffs(sp,mp,s,m).ne.c0) then
+        allZero=.false.
+      end if
+      end do
+      end do
+      end do
+      end do
+      end subroutine
+
+
+
+
