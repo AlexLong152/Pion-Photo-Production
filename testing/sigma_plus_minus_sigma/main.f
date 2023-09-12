@@ -2,7 +2,7 @@
 c     hold(Sp,Msp,S,Ms)
       complex*16 hold(0:1,-1:1,0:1,-1:1)
       real*8 vec(3)
-      real*8 vecs(3,3)
+c     real*8 vecs(3,3)
       integer i, Sp, S
       character(len=:), allocatable :: a
 c     real*8 m, mp
@@ -32,11 +32,12 @@ c     real*8 m, mp
       SVec(3,:,:)=sigmaz
 c     line break
       a = "############################################################"
-      vecs = reshape((/ 1, 0, 0, 0, 1, 0, 0, 0, 1 /), shape(vecs))!identity matrix
+c     vecs = reshape((/ 1, 0, 0, 0, 1, 0, 0, 0, 1 /), shape(vecs))!identity matrix
       hold=c0
       write(*,'(A)') "Evaluating (\vec{sigma}_1+\vec{sigma}_2).vec"
-      do i=1,3
-          vec=vecs(i,:)
+c     do i=1,3
+c         vec=vecs(i,:)
+          vec=(/1,1,1/)
           write(*,'(A,I3,I3,I3)') "vec=",int(vec)
           do s=0,1
           do sp=0,1
@@ -45,7 +46,7 @@ c     line break
           end do!sp
           end do!s
 
-      end do!i vecs loop
+c     end do!i vecs loop
       write(*,'(A)') a,a
       write(*,'(A)') a,a
       write(*,'(A)') a,a
@@ -54,8 +55,9 @@ c     line break
 
       write(*,'(A)') "Evaluating (\vec{sigma}_1-\vec{sigma}_2).vec"
       write(*,*) ""
-      do i=1,3
-          vec=vecs(i,:)
+c     do i=1,3
+c         vec=vecs(i,:)
+          vec=(/1,1,1/)
           write(*,'(A,I3,I3,I3)') "vec=",int(vec)
           do s=0,1
           do sp=0,1
@@ -65,7 +67,7 @@ c     line break
           end do!s
 
         write(*,'(A)') a,a
-      end do!i vecs loop
+c     end do!i vecs loop
       end program TEST
 
 
@@ -84,13 +86,13 @@ c     line break
       end do!mp
       end do!m
 
-      formt= '(F0.5,SP,F0.5,A3)'
+      formt= '(F0.3,SP,F0.3,A3)'
 
       if (printflag) then
         write(*,*) ""
         write(*,'(A5,I2,I2)') "s,sp=",s,sp
-        do mp=1,-1,-1
         do m=1,-1,-1
+        do mp=1,-1,-1
             write(*,formt,advance="no") hold(sp,mp,s,m), "  "
         end do
         write(*,*) ""

@@ -39,7 +39,7 @@ c     variable for line break
 
         write(*,'(A)') a,a
         write(*,*) ""
-        write(*,'(A)') "Order of indicies in matrix listed here as m,mp"
+        write(*,*) "Order of indicies in matrix listed here as m,mp"
         do mp=-1,1
         do m=-1,1
             write(*,'(I2,A1,I2)',advance="no") m,",",mp

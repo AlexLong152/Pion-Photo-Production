@@ -1,6 +1,6 @@
 131.857 131.857 15            omegaLow, omegaHigh, omegaStep
 60 60 10                             thetaLow, thetaHigh, thetaStep
-3He-threshold-output.dat
+3He-threshold-output-16-50-mu=0.005.dat
 '/home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5'
 cm_ymmetry_verbos                     frame, symmetry, verbosity of STDOUT
 Odelta2_j12max=1 		    Calctype, maximal total ang mom in (12) subsystem

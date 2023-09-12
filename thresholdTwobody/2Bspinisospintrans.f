@@ -93,9 +93,9 @@ c     real*8 Bnumer
 c     debugging variables
       real*8 p(3),tmp1(3), tmp2(3), kVec(3), kp(3)
       real*8 denomVec(3)
+      real*8 mu
       logical :: allZerox, allZeroy
-c     real*8 mu
-c     mu=0.025
+      mu=0.005
 c     
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     
@@ -185,7 +185,8 @@ c     In my derivation (Alex Long) though I just got 1/q^2
 c----------------------------------------------------------------------
 c           factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
             denomVec=p12-p12p+(kVec/2)
-            factorA=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
+
+            factorA=((-1)**t12)*0.5/(mu+DOT_PRODUCT(denomVec,denomVec))
 
             eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BA(PiPhoto2Bx,factorA,
@@ -208,24 +209,24 @@ c           The stuff below here is for debugging
      &           eps,s12p,s12,verbosity)
             call check_all_zero(allZeroy,diff)
 
-            if ((.not.(allZerox)).or.(.not.(allZeroy))) then
-                write(*,'(A,I3,I3,I3,I3,I3,I3)') "mt12,mt12p,s12,s12p,t12,t12p=",
-     &                  mt12,mt12p,s12,s12p,t12,t12p
-                write(*,*) "x polarization"
+c           if ((.not.(allZerox)).or.(.not.(allZeroy))) then
+c               write(*,'(A,I3,I3,I3,I3,I3,I3)') "mt12,mt12p,s12,s12p,t12,t12p=",
+c    &                  mt12,mt12p,s12,s12p,t12,t12p
+c               write(*,*) "x polarization"
 
-                eps=(/1.d0,0.d0,0.d0/)
-                call CalcPionPhoto2BA(diff,factorA,
-     &                eps,s12p,s12,verbosity)
-                call printDiff(diff)
+c               eps=(/1.d0,0.d0,0.d0/)
+c               call CalcPionPhoto2BA(diff,factorA,
+c    &                eps,s12p,s12,verbosity)
+c               call printDiff(diff)
 
-                eps=(/0.d0,1.d0,0.d0/)
-                call CalcPionPhoto2BA(diff,factorA,eps,s12p,s12,verbosity)
-                write(*,*) "y polarization"
-                call printDiff(diff)
+c               eps=(/0.d0,1.d0,0.d0/)
+c               call CalcPionPhoto2BA(diff,factorA,eps,s12p,s12,verbosity)
+c               write(*,*) "y polarization"
+c               call printDiff(diff)
 
-                write(*,*) ""
-                write(*,*) ""
-            end if
+c               write(*,*) ""
+c               write(*,*) ""
+c           end if
             diff=c0
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c----------------------------------------------------------------------
