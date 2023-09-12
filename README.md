@@ -1,4 +1,4 @@
-# Pion-Photo-Production
+# Pion Photoproduction
 Neutral Pion production for use with nucdens python package https://pypi.org/project/nucdens/
 
 Currently the code only works for the one body case.
