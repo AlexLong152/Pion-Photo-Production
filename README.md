@@ -1,7 +1,7 @@
 # Pion Photoproduction
-Neutral Pion production for use with nucdens python package https://pypi.org/project/nucdens/
+Neutral Pion production for use with `nucdens` python package https://pypi.org/project/nucdens/
 
-Currently the code only works for the one body case.
+Currently the code only works for the one body case. The two body case is running but does not yet give physical results.
 
 Initial implimentation based off of this paper
 Lenkewitz 2011: Neutral pion photoproduction off 3H and 3He in chiral perturbation theory
