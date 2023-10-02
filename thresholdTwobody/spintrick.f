@@ -50,7 +50,7 @@ c
 c     INPUT VARIABLES:
 c     
       real*8 factor
-      real*8 Ax,Ay,Az
+c     real*8 Ax,Ay,Az
       real*8 eps(3)
       integer Ms,Msp,Sp,S
       integer verbosity
@@ -243,23 +243,46 @@ c
 c********************************************************************
 c     
       hold=c0
-      
-      if ((Sp .eq. 1) .and. (S .eq. 1)) then
-         
-         Aplus=-(Ax+ci*Ay)/(dsqrt(2.d0))
-         Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
-         
-         hold(1,1,1,1)=factor*2.d0*Az
-         hold(1,-1,1,-1)=-2.d0*factor*Az
-c     hold(1,0,1,0)=0
-c        hold(1,-1,1,-1)=hold(1,1,1,1)
-         hold(1,0,1,1)=-factor*2.d0*Aplus
-c     hold(1,-1,1,1)=0
-         hold(1,1,1,0)=factor*2.d0*Aminus   
-         hold(1,-1,1,0)=-factor*2.d0*Aplus !check       
-c     hold(1,1,1,-1)=0       
-         hold(1,0,1,-1)=factor*2.d0*Aminus
-      end if
+c     why only Sp=1=S case ??? 
+
+      Aplus=-(Ax+ci*Ay)/(dsqrt(2.d0))
+      Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
+c     if ((Sp .eq. 1) .and. (S .eq. 1)) then
+c        hold(1,1,1,1)=factor*Az
+c        hold(1,-1,1,-1)=-1.d0*factor*Az
+c        hold(1,0,1,1)=-1.d0*Aplus
+c        hold(1,1,1,0)=factor*Aminus   
+c        hold(1,-1,1,0)=-factor*Aplus !check       
+c        hold(1,0,1,-1)=factor*Aminus
+c     end if
+
+c     if ((Sp .eq. 1) .and. (S .eq. 0)) then
+c         hold(Sp,0,S,-1)=factor*Aplus
+c         hold(Sp,0,S,0)=factor*Az
+c         hold(Sp,0,S,1)=factor*Aminus
+c     end if 
+
+c     if ((Sp .eq. 0) .and. (S .eq. 1)) then
+c         hold(Sp,-1,S,0)=factor*Aminus
+c         hold(Sp,0,S,0)=factor*Az
+c         hold(Sp,1,S,0)=factor*Aplus
+c     end if 
+
+      hold(1,1,1,1)=factor*Az
+      hold(1,-1,1,-1)=-1.d0*factor*Az
+      hold(1,0,1,1)=-1.d0*Aplus
+      hold(1,1,1,0)=factor*Aminus   
+      hold(1,-1,1,0)=-factor*Aplus
+      hold(1,0,1,-1)=factor*Aminus
+
+      hold(0,0,1,-1)=factor*Aplus
+      hold(0,0,1,0)=factor*Az
+      hold(0,0,1,1)=factor*Aminus
+
+      hold(1,-1,0,0)=factor*Aminus
+      hold(1,0,0,0)=factor*Az
+      hold(1,1,0,0)=factor*Aplus
+c     hold=hold/2.d0
       
       if (verbosity.eq.1000) continue
       end

@@ -358,12 +358,13 @@ c     hgrie Sep 2014: if thetaL is ZERO degrees, actual calculated at 1 Degree
 c**********************************************************************
             call calcphotonmomenta(k,kth,kphi,t,kp,kpth,kpphi,omega,
      &           Qk,Qkth,Qkphi,kgamma,thetacm,verbosity)
+
             if ((k.lt.omegaThreshold).and.(k+0.1.gt.omegaThreshold)) then
                 k=omegaThreshold+0.001
             end if
 
-            write(*,*) "In main.twobodyvia2Ndensity.f: k=",k 
-            write(*,*) "In main.twobodyvia2Ndensity.f: omegaThreshold=",omegaThreshold 
+c           write(*,*) "In main.twobodyvia2Ndensity.f: k=",k 
+c           write(*,*) "In main.twobodyvia2Ndensity.f: omegaThreshold=",omegaThreshold 
 c               write(*,*) "Below Pion photoproduction threshold, should abort"
 c               write(*,*) "Continuing with threshold energy instead for debugging"
 c               call RANDOM_NUMBER(tmpRandom)

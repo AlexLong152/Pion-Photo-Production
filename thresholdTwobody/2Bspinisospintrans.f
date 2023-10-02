@@ -95,7 +95,6 @@ c     debugging variables
       real*8 denomVec(3)
       real*8 mu
       logical :: allZerox, allZeroy
-      mu=0.005
 c     
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     
@@ -161,7 +160,10 @@ c     Here we calculate the non-isospin-changing part of the matrix element.
 c     This is the only piece at OQ3.
 c     
 c     Define overall factors for spin-symmetric parts of matrix element
-         K2n=0.135*0.001 !in pion mass units
+c     139.6=pi^+ mass
+c     1fm = 197.3 MeV^-1
+         K2n=(0.135*0.001/139.6)*197.3 !fm^2
+
 
 c   
 c     
@@ -186,12 +188,11 @@ c----------------------------------------------------------------------
 c           factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
             denomVec=p12-p12p+(kVec/2)
 
-            factorA=((-1)**t12)*0.5/(mu+DOT_PRODUCT(denomVec,denomVec))
+            factorA=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
 
             eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BA(PiPhoto2Bx,factorA,
      &           eps,s12p,s12,verbosity)
-            diff=c0
 
             eps=(/0.d0,1.d0,0.d0/)
             call CalcPionPhoto2BA(PiPhoto2By,factorA,
@@ -199,15 +200,16 @@ c           factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c           The stuff below here is for debugging
-            eps=(/1.d0,0.d0,0.d0/)
-            call CalcPionPhoto2BA(diff,factorA,
-     &           eps,s12p,s12,verbosity)
-            call check_all_zero(allZerox,diff)
+c           diff=c0
+c           eps=(/1.d0,0.d0,0.d0/)
+c           call CalcPionPhoto2BA(diff,factorA,
+c    &           eps,s12p,s12,verbosity)
+c           call check_all_zero(allZerox,diff)
 
-            eps=(/0.d0,1.d0,0.d0/)
-            call CalcPionPhoto2BA(diff,factorA,
-     &           eps,s12p,s12,verbosity)
-            call check_all_zero(allZeroy,diff)
+c           eps=(/0.d0,1.d0,0.d0/)
+c           call CalcPionPhoto2BA(diff,factorA,
+c    &           eps,s12p,s12,verbosity)
+c           call check_all_zero(allZeroy,diff)
 
 c           if ((.not.(allZerox)).or.(.not.(allZeroy))) then
 c               write(*,'(A,I3,I3,I3,I3,I3,I3)') "mt12,mt12p,s12,s12p,t12,t12p=",
@@ -217,17 +219,17 @@ c               write(*,*) "x polarization"
 c               eps=(/1.d0,0.d0,0.d0/)
 c               call CalcPionPhoto2BA(diff,factorA,
 c    &                eps,s12p,s12,verbosity)
-c               call printDiff(diff)
+c               call printDiff(diff/factorA)
 
 c               eps=(/0.d0,1.d0,0.d0/)
 c               call CalcPionPhoto2BA(diff,factorA,eps,s12p,s12,verbosity)
 c               write(*,*) "y polarization"
-c               call printDiff(diff)
+c               call printDiff(diff/factorA)
 
 c               write(*,*) ""
 c               write(*,*) ""
 c           end if
-            diff=c0
+c           diff=c0
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c----------------------------------------------------------------------
 c     
@@ -272,20 +274,20 @@ c     Calculate two-body diagram A, anti-symmetric part
 c     
 c----------------------------------------------------------------------
 
-            denomVec=p12-p12p+(kVec/2)
-            factorAasy=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
+c           denomVec=p12-p12p+(kVec/2)
+c           factorAasy=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
 
-            eps=(/1.d0,0.d0,0.d0/)
-            call CalcPionPhoto2BAasy(PiPhoto2Bx,factorAasy,
-     &           eps,s12p,s12,verbosity)
+c           eps=(/1.d0,0.d0,0.d0/)
+c           call CalcPionPhoto2BAasy(PiPhoto2Bx,factorAasy,
+c    &           eps,s12p,s12,verbosity)
 c           diff=c0
 c           call CalcPionPhoto2BAasy(diff,factorAasy,
 c    &           eps,s12p,s12,verbosity)
 c           call printDiff(diff)
 
-            eps=(/0.d0,1.d0,0.d0/)
-            call CalcPionPhoto2BAasy(PiPhoto2By,factorAasy,
-     &           eps,s12p,s12,verbosity)
+c           eps=(/0.d0,1.d0,0.d0/)
+c           call CalcPionPhoto2BAasy(PiPhoto2By,factorAasy,
+c    &           eps,s12p,s12,verbosity)
 c           diff=c0
 c           call CalcPionPhoto2BAasy(diff,factorAasy,
 c    &           eps,s12p,s12,verbosity)
@@ -327,7 +329,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       complex*16 diff(0:1,-1:1,0:1,-1:1)
       character(19) formt
       integer s,sp,m,mp
-      formt = '(F0.8,SP,F0.8,"i")'
+      formt = '(F0.4,SP,F0.4,"i")'
 c     hold(Sp,Msp,S,Ms)
       do s=0,1
       do sp=0,1

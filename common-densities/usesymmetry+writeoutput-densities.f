@@ -271,6 +271,7 @@ c
       complex*16 :: sigmay(-1:1,-1:1) ! (ms3p,ms3): sigma-y
       complex*16 :: sigmaz(-1:1,-1:1)  ! (ms3p,ms3): sigma-z
       complex*16 :: SVec(3,-1:1,-1:1)
+      character(39) formt
 c     
 c**********************************************************************
 c     
@@ -292,6 +293,9 @@ c
        SVec(2,:,:)=sigmay
        SVec(3,:,:)=sigmaz
 
+c      formt= '(F0.3,SP,F0.3,"i")'
+       formt='(F0.8,SP,F0.8,"i",A25,F0.3,SP,F0.3,"i")'
+       formt='(F0.8,SP,F0.8,"i",A25,F0.0,SP,F0.0,"i")'
        write(outUnitno,*) ""
        write(*,*) ""
 
@@ -299,8 +303,8 @@ c
        write(*,*) "x polarization - epsilon=<1,0,0>"
        do twoMzp=twoSnucl,-twoSnucl,-2
           do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,*) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz) !, "for (Mzp, Mz)=",twoMzp, twoMz
-             write(*,*) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz)
+             write(outUnitno,formt) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz) !, "for (Mzp, Mz)=",twoMzp, twoMz
+             write(*,formt) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz)
           end do
        end do
        
@@ -310,8 +314,8 @@ c
        write(*,*) "y polarization - epsilon=<0,1,0>"
        do twoMzp=twoSnucl,-twoSnucl,-2
           do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,*) Resulty(twoMzp,twoMz),"sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
-             write(*,*) Resulty(twoMzp,twoMz),"sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
+             write(outUnitno,formt) Resulty(twoMzp,twoMz),"sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
+             write(*,formt) Resulty(twoMzp,twoMz),"sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
           end do
        end do
 
@@ -320,7 +324,7 @@ c
 c     hgrie Aug 2020: if so wanted, output first independent MEs also to screen in a form that can directly be pasted into mathematica
             if (verbosity.ge.0) call outputtomathPiPhoto(Resultx,Resulty,twoSnucl,verbosity)
       return
-      end                       ! outputroutine
+      end                       ! output PiPhoto
 
       subroutine SingleDiagramOutput(cartesian,twoSnucl,twoMzplimit,
      &     DiagramX,label,verbosity)

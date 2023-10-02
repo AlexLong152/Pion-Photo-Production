@@ -1,16 +1,16 @@
  cm omega =    131.85700000000000      thetacm =    60.000000000000000     
  
  x polarization - epsilon=<1,0,0>
-1316.18485138+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
-29162.45084907+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
-29162.63501116+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
--1316.22646986+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+               (1008.4765254441804,0.0000000000000000) sigmax(twoMzp,twoMz)=               (0.0000000000000000,0.0000000000000000)
+               (62225.410369580655,0.0000000000000000) sigmax(twoMzp,twoMz)=               (1.0000000000000000,0.0000000000000000)
+               (62225.329957611764,0.0000000000000000) sigmax(twoMzp,twoMz)=               (1.0000000000000000,0.0000000000000000)
+              (-1008.7672644267608,0.0000000000000000) sigmax(twoMzp,twoMz)=               (0.0000000000000000,0.0000000000000000)
  
  y polarization - epsilon=<0,1,0>
-.00000000-.21645303i    sigmay(twoMzp,twoMz)=+0.+0.i
-.00000000-28939.14442549i    sigmay(twoMzp,twoMz)=+0.-1.i
-.00000000+28938.95158902i    sigmay(twoMzp,twoMz)=+0.+1.i
-.00000000+.09687006i    sigmay(twoMzp,twoMz)=+0.+0.i
+              (0.0000000000000000,0.43537534467225569) sigmay(twoMzp,twoMz)=               (0.0000000000000000,0.0000000000000000)
+              (0.0000000000000000,-61807.381663837543) sigmay(twoMzp,twoMz)=              (0.0000000000000000,-1.0000000000000000)
+               (0.0000000000000000,61807.202595987757) sigmay(twoMzp,twoMz)=               (0.0000000000000000,1.0000000000000000)
+             (0.0000000000000000,-0.18000397141005564) sigmay(twoMzp,twoMz)=               (0.0000000000000000,0.0000000000000000)
  
 
  ===================================================================================================
@@ -67,6 +67,8 @@ Calculate all 16 amplitudes independently, not using Symmetry.
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  Calculating amps: theta =   60.000000000000000      deg: angle #           1
+ In main.twobodyvia2Ndensity.f: k=   131.87643593980371     
+ In main.twobodyvia2Ndensity.f: omegaThreshold=   131.87543593975622     
     Now looking for density file...
     Density file name generated from energy & angle: /home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5
        Density file exists, good.
@@ -76,7 +78,7 @@ Calculate all 16 amplitudes independently, not using Symmetry.
  HDFinit: Using standard driver in HDF for all writing.
  Initamp version: 
  P12 grid read in from file
-p12 read parameters:  p1=   0.100000E+01 p2=   0.500000E+01 p3=   0.180000E+02 n1=   44 n2=   12 n_ges=   56
+p12 read parameters:  p1=   0.100000E+01 p2=   0.300000E+01 p3=   0.800000E+01 n1=   40 n2=   16 n_ges=   56
 j12max_rho =    5
 mjtot      =   -1...   1
         alpha  al2    l12  s12  j12  t12    mt12   m12 mjtot
@@ -85,7 +87,7 @@ mjtot      =   -1...   1
       1               131.86                59.98
     Finished reading bookkeeping information. Starting to read data sets.
  Finished reading dataset of 2Ndensity.
-FF:    0.668014E+00  -0.604648E-07   0.443881E+00   0.182610E+00   0.626491E+00
+FF:    0.668014E+00   0.394181E-07   0.437277E+00   0.156624E+00   0.593901E+00
 Calculation of rho for ...
   omega     =    0.131857E+03
   qval      =    0.131817E+03
@@ -98,19 +100,19 @@ Calculation of rho for ...
  *********Now convoluting 2N helicity amplitudes with 2N density matrix.*********
  
  x polarization - epsilon=<1,0,0>
-1316.18485138+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
-29162.45084907+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
-29162.63501116+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
--1316.22646986+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+               (1008.4765254441804,0.0000000000000000) sigmax(twoMzp,twoMz)=               (0.0000000000000000,0.0000000000000000)
+               (62225.410369580655,0.0000000000000000) sigmax(twoMzp,twoMz)=               (1.0000000000000000,0.0000000000000000)
+               (62225.329957611764,0.0000000000000000) sigmax(twoMzp,twoMz)=               (1.0000000000000000,0.0000000000000000)
+              (-1008.7672644267608,0.0000000000000000) sigmax(twoMzp,twoMz)=               (0.0000000000000000,0.0000000000000000)
  
  y polarization - epsilon=<0,1,0>
-.00000000-.21645303i    sigmay(twoMzp,twoMz)=+0.+0.i
-.00000000-28939.14442549i    sigmay(twoMzp,twoMz)=+0.-1.i
-.00000000+28938.95158902i    sigmay(twoMzp,twoMz)=+0.+1.i
-.00000000+.09687006i    sigmay(twoMzp,twoMz)=+0.+0.i
+              (0.0000000000000000,0.43537534467225569) sigmay(twoMzp,twoMz)=               (0.0000000000000000,0.0000000000000000)
+              (0.0000000000000000,-61807.381663837543) sigmay(twoMzp,twoMz)=              (0.0000000000000000,-1.0000000000000000)
+               (0.0000000000000000,61807.202595987757) sigmay(twoMzp,twoMz)=               (0.0000000000000000,1.0000000000000000)
+             (0.0000000000000000,-0.18000397141005564) sigmay(twoMzp,twoMz)=               (0.0000000000000000,0.0000000000000000)
  
  Note the following code has not been checked for a full output to mathematica, and might need fixing
-         {+.131618485138321239*10^(+04)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)-.216453026471650684*10^(+00)*I,+.291624508490656626*10^(+05)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)-.289391444254863636*10^(+05)*I,+.291626350111642496*10^(+05)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.289389515890182920*10^(+05)*I,-.131622646986387963*10^(+04)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.968700622324242672*10^(-01)*I}
+         {+.100847652544418042*10^(+04)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.435375344672255693*10^(+00)*I,+.622254103695806552*10^(+05)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)-.618073816638375429*10^(+05)*I,+.622253299576117643*10^(+05)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.618072025959877574*10^(+05)*I,-.100876726442676079*10^(+04)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)-.180003971410055641*10^(+00)*I}
  
  Lenkewitz Results at threshold https://arxiv.org/pdf/1103.3400.pdf
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -119,7 +121,7 @@ Calculation of rho for ...
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
  *** Wrote output to file: 3He-threshold-output.dat
-Production date: 2023-09-29 11:41:03-04:00
+Production date: 2023-09-18 10:54:11-04:00
 Real Time used: 4 seconds on host along-desktop
 **************************************************
 *********            INPUT FILE          *********

@@ -19,7 +19,7 @@ c     in subroutine Calcholdasy, all hold(..) must be multiplied by 2.d0
 c     This is presently taken care of through the "factor" factors
 c====================================================================
 c     
-      subroutine CalcPionPhoto2BAasy(PiPhoto2Bx,factor,
+      subroutine CalcPionPhoto2BAasy(PiPhoto2B,factor,
      &     eps,Sp,S,verbosity)
 c     
 c********************************************************************
@@ -42,7 +42,7 @@ c********************************************************************
 c     
 c     INPUT/OUTPUT VARIABLE:
 c     
-      complex*16 PiPhoto2Bx(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
+      complex*16 PiPhoto2B(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
 c     
 c********************************************************************
 c     
@@ -62,7 +62,7 @@ c
       call singlesigmaasy(hold,eps(1),eps(2),eps(3),factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
-            PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+            PiPhoto2B(Sp,Msp,S,Ms)=PiPhoto2B(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
          end do
       end do
 c     

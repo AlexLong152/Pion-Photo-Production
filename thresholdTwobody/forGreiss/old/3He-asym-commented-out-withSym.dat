@@ -1,16 +1,16 @@
  cm omega =    131.85700000000000      thetacm =    60.000000000000000     
  
  x polarization - epsilon=<1,0,0>
-1316.18485138+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
-29162.45084907+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
-29162.63501116+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
--1316.22646986+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+-74.46058179+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+30616.47005491+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
+.00000000+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
+.00000000+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
  
  y polarization - epsilon=<0,1,0>
-.00000000-.21645303i    sigmay(twoMzp,twoMz)=+0.+0.i
-.00000000-28939.14442549i    sigmay(twoMzp,twoMz)=+0.-1.i
-.00000000+28938.95158902i    sigmay(twoMzp,twoMz)=+0.+1.i
-.00000000+.09687006i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000000+.18505211i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000000-30406.56970740i    sigmay(twoMzp,twoMz)=+0.-1.i
+.00000000+.00000000i    sigmay(twoMzp,twoMz)=+0.+1.i
+.00000000+.00000000i    sigmay(twoMzp,twoMz)=+0.+0.i
  
 
  ===================================================================================================
@@ -35,7 +35,7 @@
        /home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5
    Target Nucleus: 3He, Anucl =  3, spin Snucl =  1/2 , mass Mnucl =  2808.400    MeV
  Input and output in centre-of-mass frame.
-Calculate all 16 amplitudes independently, not using Symmetry.
+ Calculate  8 amplitudes with Mz(out)>0, find other  8 by Symmetry.
  Output in spherical basis of photon polarisations.
  O(e²delta²)=O(Q³) calculation. (12) subsystem is (pn) since only charged MECs.
  Integration parameters of (12) subsystem:
@@ -76,7 +76,7 @@ Calculate all 16 amplitudes independently, not using Symmetry.
  HDFinit: Using standard driver in HDF for all writing.
  Initamp version: 
  P12 grid read in from file
-p12 read parameters:  p1=   0.100000E+01 p2=   0.500000E+01 p3=   0.180000E+02 n1=   44 n2=   12 n_ges=   56
+p12 read parameters:  p1=   0.100000E+01 p2=   0.300000E+01 p3=   0.800000E+01 n1=   40 n2=   16 n_ges=   56
 j12max_rho =    5
 mjtot      =   -1...   1
         alpha  al2    l12  s12  j12  t12    mt12   m12 mjtot
@@ -85,7 +85,7 @@ mjtot      =   -1...   1
       1               131.86                59.98
     Finished reading bookkeeping information. Starting to read data sets.
  Finished reading dataset of 2Ndensity.
-FF:    0.668014E+00  -0.604648E-07   0.443881E+00   0.182610E+00   0.626491E+00
+FF:    0.668014E+00   0.394181E-07   0.437277E+00   0.156624E+00   0.593901E+00
 Calculation of rho for ...
   omega     =    0.131857E+03
   qval      =    0.131817E+03
@@ -98,19 +98,19 @@ Calculation of rho for ...
  *********Now convoluting 2N helicity amplitudes with 2N density matrix.*********
  
  x polarization - epsilon=<1,0,0>
-1316.18485138+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
-29162.45084907+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
-29162.63501116+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
--1316.22646986+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+-74.46058179+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+30616.47005491+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
+.00000000+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
+.00000000+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
  
  y polarization - epsilon=<0,1,0>
-.00000000-.21645303i    sigmay(twoMzp,twoMz)=+0.+0.i
-.00000000-28939.14442549i    sigmay(twoMzp,twoMz)=+0.-1.i
-.00000000+28938.95158902i    sigmay(twoMzp,twoMz)=+0.+1.i
-.00000000+.09687006i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000000+.18505211i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000000-30406.56970740i    sigmay(twoMzp,twoMz)=+0.-1.i
+.00000000+.00000000i    sigmay(twoMzp,twoMz)=+0.+1.i
+.00000000+.00000000i    sigmay(twoMzp,twoMz)=+0.+0.i
  
  Note the following code has not been checked for a full output to mathematica, and might need fixing
-         {+.131618485138321239*10^(+04)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)-.216453026471650684*10^(+00)*I,+.291624508490656626*10^(+05)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)-.289391444254863636*10^(+05)*I,+.291626350111642496*10^(+05)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.289389515890182920*10^(+05)*I,-.131622646986387963*10^(+04)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.968700622324242672*10^(-01)*I}
+         {-.744605817896381268*10^(+02)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.185052108295679751*10^(+00)*I,+.306164700549081426*10^(+05)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)-.304065697073966767*10^(+05)*I,+.000000000000000000*10^(+00)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.000000000000000000*10^(+00)*I,+.000000000000000000*10^(+00)+.000000000000000000*10^(+00)*I}
  
  Lenkewitz Results at threshold https://arxiv.org/pdf/1103.3400.pdf
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -119,8 +119,8 @@ Calculation of rho for ...
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
  *** Wrote output to file: 3He-threshold-output.dat
-Production date: 2023-09-29 11:41:03-04:00
-Real Time used: 4 seconds on host along-desktop
+Production date: 2023-09-22 11:05:27-04:00
+Real Time used: 3 seconds on host along-desktop
 **************************************************
 *********            INPUT FILE          *********
 **************************************************
@@ -128,7 +128,7 @@ Real Time used: 4 seconds on host along-desktop
 60 60 10                             thetaLow, thetaHigh, thetaStep
 3He-threshold-output.dat
 '/home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5'
-cm_nosymmetry_verbos                     frame, symmetry, verbosity of STDOUT
+cm_ymmetry_verbos                     frame, symmetry, verbosity of STDOUT
 Odelta2_j12max=1 		    Calctype, maximal total ang mom in (12) subsystem
 1 1 		    		    NP12A, NP12B
 1.1 5.0 15.0 			    P12A, P12B, P12C
