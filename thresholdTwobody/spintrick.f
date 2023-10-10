@@ -62,7 +62,7 @@ c
 c********************************************************************
 c     
 
-      call S_Dot_A(hold,eps,Sp,S,verbosity)
+      call S_Dot_A(hold,factor,eps,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
             PiPhoto2B(Sp,Msp,S,Ms)=PiPhoto2B(Sp,Msp,S,Ms)+factor*hold(Sp,Msp,S,Ms)
@@ -190,7 +190,7 @@ c
       end
 c
       
-      subroutine S_Dot_A(output,A,Sp,S,verbosity)
+      subroutine S_Dot_A(output,factor,A,Sp,S,verbosity)
 c     This is an interface to singlesigma thats more useful for my case
 c********************************************************************
       complex*16 output(0:1,-1:1,0:1,-1:1)!same as hold
@@ -198,7 +198,7 @@ c********************************************************************
       real*8 A(3)
       integer verbosity
       integer Sp,S
-      factor=1.d0
+c     factor=1.d0
       call singlesigma(output,A(1),A(2),A(3),factor,Sp,S,verbosity)
       end subroutine
 
@@ -247,42 +247,26 @@ c     why only Sp=1=S case ???
 
       Aplus=-(Ax+ci*Ay)/(dsqrt(2.d0))
       Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
-c     if ((Sp .eq. 1) .and. (S .eq. 1)) then
-c        hold(1,1,1,1)=factor*Az
-c        hold(1,-1,1,-1)=-1.d0*factor*Az
-c        hold(1,0,1,1)=-1.d0*Aplus
-c        hold(1,1,1,0)=factor*Aminus   
-c        hold(1,-1,1,0)=-factor*Aplus !check       
-c        hold(1,0,1,-1)=factor*Aminus
-c     end if
 
-c     if ((Sp .eq. 1) .and. (S .eq. 0)) then
-c         hold(Sp,0,S,-1)=factor*Aplus
-c         hold(Sp,0,S,0)=factor*Az
-c         hold(Sp,0,S,1)=factor*Aminus
-c     end if 
+      if ((Sp .eq. 1) .and. (S .eq. 1)) then
+          hold(1,1,1,1)=factor*Az
+          hold(1,-1,1,-1)=-1.d0*factor*Az
+          hold(1,0,1,1)=-1.d0*Aplus
+          hold(1,1,1,0)=factor*Aminus   
+          hold(1,-1,1,0)=-factor*Aplus
+          hold(1,0,1,-1)=factor*Aminus
+      end if
 
-c     if ((Sp .eq. 0) .and. (S .eq. 1)) then
-c         hold(Sp,-1,S,0)=factor*Aminus
-c         hold(Sp,0,S,0)=factor*Az
-c         hold(Sp,1,S,0)=factor*Aplus
-c     end if 
+      if ((Sp .eq. 1) .and. (S .eq. 0)) then
+          hold(0,0,1,-1)=factor*Aplus
+          hold(0,0,1,0)=factor*Az
+          hold(0,0,1,1)=factor*Aminus
+      end if
 
-      hold(1,1,1,1)=factor*Az
-      hold(1,-1,1,-1)=-1.d0*factor*Az
-      hold(1,0,1,1)=-1.d0*Aplus
-      hold(1,1,1,0)=factor*Aminus   
-      hold(1,-1,1,0)=-factor*Aplus
-      hold(1,0,1,-1)=factor*Aminus
-
-      hold(0,0,1,-1)=factor*Aplus
-      hold(0,0,1,0)=factor*Az
-      hold(0,0,1,1)=factor*Aminus
-
-      hold(1,-1,0,0)=factor*Aminus
-      hold(1,0,0,0)=factor*Az
-      hold(1,1,0,0)=factor*Aplus
-c     hold=hold/2.d0
-      
+      if ((Sp .eq. 0) .and. (S .eq. 1)) then
+          hold(1,-1,0,0)=factor*Aminus
+          hold(1,0,0,0)=factor*Az
+          hold(1,1,0,0)=factor*Aplus
+      end if
       if (verbosity.eq.1000) continue
       end

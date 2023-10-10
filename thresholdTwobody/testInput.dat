@@ -1,12 +1,12 @@
-120 120 10                   omegaLow, omegaHigh, omegaStep
-150 150 15                             thetaLow, thetaHigh, thetaStep
-4He-twobody-srgwf-omega=120theta=150lambda=400-output.dat
-'/home/alex/OneDrive/densities-4He/2Ndensities/4He-twobody-srgwf-omega=120theta=150lambda=400.0.gz'
-cm_ymmetry_verbos                     frame, symmetry, verbosity of STDOUT
+131.857 131.857 15            omegaLow, omegaHigh, omegaStep
+60 60 10                             thetaLow, thetaHigh, thetaStep
+3He-1hold-sym=True-asym=True-testParams.dat
+'/home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5'
+cm_nosymmetry_verbos                     frame, symmetry, verbosity of STDOUT
 Odelta2_j12max=1 		    Calctype, maximal total ang mom in (12) subsystem
-2 7 		    		    NP12A, NP12B
+1 1 		    		    NP12A, NP12B
 1.1 5.0 15.0 			    P12A, P12B, P12C
-2 2     			    AngularType12,(Nordth12 OR Nanggrid12),Nthbins12,Nordphi12,Nphibins12
+2 1     			    AngularType12,(Nordth12 OR Nanggrid12),Nthbins12,Nordphi12,Nphibins12
 COMMENTS:_v2.0
 # in density filename, code replaces XXX and YYY automatically by energy and angle.
 

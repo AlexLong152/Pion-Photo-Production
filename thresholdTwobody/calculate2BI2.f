@@ -46,14 +46,6 @@ c     complex*16,intent(out) :: Int2Bxx,Int2Bxy,Int2Byx,Int2Byy
       complex*16 PiPhoto2Bx(0:1,-1:1,0:1,-1:1)
       complex*16 PiPhoto2By(0:1,-1:1,0:1,-1:1)
 
-c     complex*16 Compton2Bxx(0:1,-1:1,0:1,-1:1)
-c     complex*16 Compton2Bxy(0:1,-1:1,0:1,-1:1)
-c     complex*16 Compton2Byx(0:1,-1:1,0:1,-1:1)
-c     complex*16 Compton2Byy(0:1,-1:1,0:1,-1:1)
-c     complex*16 Compton2Bx(0:1,-1:1,0:1,-1:1)
-c     complex*16 Compton2By(0:1,-1:1,0:1,-1:1)
-c     complex*16 Compton2Bpx(0:1,-1:1,0:1,-1:1)
-c     complex*16 Compton2Bpy(0:1,-1:1,0:1,-1:1)
 c     
       integer ith,iphi,jth,jphi,msp,ms,ml12p,ml12
       complex*16 Yl12(-5:5),Yl12p(-5:5)
@@ -142,6 +134,7 @@ c                          Calcualtes Cartesian components given spherical polar
                            call getsphericalharmonics(Yl12p,l12p,th12(jth),phi12(jphi))
                            Yl12pstar=Real(Yl12p(ml12p))-ci*Imag(Yl12p(ml12p))
 
+c                          In 2Bspinisospintrans.f                         
                            call Calc2Bspinisospintrans(PiPhoto2Bx,PiPhoto2By, 
      &                          t12,mt12,t12p,mt12p,l12,
      &                          s12,l12p,s12p,thetacm,k,p12x,p12y,p12z,
@@ -161,14 +154,9 @@ c                          Calcualtes Cartesian components given spherical polar
             end if
             cgcp=CG(2*l12p,2*s12p,2*j12p,2*ml12p,2*msp,2*m12p)
             cgc=CG(2*l12,2*s12,2*j12,2*ml12,2*ms,2*m12)
-c           Int2Bxx=Int2Bxx+Intxx(ml12p,ml12)*cgc*cgcp
-c           Int2Bxy=Int2Bxy+Intxy(ml12p,ml12)*cgc*cgcp
-c           Int2Byx=Int2Byx+Intyx(ml12p,ml12)*cgc*cgcp
-c           Int2Byy=Int2Byy+Intyy(ml12p,ml12)*cgc*cgcp
+
             Int2Bx=Int2Bx+Intx(ml12p,ml12)*cgc*cgcp
             Int2By=Int2By+Inty(ml12p,ml12)*cgc*cgcp
-c           Int2Bpx=Int2Bpx+Intpx(ml12p,ml12)*cgc*cgcp
-c           Int2Bpy=Int2Bpy+Intpy(ml12p,ml12)*cgc*cgcp
          end do                 !ms12
       end do                    !ms12p
       if (verbosity.eq.1000) continue

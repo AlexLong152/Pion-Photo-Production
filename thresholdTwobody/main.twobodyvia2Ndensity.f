@@ -453,7 +453,6 @@ c         for Mzp=0, run only over Mz>=0 -- that's still 2 more than necessary, 
                      twoMzlimit = -twoSnucl
                   end if   
                   do twoMz=twoSnucl,twoMzlimit,-2
-c                    write (*,*) "Resultx(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultx(twoMzp,twoMz)
 c hgrie Aug 2020: now cure: for Mzp=Mz=0, only calculate xx and yy, since xy and yx must be zero               
                      if ((twoMzplimit.eq.0).and.(twoMzp.eq.0).and.(twoMz.eq.0)) then
                         continue

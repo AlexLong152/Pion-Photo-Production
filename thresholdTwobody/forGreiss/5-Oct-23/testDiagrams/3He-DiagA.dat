@@ -1,0 +1,186 @@
+ cm omega =    131.85700000000000      thetacm =    60.000000000000000     
+ 
+ x polarization - epsilon=<1,0,0>
+-3.01535039+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+1029.25270221-.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
+1029.29643994+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
+3.09414694+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+ 
+ y polarization - epsilon=<0,1,0>
+.00000000+2.23063518i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000000-1023.44789927i    sigmay(twoMzp,twoMz)=+0.-1.i
+.00000000+1023.41239451i    sigmay(twoMzp,twoMz)=+0.+1.i
+-.00000000+2.21757361i    sigmay(twoMzp,twoMz)=+0.+0.i
+ 
+
+ ===================================================================================================
+ Twobody Contributions to Few-Nucleon Neutral Pion photoproduction Calculated Via 2N-Density Matrix
+ ===================================================================================================
+ Alexander Long started 2023, modified from Compton scattering
+    Compton code Version 1.0
+       D. Phillips/A. Nogga/hgrie starting August 2020   
+       based on 3He codes: D. Phillips/A. Nogga/hgrie starting May 2018
+                           D. Phillips/B. Strasberg/hgrie starting June 2014
+                           with A. Margaryan 2016-17, modifying codes by D. Shukla 2007/8
+
+    Lowest beam energy           =    131.85700000000000      MeV
+    Highest beam energy          =    131.85700000000000      MeV
+    Energy step from low to high =    15.000000000000000      MeV
+    Lowest theta                 =    60.000000000000000      deg
+    Highest theta                =    60.000000000000000      deg
+    Theta step from low to high  =    10.000000000000000      deg
+ First take on output filename (placeholders to be replaced below): 
+       3He-1hold-sym=True-asym=True.dat
+ First take on density filename (placeholders to be replaced below): 
+       /home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5
+   Target Nucleus: 3He, Anucl =  3, spin Snucl =  1/2 , mass Mnucl =  2808.400    MeV
+ Input and output in centre-of-mass frame.
+Calculate all 16 amplitudes independently, not using Symmetry.
+ Output in spherical basis of photon polarisations.
+ O(e²delta²)=O(Q³) calculation. (12) subsystem is (pn) since only charged MECs.
+ Integration parameters of (12) subsystem:
+ Total angular momentum in (12) subsystem set to j12max =    1
+ Radial Integration in (12) subsystem:
+    total of NP12 = NP12A+NP12B =           23  points
+    1 bin with hyperbolic map: (NP12A = 16) points:
+       (NP12A/2 =  8) points in p12 interval [0; (P12A =     1.1000)] fm^-1
+       (NP12A/2 =  8) points in p12 interval [(P12A =     1.1000);(P12B =     5.0000)] fm^-1
+    1 bin with linear map: (NP12B= 7) points in p12 interval [(P12B =     5.0000);(P12C =    15.0000)] fm^-1
+    NP12p == ( NP12A+NP12B =           23 ) cannot be dialled.
+ Angular Integration in (12) subsystem
+    by Lebedev-Laikov for theta & phi combined:
+    ==> preliminary size of solid angle grid Nanggrid12(set to Nordth12) =   50 points.
+    Nthbins12, Nordphi12, Nphibins12 have no meaning.
+ ADDITIONAL COMMENTS:_v2.0
+ Write output to file: 3He-1hold-sym=True-asym=True.dat
+ LebedevLaikov:
+     Solid angle grid size:           50
+           #   theta [deg], phi [deg], angular weight (sums to 4\pi)
+           1   89.999997495521924        0.0000000000000000       0.15957296462286086     
+           2   89.999997495521924        179.99999499104382       0.15957296462286086     
+           3   89.999997495521924        89.999997495521924       0.15957296462286086     
+           4   89.999997495521924       -89.999997495521924       0.15957296462286086     
+           5   0.0000000000000000        0.0000000000000000       0.15957296462286086     
+           6   179.99999499104382        0.0000000000000000       0.15957296462286086     
+           7   89.999997495521924        44.999998747760955       0.28368527044064151     
+           8   89.999997495521924       -44.999998747760955       0.28368527044064151     
+           9   89.999997495521924        134.99999624328285       0.28368527044064151     
+          10   89.999997495521924       -134.99999624328285       0.28368527044064151     
+          11   44.999998747760955        89.999997495521924       0.28368527044064151     
+          12   134.99999624328285        89.999997495521924       0.28368527044064151     
+          13   44.999998747760955       -89.999997495521924       0.28368527044064151     
+          14   134.99999624328285       -89.999997495521924       0.28368527044064151     
+          15   44.999998747760955        0.0000000000000000       0.28368527044064151     
+          16   44.999998747760955        179.99999499104382       0.28368527044064151     
+          17   134.99999624328285        0.0000000000000000       0.28368527044064151     
+          18   134.99999624328285        179.99999499104382       0.28368527044064151     
+          19   54.735608794088265        44.999998747760955       0.26507188752293587     
+          20   125.26438619695554        44.999998747760955       0.26507188752293587     
+          21   54.735608794088265       -44.999998747760955       0.26507188752293587     
+          22   125.26438619695554       -44.999998747760955       0.26507188752293587     
+          23   54.735608794088265        134.99999624328285       0.26507188752293587     
+          24   125.26438619695554        134.99999624328285       0.26507188752293587     
+          25   54.735608794088265       -134.99999624328285       0.26507188752293587     
+          26   125.26438619695554       -134.99999624328285       0.26507188752293587     
+          27   25.239401118328587        44.999998747760955       0.25350561795174759     
+          28   154.76059387271525        44.999998747760955       0.25350561795174759     
+          29   25.239401118328587       -44.999998747760955       0.25350561795174759     
+          30   154.76059387271525       -44.999998747760955       0.25350561795174759     
+          31   25.239401118328587        134.99999624328285       0.25350561795174759     
+          32   154.76059387271525        134.99999624328285       0.25350561795174759     
+          33   25.239401118328587       -134.99999624328285       0.25350561795174759     
+          34   154.76059387271525       -134.99999624328285       0.25350561795174759     
+          35   72.451597370058309        18.434948309922838       0.25350561795174759     
+          36   72.451597370058309        161.56504668112098       0.25350561795174759     
+          37   107.54839762098548        18.434948309922838       0.25350561795174759     
+          38   107.54839762098548        161.56504668112098       0.25350561795174759     
+          39   72.451597370058309       -18.434948309922838       0.25350561795174759     
+          40   72.451597370058309       -161.56504668112098       0.25350561795174759     
+          41   107.54839762098548       -18.434948309922838       0.25350561795174759     
+          42   107.54839762098548       -161.56504668112098       0.25350561795174759     
+          43   72.451597370058309        71.565049185599037       0.25350561795174759     
+          44   72.451597370058309       -71.565049185599037       0.25350561795174759     
+          45   72.451597370058309        108.43494580544476       0.25350561795174759     
+          46   72.451597370058309       -108.43494580544476       0.25350561795174759     
+          47   107.54839762098548        71.565049185599037       0.25350561795174759     
+          48   107.54839762098548       -71.565049185599037       0.25350561795174759     
+          49   107.54839762098548        108.43494580544476       0.25350561795174759     
+          50   107.54839762098548       -108.43494580544476       0.25350561795174759     
+ Sum of all angular weights (expect 4Pi) =   0.99999999999999933      *4Pi
+ ***************************** END OF INITIALISATION *****************************
+ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+ Incoming photon energy (rounded) =          131  MeV
+ Number of Angles Nangles         =            1
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ Calculating amps: theta =   60.000000000000000      deg: angle #           1
+    Now looking for density file...
+    Density file name generated from energy & angle: /home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5
+       Density file exists, good.
+ *********************** 2N DENSITY MATRIX PARAMETERS ***************************
+ hdf tools version: 
+ HDFinit: Using standard driver in HDF for all reading.
+ HDFinit: Using standard driver in HDF for all writing.
+ Initamp version: 
+ P12 grid read in from file
+p12 read parameters:  p1=   0.100000E+01 p2=   0.500000E+01 p3=   0.180000E+02 n1=   44 n2=   12 n_ges=   56
+j12max_rho =    5
+mjtot      =   -1...   1
+        alpha  al2    l12  s12  j12  t12    mt12   m12 mjtot
+ Sets in file:
+ set number     energy [MeV]     scatt. angle [deg]
+      1               131.86                59.98
+    Finished reading bookkeeping information. Starting to read data sets.
+ Finished reading dataset of 2Ndensity.
+FF:    0.668014E+00   0.342264E-07   0.629261E+00   0.317690E+00   0.946951E+00
+Calculation of rho for ...
+  omega     =    0.131857E+03
+  qval      =    0.131817E+03
+  thetaval  =    0.599800E+02
+  thetaqval =    0.119990E+03
+    Energy and angle of 2Ndensity file match request.
+      j12max     =    1
+      j12max2N   =    5
+    2Ndensity file covers requested j12max. Proceeding with j12max =    1
+ *********Now convoluting 2N helicity amplitudes with 2N density matrix.*********
+ 
+ x polarization - epsilon=<1,0,0>
+-3.01535039+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+1029.25270221-.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
+1029.29643994+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
+3.09414694+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+ 
+ y polarization - epsilon=<0,1,0>
+.00000000+2.23063518i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000000-1023.44789927i    sigmay(twoMzp,twoMz)=+0.-1.i
+.00000000+1023.41239451i    sigmay(twoMzp,twoMz)=+0.+1.i
+-.00000000+2.21757361i    sigmay(twoMzp,twoMz)=+0.+0.i
+ 
+ Note the following code has not been checked for a full output to mathematica, and might need fixing
+         {-.301535039196734900*10^(+01)+.506880373253925211*10^(-15)*I,+.461833218411371364*10^(-15)+.223063517540117706*10^(+01)*I,+.102925270221262144*10^(+04)-.173509138577905764*10^(-14)*I,+.146516738469612681*10^(-14)-.102344789926794499*10^(+04)*I,+.102929643994319918*10^(+04)+.173533577777304792*10^(-14)*I,+.146920677058448781*10^(-14)+.102341239451290460*10^(+04)*I,+.309414694229377352*10^(+01)+.508278447033338910*10^(-15)*I,-.468219882690060322*10^(-15)+.221757360594309727*10^(+01)*I}
+ 
+ Lenkewitz Results at threshold https://arxiv.org/pdf/1103.3400.pdf
+ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+ F_T^a-F_T^b=-29.3 fm^-1=-5780.89 MeV for 3He
+ F_L^a-F_L^b=-22.9 fm^-1=-4518.18 MeV for 3H 
+ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+ *** Wrote output to file: 3He-1hold-sym=True-asym=True.dat
+Production date: 2023-10-04 10:26:40-04:00
+Real Time used: 165 seconds on host along-desktop
+**************************************************
+*********            INPUT FILE          *********
+**************************************************
+131.857 131.857 15            omegaLow, omegaHigh, omegaStep
+60 60 10                             thetaLow, thetaHigh, thetaStep
+3He-1hold-sym=True-asym=True.dat
+'/home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5'
+cm_nosymmetry_verbos                     frame, symmetry, verbosity of STDOUT
+Odelta2_j12max=1 		    Calctype, maximal total ang mom in (12) subsystem
+16 7 		    		    NP12A, NP12B
+1.1 5.0 15.0 			    P12A, P12B, P12C
+2 50     			    AngularType12,(Nordth12 OR Nanggrid12),Nthbins12,Nordphi12,Nphibins12
+COMMENTS:_v2.0
+# in density filename, code replaces XXX and YYY automatically by energy and angle.

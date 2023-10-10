@@ -1,0 +1,35 @@
+2Bspinisospintrans.f
+   CONTAINS: subroutine Calc2Bspinisospintrans
+   calls: calculateqs - found in common-densities/calcmomenta.f
+                -calculateqs needs to be modified for pion photoproduction  
+
+   Diagrams are labeled A,B,C etc. will proceed with just an description of diagramA
+
+   DEFINES: FactorA, the scalar part of the contribution from the feynman diagram
+
+   CALLS: CalcPionPhoto2BAx - found in spintrick.f
+            '2B' stands for 2 body, x means x polarization
+
+   CALLS: CalcPionPhoto2BAxasy - found in spintrickasy
+   check the compton case for comparison on how this should work.
+
+   Questions:
+        -Whats up with the factor (-1)**(t12) in front of everything? Do I need to insert this?
+            Probably need to acccount for $ \tau_1 \dot \tau_2 - tau_1^z tau_2^z$
+
+        -Why do they define different factorAsy and factorA shouldn't they be the same?
+        -I need to insert the factor m_target/(m_target + m_pion) how do I get this from constants.def?
+        -Deepshika thesis equation 4.4 pg 85, the isospin structure is the same in compton, so shouldn't it be the same in
+        the code? Just insert (-1)**(t12)
+
+########################################################################################################
+########################################################################################################
+########################################################################################################
+
+Calculate2BI2.f
+    Calculates Intxx etc with the spherical harmonics
+
+
+Overall Questions:
+    What 3He density should I use
+

@@ -124,6 +124,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     
 c     First a little initialization:
 c     
+      mu=0.d0
       PiPhoto2Bx=c0
       PiPhoto2By=c0
       dl12by2=(l12-l12p)/2.d0   !to check if l12-l12p is  even or odd
@@ -251,7 +252,7 @@ c           eps=(/1.d0,0.d0,0.d0/)
 c           factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
 c    &          (DOT_PRODUCT(q1,q1)+mPion**2)
 c    &          *(DOT_PRODUCT(q,q))
-c    &          )
+c    &          +mu)
 
 c           call CalcPionPhoto2BB(PiPhoto2Bx,factorB,
 c    &          q1,s12p,s12,verbosity)
@@ -260,7 +261,7 @@ c           eps=(/0.d0,1.d0,0.d0/)
 c           factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
 c    &          (DOT_PRODUCT(q1,q1)+mPion**2)
 c    &          *(DOT_PRODUCT(q,q))
-c    &          )
+c    &          +mu)
 
 c           call CalcPionPhoto2BB(PiPhoto2By,factorB,
 c    &          q1,s12p,s12,verbosity)
@@ -274,20 +275,21 @@ c     Calculate two-body diagram A, anti-symmetric part
 c     
 c----------------------------------------------------------------------
 
-c           denomVec=p12-p12p+(kVec/2)
-c           factorAasy=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
+            denomVec=p12-p12p+(kVec/2)
+            factorAasy=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
 
-c           eps=(/1.d0,0.d0,0.d0/)
-c           call CalcPionPhoto2BAasy(PiPhoto2Bx,factorAasy,
-c    &           eps,s12p,s12,verbosity)
+            eps=(/1.d0,0.d0,0.d0/)
+            call CalcPionPhoto2BAasy(PiPhoto2Bx,factorAasy,
+     &           eps,s12p,s12,verbosity)
+
+            eps=(/0.d0,1.d0,0.d0/)
+            call CalcPionPhoto2BAasy(PiPhoto2By,factorAasy,
+     &           eps,s12p,s12,verbosity)
+
 c           diff=c0
 c           call CalcPionPhoto2BAasy(diff,factorAasy,
 c    &           eps,s12p,s12,verbosity)
 c           call printDiff(diff)
-
-c           eps=(/0.d0,1.d0,0.d0/)
-c           call CalcPionPhoto2BAasy(PiPhoto2By,factorAasy,
-c    &           eps,s12p,s12,verbosity)
 c           diff=c0
 c           call CalcPionPhoto2BAasy(diff,factorAasy,
 c    &           eps,s12p,s12,verbosity)
@@ -303,7 +305,7 @@ c           eps=(/1.d0,0.d0,0.d0/)
 c           factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
 c    &          (DOT_PRODUCT(q1,q1)+mPion**2)
 c    &          *(DOT_PRODUCT(q,q))
-c    &          )
+c    &          +mu)
 
 c           call CalcPionPhoto2BBasy(PiPhoto2Bx,factorB,
 c    &           q1,s12p,s12,verbosity)
@@ -312,7 +314,7 @@ c           eps=(/0.d0,1.d0,0.d0/)
 c           factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
 c    &          (DOT_PRODUCT(q1,q1)+mPion**2)
 c    &          *(DOT_PRODUCT(q,q))
-c    &          )
+c    &          +mu)
 
 c           call CalcPionPhoto2BBasy(PiPhoto2By,factorB,
 c    &           q1,s12p,s12,verbosity)

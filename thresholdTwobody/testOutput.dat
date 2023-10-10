@@ -1,0 +1,107 @@
+ cm omega =    120.00000000000000      thetacm =    150.00000000000000     
+
+ ===================================================================================================
+ Twobody Contributions to Few-Nucleon Neutral Pion photoproduction Calculated Via 2N-Density Matrix
+ ===================================================================================================
+ Alexander Long started 2023, modified from Compton scattering
+    Compton code Version 1.0
+       D. Phillips/A. Nogga/hgrie starting August 2020   
+       based on 3He codes: D. Phillips/A. Nogga/hgrie starting May 2018
+                           D. Phillips/B. Strasberg/hgrie starting June 2014
+                           with A. Margaryan 2016-17, modifying codes by D. Shukla 2007/8
+
+    Lowest beam energy           =    120.00000000000000      MeV
+    Highest beam energy          =    120.00000000000000      MeV
+    Energy step from low to high =    10.000000000000000      MeV
+    Lowest theta                 =    150.00000000000000      deg
+    Highest theta                =    150.00000000000000      deg
+    Theta step from low to high  =    15.000000000000000      deg
+ First take on output filename (placeholders to be replaced below): 
+       testOutput.dat
+ First take on density filename (placeholders to be replaced below): 
+       /home/along/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5
+   Target Nucleus: 3He, Anucl =  3, spin Snucl =  1/2 , mass Mnucl =  2808.400    MeV
+ Input and output in centre-of-mass frame.
+ Calculate  8 amplitudes with Mz(out)>0, find other  8 by Symmetry.
+ Output in spherical basis of photon polarisations.
+ O(e²delta²)=O(Q³) calculation. (12) subsystem is (pn) since only charged MECs.
+ Integration parameters of (12) subsystem:
+ Total angular momentum in (12) subsystem set to j12max =    1
+ Radial Integration in (12) subsystem:
+    total of NP12 = NP12A+NP12B =            9  points
+    1 bin with hyperbolic map: (NP12A =  2) points:
+       (NP12A/2 =  1) points in p12 interval [0; (P12A =     1.1000)] fm^-1
+       (NP12A/2 =  1) points in p12 interval [(P12A =     1.1000);(P12B =     5.0000)] fm^-1
+    1 bin with linear map: (NP12B= 7) points in p12 interval [(P12B =     5.0000);(P12C =    15.0000)] fm^-1
+    NP12p == ( NP12A+NP12B =            9 ) cannot be dialled.
+ Angular Integration in (12) subsystem
+    by Lebedev-Laikov for theta & phi combined:
+    ==> preliminary size of solid angle grid Nanggrid12(set to Nordth12) =    2 points.
+    Nthbins12, Nordphi12, Nphibins12 have no meaning.
+ ADDITIONAL COMMENTS:_v2.0
+ Write output to file: testOutput.dat
+ LebedevLaikov:
+   No solid angle grid size              2  available --
+      Next larger one chosen:            6
+           #   theta [deg], phi [deg], angular weight (sums to 4\pi)
+           1   90.000000000000000        0.0000000000000000        2.0943951606750488     
+           2   90.000000000000000        90.000000000000000        2.0943951606750488     
+           3   90.000000000000000        180.00000000000000        2.0943951606750488     
+           4   90.000000000000000        270.00000000000000        2.0943951606750488     
+           5   0.0000000000000000        0.0000000000000000        2.0943951606750488     
+           6   180.00000000000000        0.0000000000000000        2.0943951606750488     
+ Sum of all angular weights (expect 4Pi) =    1.0000000000000000      *4Pi
+ ***************************** END OF INITIALISATION *****************************
+ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+ Incoming photon energy (rounded) =          120  MeV
+ Number of Angles Nangles         =            1
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ Calculating amps: theta =   150.00000000000000      deg: angle #           1
+    Now looking for density file...
+    Density file name generated from energy & angle: /home/along/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5
+       Density file exists, good.
+ *********************** 2N DENSITY MATRIX PARAMETERS ***************************
+ hdf tools version: 
+ HDFinit: Using standard driver in HDF for all reading.
+ HDFinit: Using standard driver in HDF for all writing.
+ Initamp version: 
+ P12 grid read in from file
+p12 read parameters:  p1=   0.100000E+01 p2=   0.500000E+01 p3=   0.180000E+02 n1=   44 n2=   12 n_ges=   56
+j12max_rho =    5
+mjtot      =   -1...   1
+        alpha  al2    l12  s12  j12  t12    mt12   m12 mjtot
+ Sets in file:
+ set number     energy [MeV]     scatt. angle [deg]
+      1               131.86                59.98
+    Finished reading bookkeeping information. Starting to read data sets.
+ Finished reading dataset of 2Ndensity.
+FF:    0.668014E+00   0.000000E+00   0.000000E+00   0.000000E+00   0.000000E+00
+Calculation of rho for ...
+  omega     =    0.131857E+03
+  qval      =    0.131817E+03
+  thetaval  =    0.599800E+02
+  thetaqval =    0.119990E+03
+ *** ERROR: Energy of 2Ndensity file does not match:
+     omega =    120.00000000000000       MeV   <===>   omega2N =    131.85701884368552       MeV
+    omega - omega(2Ndensity) =      -11.857019 MeV
+ -- Exiting.
+Production date: 2023-10-02 15:29:08-04:00
+Real Time used: 3 seconds on host alex-xpx
+**************************************************
+*********            INPUT FILE          *********
+**************************************************
+120 120 10                   omegaLow, omegaHigh, omegaStep
+150 150 15                             thetaLow, thetaHigh, thetaStep
+testOutput.dat
+"/home/along/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5"
+cm_ymmetry_verbos                     frame, symmetry, verbosity of STDOUT
+Odelta2_j12max=1 		    Calctype, maximal total ang mom in (12) subsystem
+2 7 		    		    NP12A, NP12B
+1.1 5.0 15.0 			    P12A, P12B, P12C
+2 2     			    AngularType12,(Nordth12 OR Nanggrid12),Nthbins12,Nordphi12,Nphibins12
+COMMENTS:_v2.0
+# in density filename, code replaces XXX and YYY automatically by energy and angle.
+

@@ -267,15 +267,16 @@ c
       Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
       hold=c0
       
-      if ((Sp .eq. 0) .and. (S .eq. 1)) then
-         hold(0,0,1,1)=-factor*2.d0*Aplus
-         hold(0,0,1,0)=factor*2.d0*Az
-         hold(0,0,1,-1)=-factor*2.d0*Aminus
-      else if ((Sp .eq. 1) .and. (S .eq. 0)) then
-         hold(1,1,0,0)=-factor*2.d0*Aminus
-         hold(1,0,0,0)=factor*2.d0*Az
-         hold(1,-1,0,0)=-factor*2.d0*Aplus
-      end if
+c     if ((Sp .eq. 0) .and. (S .eq. 1)) then
+c        hold(0,0,1,1)=-factor*2.d0*Aplus
+c        hold(0,0,1,0)=factor*2.d0*Az
+c        hold(0,0,1,-1)=-factor*2.d0*Aminus
+c     else if ((Sp .eq. 1) .and. (S .eq. 0)) then
+c        hold(1,1,0,0)=-factor*2.d0*Aminus
+c        hold(1,0,0,0)=factor*2.d0*Az
+c        hold(1,-1,0,0)=-factor*2.d0*Aplus
+c     end if
+c     hold=0.10
       if (verbosity.eq.1000) continue
       end
 c

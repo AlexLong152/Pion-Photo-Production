@@ -57,7 +57,11 @@ c
       integer ip12,ip12p
 c     complex*16 Int2Bxx,Int2Bxy,Int2Byx,Int2Byy
       complex*16 Int2Bx,Int2By, Int3
-      complex*16 Int3x, Int3y, Int3px, Int3py
+
+      integer rindxtmp
+      complex*16 Int3tmp
+
+c     complex*16 Int3x, Int3y, Int3px, Int3py
       complex*16 fact, factx, facty, factpx,factpy,f 
       integer twoMz,twoMzp
 
@@ -106,30 +110,33 @@ c                           write(*,*) l12p,s12p,j12p,mt12p,m12p,twoMzp
 c                           write(*,*) "rindx = ",rindx," ; alpha2N  = ",alpha2N," ; alpha2Np = ",alpha2Np
 c                           write(*,*) "             ρ12 = ",rho(ip12,ip12,rindx)
                            Int3=rho(ip12,ip12p,rindx)
-c                           write(*,'(3(A,I5),A,E15.8,SP,E16.8," I")')
-c     &                          "    ρ(rindx=",rindx,",ip12=",ip12,",ip12p=",ip12p,") = ",Int3
+
+c                          rindxtmp=rhoindx(alpha2Np, alpha2N)
+c                          Int3tmp=rho(ip12p,ip12,rindxtmp)
+
+c                           if ((Int3tmp.ne.c0).or.(Int3.ne.c0)) then
+c                               write(*,*) ""
+c                               write(*,*) ""
+c                               write(*,'(3(A,I5),A,E15.8,SP,E16.8," I")')
+c    &                          "    ρ(rindx=",rindx,",ip12=",ip12,",ip12p=",ip12p,") = ",Int3
+
+c                               write(*,'(3(A,I5),A,E15.8,SP,E16.8," I")')
+c    &                          "    ρ(rindx=",rindxtmp,",ip12=",ip12,",ip12p=",ip12p,") = ",Int3tmp
+c                               if (Int3tmp.ne.c0) then
+c                                   write(*,*) "ratio is", Int3/Int3tmp
+c                               end if
+c                           end if
                            
-                           Int3x=0.d0 !quick fix to get NOthing at OQ3 -- needs changing at OQ4!
-                           Int3y=0.d0 !quick fix to get NOthing at OQ3 -- needs changing at OQ4!
-                           Int3px=0.d0 !quick fix to get NOthing at OQ3 -- needs changing at OQ4!
-                           Int3py=0.d0 !quick fix to get NOthing at OQ3 -- needs changing at OQ4!
 c     multiplication by HC**3.d0 transforms ME units from fm^-3 to MeV^3
 c     hgrie May 2018/July 2020:
 c     original factor 3.d0 in 3He-code is replaced by number of nucleon pairs inside nucleus -- see 3He-densities paper
                            f=Anucl*(Anucl-1)/2*p12**2*wp12*P12MAG(ip12p)**2*AP12MAG(ip12p)*HC**3.d0
 c     next line replaces Int3 by 2Ndensity ρ                                    
-                           fact=f*Int3
+                           fact=f*Int3 ! density dependence 
 c     following only for OQ4 -- NOT YET IMPLEMENTED !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                           factx=f*Int3x
-                           facty=f*Int3y                                    
-c                          factpx=f*Int3px
-c                          factpy=f*Int3py
                            
-c                           write(*,*) fact, factx, facty, factpx, factpy
-c                           write(*,*) Int2Bxx, Int2Bxy, Int2Byx, Int2Byy 
-c                           write(*,*) Int2Bpx, Int2Bpy, Int2Bx, Int2By
 
-c ALong July2023:  Commented out Int2Bpx, which has to do with OQ4 contributions                          
+c ALong July2023:  Commented out Int2Bpx, which has to do with OQ4 contributions in compton                           
                            Resultx(twoMzp,twoMz)=Resultx(twoMzp,twoMz)+fact*Int2Bx!+factx*Int2Bpx+factpx*Int2Bx
                            Resulty(twoMzp,twoMz)=Resulty(twoMzp,twoMz)+fact*Int2By!+facty*Int2Bpy+factpy*Int2By
 c ALong July 2023: Commented all the below out, since its (probably) not relevent for pion photoproduction
