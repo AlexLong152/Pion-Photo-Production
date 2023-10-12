@@ -202,6 +202,7 @@ c     Value twoMzplimit = -twoSnucl calculates all amplitudes
       real*8 frac
 
       complex*16, allocatable :: Resultx(:,:),Resulty(:,:) ! twoMz from -twoSnucl to twoSnucl, stepsize 2; rest blank.
+      complex*16, allocatable :: Resultz(:,:)
 c     That means arrays are less than 2^2=4 times bigger than need be, but that's ok since quite small anyway. 
       
       logical cartesian         ! hgrie Oct 2014: for output in Cartesian basis of photon polarisations
@@ -376,8 +377,10 @@ c     be a good boy and initialise everything to 0, overwriting entries from pre
 c**********************************************************************
             allocate(Resultx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
             allocate(Resulty(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
+            allocate(Resultz(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl))
             Resultx=c0
             Resulty=c0
+            Resultz=c0
 c**********************************************************************
 c     hgrie June 2017: create name of 1Ndensity file for given energy and angle, unpack it
 c     define correct formats for energy and angle
@@ -412,7 +415,7 @@ c**********************************************************************
                         do m12=-j12,j12             ! spin projection (12)
                            do ip12=1,NP12           ! integration over momentum magnitude (12)
                               call twobodyfinalstatesumsvia2Ndensity(
-     &                             Resultx,Resulty,
+     &                             Resultx,Resulty,Resultz,
      &                             Anucl,twoSnucl,twoMzplimit,j12,m12,l12,s12,t12,mt12,
      &                             k,thetacm,
      &                             ip12,P12MAG(ip12),AP12MAG(ip12),     
@@ -459,6 +462,7 @@ c hgrie Aug 2020: now cure: for Mzp=Mz=0, only calculate xx and yy, since xy and
                      else
                         write (*,*) "Resultx(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultx(twoMzp,twoMz)
                         write (*,*) "Resulty(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resulty(twoMzp,twoMz)
+                        write (*,*) "Resultz(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultz(twoMzp,twoMz)
                      end if
 c      end cure
 c                    write (*,*) "Resultyy(twoMzp=",twoMzp,", twoMz=",twoMz,"): ",Resultyy(twoMzp,twoMz)
@@ -477,9 +481,9 @@ c           write(*,*) Resulty
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c      found in usesymmetry+writeoutput-densities.f, and calls outputtomathPiPhoto found in 
             call outputPiPhoto(outUnitno,cartesian,twoSnucl,twoMzplimit,
-     &           Resultx,Resulty,verbosity) 
+     &           Resultx,Resulty,Resultz,verbosity) 
 c     be a good boy and deallocate arrays. Compilers do that automatically for simple programs. Better safe than sorry.
-            deallocate (Resultx,Resulty, STAT=test ) ! test becomes nonzero if this fails
+            deallocate (Resultx,Resulty,Resultz, STAT=test ) ! test becomes nonzero if this fails
             if (test .ne. 0) stop "*** ERROR: Arrays ResultAB: Deallocation error. Abort."
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

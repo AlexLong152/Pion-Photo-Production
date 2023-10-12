@@ -241,7 +241,7 @@ c     hgrie Aug 2020: if so wanted, output first independent MEs also to screen 
       end                       ! outputroutine
 
       subroutine outputPiPhoto(outUnitno,cartesian,twoSnucl,twoMzplimit,
-     &     Resultx,Resulty,verbosity)
+     &     Resultx,Resulty,Resultz,verbosity)
 c     hgrie May 2018: new routines, outsourced from main.*.f
 c
 c     construct symmetry-partners if necessary and outpout in cartesian or spherical coordinates
@@ -257,14 +257,15 @@ c     amplitudes with photon helicities
 c     
       complex*16,intent(in) :: Resultx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
       complex*16,intent(in) :: Resulty(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
+      complex*16,intent(in) :: Resultz(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
       
+      integer :: twoMzp,twoMz,twoMzlimit
       integer,intent(in) :: twoSnucl,twoMzplimit
       integer,intent(in) :: outUnitno
       logical,intent(in) :: cartesian
       
       integer,intent(in) :: verbosity
       
-      integer :: twoMzp,twoMz,twoMzlimit
       character(len=25) ::str
 
       complex*16 :: sigmax(-1:1,-1:1)  ! (ms3p,ms3): sigma-x
@@ -299,17 +300,21 @@ c      formt= '(F0.3,SP,F0.3,"i")'
        write(outUnitno,*) ""
        write(*,*) ""
 
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        write(outUnitno,*) "x polarization - epsilon=<1,0,0>"
        write(*,*) "x polarization - epsilon=<1,0,0>"
        do twoMzp=twoSnucl,-twoSnucl,-2
           do twoMz=twoSnucl,-twoSnucl,-2
-             write(outUnitno,formt) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz) !, "for (Mzp, Mz)=",twoMzp, twoMz
+             write(outUnitno,formt) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz) !for (Mzp, Mz)=",twoMzp, twoMz
              write(*,formt) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz)
           end do
        end do
-       
+       call printsum(outUnitno, sigmax, Resultx, twoSnucl,twoMzplimit)
        write(outUnitno,*) ""
        write(*,*) ""
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        write(outUnitno,*) "y polarization - epsilon=<0,1,0>"
        write(*,*) "y polarization - epsilon=<0,1,0>"
        do twoMzp=twoSnucl,-twoSnucl,-2
@@ -318,13 +323,58 @@ c      formt= '(F0.3,SP,F0.3,"i")'
              write(*,formt) Resulty(twoMzp,twoMz),"sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
           end do
        end do
+       call printsum(outUnitno, sigmay, Resulty, twoSnucl,twoMzplimit)
 
        write(outUnitno,*) ""
        write(*,*) ""
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+       write(outUnitno,*) "z polarization - epsilon=<0,0,1>"
+       write(*,*) "z polarization - epsilon=<0,0,1>"
+       do twoMzp=twoSnucl,-twoSnucl,-2
+          do twoMz=twoSnucl,-twoSnucl,-2
+             write(outUnitno,formt) Resultz(twoMzp,twoMz),"sigmaz(twoMzp,twoMz)=",sigmaz(twoMzp,twoMz) 
+             write(*,formt) Resultz(twoMzp,twoMz),"sigmaz(twoMzp,twoMz)=",sigmaz(twoMzp,twoMz) 
+          end do
+       end do
+
+       call printsum(outUnitno, sigmaz, Resultz, twoSnucl,twoMzplimit)
+       write(outUnitno,*) ""
+       write(*,*) ""
 c     hgrie Aug 2020: if so wanted, output first independent MEs also to screen in a form that can directly be pasted into mathematica
-            if (verbosity.ge.0) call outputtomathPiPhoto(Resultx,Resulty,twoSnucl,verbosity)
+            if (verbosity.ge.0) call outputtomathPiPhoto(Resultx,Resulty,Resultz, twoSnucl,verbosity)
       return
       end                       ! output PiPhoto
+
+      subroutine printsum(outUnitno, sigma, resultxy, twoSnucl,twoMzplimit)
+
+      implicit none
+      integer,intent(in) :: twoSnucl,twoMzplimit
+      integer,intent(in) :: outUnitno
+      integer :: twoMzp,twoMz,twoMzlimit
+      complex*16 :: sigma(-1:1,-1:1)
+      complex*16 :: resultxy(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
+      complex*16 total
+      total=cmplx(0.d0,0.d0)
+
+       do twoMzp=twoSnucl,-twoSnucl,-2
+          do twoMz=twoSnucl,-twoSnucl,-2
+             if (sigma(twoMzp,twoMz).ne.cmplx(0.d0,0.d0)) then
+                 total=total+(resultxy(twoMzp,twoMz)/sigma(twoMzp,twoMz))
+             end if
+c            write(outUnitno,formt) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz) !, "for (Mzp, Mz)=",twoMzp, twoMz
+c            write(*,formt) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz)
+          end do
+       end do
+      if (AIMAG(total).ne.0.d0) then
+        write(*,'(A5,F0.8,SP,F0.8,"i")') "sum=",total
+        write(outUnitno,'(A4,F0.8,SP,F0.8,"i")') "sum=",total
+      else
+        write(*,'(A5,F0.8)') "sum=",Real(total)
+        write(outUnitno,'(A4,F0.8)') "sum=",Real(total)
+      end if
+      end subroutine
 
       subroutine SingleDiagramOutput(cartesian,twoSnucl,twoMzplimit,
      &     DiagramX,label,verbosity)

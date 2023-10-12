@@ -1,8 +1,6 @@
 c     hgrie Aug 2020: v1.0 fewbody-Compton
 c     new Aug 2020, based on 3He density codes with the following datings/changes:
-c     TODO: Get prefactors right
-c     TODO: Get Diagram B asymmetric part working
-      subroutine Calc2Bspinisospintrans(PiPhoto2Bx,PiPhoto2By,
+      subroutine Calc2Bspinisospintrans(PiPhoto2Bx,PiPhoto2By,PiPhoto2Bz,
      &     t12,mt12,t12p,mt12p,l12,s12,
      &     l12p,s12p,thetacm,k,px,py,pz,ppx,ppy,ppz,calctype,Mnucl,verbosity)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -56,10 +54,10 @@ c
       include '../common-densities/params.def'
       include '../common-densities/calctype.def'
 c     Only care about neutral pion photoproduction 
-      complex*16,intent(out) :: PiPhoto2By(0:1,-1:1,0:1,-1:1)
-      complex*16 diff(0:1,-1:1,0:1,-1:1)
       complex*16,intent(out) :: PiPhoto2Bx(0:1,-1:1,0:1,-1:1)
-c     
+      complex*16,intent(out) :: PiPhoto2By(0:1,-1:1,0:1,-1:1)
+      complex*16,intent(out) :: PiPhoto2Bz(0:1,-1:1,0:1,-1:1)
+      complex*16 diff(0:1,-1:1,0:1,-1:1)
 
       complex*16 DiagramA(0:1,-1:1,0:1,-1:1)
       complex*16 DiagramB(0:1,-1:1,0:1,-1:1)
@@ -92,6 +90,7 @@ c     real*8 Bnumer
       real*8 k1(3),k1p(3),k2(3),k2p(3), p12(3), p12p(3), pp(3)
 c     debugging variables
       real*8 p(3),tmp1(3), tmp2(3), kVec(3), kp(3)
+      real*8 tmpVec(3)
       real*8 denomVec(3)
       real*8 mu
       logical :: allZerox, allZeroy
@@ -127,6 +126,7 @@ c
       mu=0.d0
       PiPhoto2Bx=c0
       PiPhoto2By=c0
+      PiPhoto2Bz=c0
       dl12by2=(l12-l12p)/2.d0   !to check if l12-l12p is  even or odd
 c     
 c     Calculate momenta q,q',q':
@@ -146,6 +146,7 @@ c     TODO: get these from calculateqsmass instead of recalculating them
 
       p12=(k1-k2)/2
       p12p=(k1p-k2p)/2
+      K2n=(0.135*0.001/135)*197.3 !fm^2
 c     write(*,*) "In 2Bspinisospintrans.f: (/px,py,pz)=",(/px,py,pz/) 
 c     write(*,*) "In 2Bspinisospintrans.f: (/ppx,ppy,ppz)=",(/ppx,ppy,ppz/) 
 c     p=(/px,py,pz/)
@@ -163,7 +164,6 @@ c
 c     Define overall factors for spin-symmetric parts of matrix element
 c     139.6=pi^+ mass
 c     1fm = 197.3 MeV^-1
-         K2n=(0.135*0.001/139.6)*197.3 !fm^2
 
 
 c   
@@ -189,14 +189,19 @@ c----------------------------------------------------------------------
 c           factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
             denomVec=p12-p12p+(kVec/2)
 
-            factorA=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
-
             eps=(/1.d0,0.d0,0.d0/)
+            factorA=((-1)**t12)*K2n*0.5/(DOT_PRODUCT(denomVec,denomVec)+mu)
             call CalcPionPhoto2BA(PiPhoto2Bx,factorA,
      &           eps,s12p,s12,verbosity)
 
             eps=(/0.d0,1.d0,0.d0/)
+            factorA=((-1)**t12)*K2n*0.5/(DOT_PRODUCT(denomVec,denomVec)+mu)
             call CalcPionPhoto2BA(PiPhoto2By,factorA,
+     &           eps,s12p,s12,verbosity)
+
+            eps=(/0.d0,0.d0,1.d0/)
+            factorA=((-1)**t12)*K2n*0.5/(DOT_PRODUCT(denomVec,denomVec)+mu)
+            call CalcPionPhoto2BA(PiPhoto2Bz,factorA,
      &           eps,s12p,s12,verbosity)
 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -248,23 +253,32 @@ c     \big[\vec{p}_{12}-\vec{p}_{12}^{\;\prime}+\vec{k}_\gamma/2 \big]^2
 c     } 
 c     |M_J\rangle_\psi,
 c----------------------------------------------------------------------
-c           eps=(/1.d0,0.d0,0.d0/)
-c           factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
-c    &          (DOT_PRODUCT(q1,q1)+mPion**2)
-c    &          *(DOT_PRODUCT(q,q))
-c    &          +mu)
+            tmpVec=p12-p12p-(kVec/2)
+            eps=(/1.d0,0.d0,0.d0/)
+            factorB=K2n*((-1)**t12)*(DOT_PRODUCT(eps,p12-p12p))/(
+     &          (DOT_PRODUCT(tmpVec,tmpVec)+mPion**2)*
+     &          (DOT_PRODUCT(tmpVec,tmpVec))+mu
+     &             )
+            call CalcPionPhoto2BB(PiPhoto2Bx,factorB,
+     &          tmpVec,s12p,s12,verbosity)
 
-c           call CalcPionPhoto2BB(PiPhoto2Bx,factorB,
-c    &          q1,s12p,s12,verbosity)
 
-c           eps=(/0.d0,1.d0,0.d0/)
-c           factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
-c    &          (DOT_PRODUCT(q1,q1)+mPion**2)
-c    &          *(DOT_PRODUCT(q,q))
-c    &          +mu)
+            eps=(/0.d0,1.d0,0.d0/)
+            factorB=K2n*((-1)**t12)*(DOT_PRODUCT(eps,p12-p12p))/(
+     &          (DOT_PRODUCT(tmpVec,tmpVec)+mPion**2)*
+     &          (DOT_PRODUCT(tmpVec,tmpVec))+mu
+     &             )
+            call CalcPionPhoto2BB(PiPhoto2By,factorB,
+     &          tmpVec,s12p,s12,verbosity)
 
-c           call CalcPionPhoto2BB(PiPhoto2By,factorB,
-c    &          q1,s12p,s12,verbosity)
+
+            eps=(/0.d0,0.d0,1.d0/)
+            factorB=K2n*((-1)**t12)*(DOT_PRODUCT(eps,p12-p12p))/(
+     &          (DOT_PRODUCT(tmpVec,tmpVec)+mPion**2)*
+     &          (DOT_PRODUCT(tmpVec,tmpVec))+mu
+     &             )
+            call CalcPionPhoto2BB(PiPhoto2Bz,factorB,
+     &          tmpVec,s12p,s12,verbosity)
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c        BEGIN ASYMMETRIC PART
          else                   !l12-l12p is odd;  s12-s12p=+/- 1 => spin asymmetric part of operator.               
@@ -276,7 +290,7 @@ c
 c----------------------------------------------------------------------
 
             denomVec=p12-p12p+(kVec/2)
-            factorAasy=((-1)**t12)*0.5/(DOT_PRODUCT(denomVec,denomVec))
+            factorAasy=((-1)**t12)*K2n*0.5/(mu+DOT_PRODUCT(denomVec,denomVec))
 
             eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BAasy(PiPhoto2Bx,factorAasy,
@@ -286,38 +300,42 @@ c----------------------------------------------------------------------
             call CalcPionPhoto2BAasy(PiPhoto2By,factorAasy,
      &           eps,s12p,s12,verbosity)
 
-c           diff=c0
-c           call CalcPionPhoto2BAasy(diff,factorAasy,
-c    &           eps,s12p,s12,verbosity)
-c           call printDiff(diff)
-c           diff=c0
-c           call CalcPionPhoto2BAasy(diff,factorAasy,
-c    &           eps,s12p,s12,verbosity)
-c           call printDiff(diff)
-c           diff=c0
+            eps=(/0.d0,0.d0,1.d0/)
+            call CalcPionPhoto2BAasy(PiPhoto2Bz,factorAasy,
+     &           eps,s12p,s12,verbosity)
 c----------------------------------------------------------------------
 c     
 c     Calculate two-body diagram B, anti-symmetric part
 c     
 c----------------------------------------------------------------------
 
-c           eps=(/1.d0,0.d0,0.d0/)
-c           factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
-c    &          (DOT_PRODUCT(q1,q1)+mPion**2)
-c    &          *(DOT_PRODUCT(q,q))
-c    &          +mu)
+            tmpVec=p12-p12p-(kVec/2)
 
-c           call CalcPionPhoto2BBasy(PiPhoto2Bx,factorB,
-c    &           q1,s12p,s12,verbosity)
+            eps=(/1.d0,0.d0,0.d0/)
+            factorB=K2n*((-1)**t12)*3*(DOT_PRODUCT(eps,p12-p12p))/(
+     &          (DOT_PRODUCT(tmpVec,tmpVec)+mPion**2)*
+     &          (DOT_PRODUCT(tmpVec,tmpVec))
+     &             +mu)
+            call CalcPionPhoto2BBasy(PiPhoto2Bx,factorB,
+     &          tmpVec,s12p,s12,verbosity)
 
-c           eps=(/0.d0,1.d0,0.d0/)
-c           factorB=K2n*((-1)**t12)*1.5*DOT_PRODUCT(eps,q1+q)/(
-c    &          (DOT_PRODUCT(q1,q1)+mPion**2)
-c    &          *(DOT_PRODUCT(q,q))
-c    &          +mu)
 
-c           call CalcPionPhoto2BBasy(PiPhoto2By,factorB,
-c    &           q1,s12p,s12,verbosity)
+            eps=(/0.d0,1.d0,0.d0/)
+            factorB=K2n*((-1)**t12)*3*(DOT_PRODUCT(eps,p12-p12p))/(
+     &          (DOT_PRODUCT(tmpVec,tmpVec)+mPion**2)*
+     &          (DOT_PRODUCT(tmpVec,tmpVec))
+     &             +mu)
+            call CalcPionPhoto2BBasy(PiPhoto2By,factorB,
+     &          tmpVec,s12p,s12,verbosity)
+
+
+            eps=(/0.d0,0.d0,1.d0/)
+            factorB=K2n*((-1)**t12)*3*(DOT_PRODUCT(eps,p12-p12p))/(
+     &          (DOT_PRODUCT(tmpVec,tmpVec)+mPion**2)*
+     &          (DOT_PRODUCT(tmpVec,tmpVec))
+     &             +mu)
+            call CalcPionPhoto2BBasy(PiPhoto2Bz,factorB,
+     &          tmpVec,s12p,s12,verbosity)
          end if                 ! s12 question
       end if                    !t12 question
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

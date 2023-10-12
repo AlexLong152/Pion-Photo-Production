@@ -75,11 +75,11 @@ c
       
 c
       subroutine CalcPionPhoto2BB(Pion2Bout,factor,
-     &     q1,Sp,S,verbosity)
+     &     vec,Sp,S,verbosity)
 c     
 c********************************************************************
 c     
-c     Calculates symmetric part of diagram A for x->y.
+c     Calculates symmetric part of diagram B.
 c     
 c     Indices in Pion2Bab are that first index gives NN spin state:
 c     S=0 or S=1, second index gives spin projection. This is for final
@@ -104,7 +104,7 @@ c
 c     INPUT VARIABLES:
 c     
       real*8 factor
-      real*8 eps(3), q1(3), q2(3)
+      real*8 vec(3)
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
@@ -112,7 +112,7 @@ c     Sp,S-final- and initial-state total spin of pair
 c     
 c********************************************************************
 c     
-      call singlesigma(hold,q1(1),q1(2),q1(3),factor,Sp,S,verbosity)
+      call singlesigma(hold,vec(1),vec(2),vec(3),factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
             Pion2Bout(Sp,Msp,S,Ms)=Pion2Bout(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)

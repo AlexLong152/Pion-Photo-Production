@@ -17,7 +17,7 @@ c     hgrie May 2018: more extensive description of changes in main.*.f
 c                     rewritten such that magnetic quantum numbers are "2*Mz" etc
 c
       subroutine twobodyfinalstatesumsvia2Ndensity(
-     &     Resultx,Resulty,
+     &     Resultx,Resulty,Resultz,
      &     Anucl,twoSnucl,twoMzplimit,j12,m12,l12,s12,t12,mt12,
      &     k,thetacm,
      &     ip12,p12,wp12,
@@ -50,13 +50,14 @@ c
       integer,intent(in) :: Anucl,twoSnucl,twoMzplimit
 c
       complex*16,intent(out) :: Resultx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl),Resulty(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
+      complex*16,intent(out) :: Resultz(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
 c      
       integer alpha2N,alpha2Np,rindx
       
       integer mt12p,j12p,s12p,l12p,t12p,m12p ! quantum #s of (12) system -- integer already, so no factor 2
       integer ip12,ip12p
 c     complex*16 Int2Bxx,Int2Bxy,Int2Byx,Int2Byy
-      complex*16 Int2Bx,Int2By, Int3
+      complex*16 Int2Bx,Int2By,Int2Bz, Int3
 
       integer rindxtmp
       complex*16 Int3tmp
@@ -84,7 +85,7 @@ c
                   do ip12p=1,NP12 ! mag of momentum (12) subsystem
 c                    
 c                    write(*,*) "In finalstatesums k=", k
-                     call Calculate2BIntegralI2(Int2Bx,Int2By,
+                     call Calculate2BIntegralI2(Int2Bx,Int2By,Int2Bz,
      &                    j12p,m12p,l12p,s12p,t12p,mt12p,
      &                    j12,m12,l12,s12,t12,mt12,
      &                    p12*HC,P12MAG(ip12p)*HC,th12,
@@ -133,12 +134,12 @@ c     original factor 3.d0 in 3He-code is replaced by number of nucleon pairs in
                            f=Anucl*(Anucl-1)/2*p12**2*wp12*P12MAG(ip12p)**2*AP12MAG(ip12p)*HC**3.d0
 c     next line replaces Int3 by 2Ndensity ρ                                    
                            fact=f*Int3 ! density dependence 
-c     following only for OQ4 -- NOT YET IMPLEMENTED !!!!!!!!!!!!!!!!!!!!!!!!!!!!
                            
 
 c ALong July2023:  Commented out Int2Bpx, which has to do with OQ4 contributions in compton                           
                            Resultx(twoMzp,twoMz)=Resultx(twoMzp,twoMz)+fact*Int2Bx!+factx*Int2Bpx+factpx*Int2Bx
                            Resulty(twoMzp,twoMz)=Resulty(twoMzp,twoMz)+fact*Int2By!+facty*Int2Bpy+factpy*Int2By
+                           Resultz(twoMzp,twoMz)=Resultz(twoMzp,twoMz)+fact*Int2Bz!+factx*Int2Bpx+factpx*Int2Bx
 c ALong July 2023: Commented all the below out, since its (probably) not relevent for pion photoproduction
 c hgrie Aug 2020: now cure: for Mzp=Mz=0, only calculate xx and yy, since xy and yx must be zero               
 c                          if ((twoMzplimit.eq.0).and.(twoMzp.eq.0).and.(twoMz.eq.0)) then

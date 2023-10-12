@@ -1,6 +1,6 @@
 c     hgrie Aug 2020: v1.0 fewbody-Compton
 c     new Aug 2020, based on 3He density codes with the following datings/changes:
-      subroutine Calculate2BIntegralI2(Int2Bx,Int2By,
+      subroutine Calculate2BIntegralI2(Int2Bx,Int2By,Int2Bz,
      &     j12p,m12p,l12p,s12p,t12p,mt12p,j12,m12,
      &     l12,s12,t12,mt12,p12,p12p,th12,phi12,Nth12,Nphi12,
      &     thetacm,k,
@@ -40,19 +40,20 @@ c     end add hgrie
       
       real*8,intent(in) :: thetacm,k,th12(Nangmax),phi12(Nangmax), Mnucl
       
-c     complex*16,intent(out) :: Int2Bxx,Int2Bxy,Int2Byx,Int2Byy
-      complex*16,intent(out) :: Int2Bx,Int2By
+      complex*16,intent(out) :: Int2Bx,Int2By,Int2Bz
       
       complex*16 PiPhoto2Bx(0:1,-1:1,0:1,-1:1)
       complex*16 PiPhoto2By(0:1,-1:1,0:1,-1:1)
+      complex*16 PiPhoto2Bz(0:1,-1:1,0:1,-1:1)
 
 c     
       integer ith,iphi,jth,jphi,msp,ms,ml12p,ml12
       complex*16 Yl12(-5:5),Yl12p(-5:5)
-c     complex*16 Intxx(-5:5,-5:5),Intxy(-5:5,-5:5)
-c     complex*16     Intyx(-5:5,-5:5),Intyy(-5:5,-5:5)
-      complex*16 Intx(-5:5,-5:5),Inty(-5:5,-5:5)
-c     complex*16     Intpx(-5:5,-5:5),Intpy(-5:5,-5:5)
+
+      complex*16 Intx(-5:5,-5:5)
+      complex*16 Inty(-5:5,-5:5)
+      complex*16 Intz(-5:5,-5:5)
+
       complex*16 Yl12pstar
       real*8 cgcp,cgc,p12x,p12y,p12z,p12px,p12py,p12pz,p12,p12p
 c     
@@ -61,18 +62,13 @@ c
       if ((l12p .gt. 5) .or. (l12 .gt. 5)) then
          goto 100
       endif 
-c     Int2Bxx=c0
-c     Int2Bxy=c0
-c     Int2Byx=c0
-c     Int2Byy=c0
-c     Compton2Bxx=c0
-c     Compton2Bxy=c0
-c     Compton2Byx=c0
-c     Compton2Byy=c0
+
       Int2Bx=c0
       Int2By=c0
+      Int2Bz=c0
       PiPhoto2Bx=c0
       PiPhoto2By=c0
+      PiPhoto2Bz=c0
 c     Compton2Bpx=c0
 c     Compton2Bpy=c0
 c     
@@ -91,6 +87,7 @@ c     Initializing to zero
             Yl12pstar=c0
             Intx=c0
             Inty=c0
+            Intz=c0
             if ((abs(ml12p) .le. l12p) .and. (abs(ml12) .le. l12)) then
                do ith=1,Nth12
 c     c   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -135,7 +132,7 @@ c                          Calcualtes Cartesian components given spherical polar
                            Yl12pstar=Real(Yl12p(ml12p))-ci*Imag(Yl12p(ml12p))
 
 c                          In 2Bspinisospintrans.f                         
-                           call Calc2Bspinisospintrans(PiPhoto2Bx,PiPhoto2By, 
+                           call Calc2Bspinisospintrans(PiPhoto2Bx,PiPhoto2By,PiPhoto2Bz,
      &                          t12,mt12,t12p,mt12p,l12,
      &                          s12,l12p,s12p,thetacm,k,p12x,p12y,p12z,
      &                          p12px,p12py,p12pz,calctype,Mnucl,verbosity)
@@ -143,10 +140,14 @@ c                          In 2Bspinisospintrans.f
                            Intx(ml12p,ml12)=Intx(ml12p,ml12)+Yl12pstar*Yl12(ml12)*
      &                          angweight12(ith,iphi)*angweight12(jth,jphi)*
      &                          PiPhoto2Bx(s12p,msp,s12,ms)
+
                            Inty(ml12p,ml12)=Inty(ml12p,ml12)+Yl12pstar*Yl12(ml12)*
      &                          angweight12(ith,iphi)*angweight12(jth,jphi)*
      &                          PiPhoto2By(s12p,msp,s12,ms)
 
+                           Intz(ml12p,ml12)=Intz(ml12p,ml12)+Yl12pstar*Yl12(ml12)*
+     &                          angweight12(ith,iphi)*angweight12(jth,jphi)*
+     &                          PiPhoto2Bz(s12p,msp,s12,ms)
                         end do  ! jphi
                      end do     ! jth
                   end do        ! iphi
@@ -157,6 +158,7 @@ c                          In 2Bspinisospintrans.f
 
             Int2Bx=Int2Bx+Intx(ml12p,ml12)*cgc*cgcp
             Int2By=Int2By+Inty(ml12p,ml12)*cgc*cgcp
+            Int2Bz=Int2Bz+Intz(ml12p,ml12)*cgc*cgcp
          end do                 !ms12
       end do                    !ms12p
       if (verbosity.eq.1000) continue

@@ -1,7 +1,7 @@
 131.857 131.857 15            omegaLow, omegaHigh, omegaStep
 60 60 10                             thetaLow, thetaHigh, thetaStep
 3He-DiagsB-mu_B=0.dat
-'/home/along/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5'
+'/home/alex/OneDrive/densities-3He/2Ndensities/3He-59.98=theta-131.857=MeV-twobody.h5'
 cm_nosymmetry_verbos                     frame, symmetry, verbosity of STDOUT
 Odelta2_j12max=1 		    Calctype, maximal total ang mom in (12) subsystem
 16 7 		    		    NP12A, NP12B

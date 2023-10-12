@@ -132,7 +132,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       end ! subroutine StripSpaces
 
       
-      subroutine outputtomathPiPhoto(Resultx,Resulty,twoSnucl,verbosity)
+      subroutine outputtomathPiPhoto(Resultx,Resulty,Resultz,twoSnucl,verbosity)
 c**********************************************************************
       IMPLICIT NONE
 c**********************************************************************
@@ -141,6 +141,7 @@ c     input variables
       integer,intent(in)    :: twoSnucl
       complex*16,intent(in) :: Resultx(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)     
       complex*16,intent(in) :: Resulty(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
+      complex*16,intent(in) :: Resultz(-twoSnucl:twoSnucl,-twoSnucl:twoSnucl)
       
       integer,intent(in)    :: verbosity
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -172,7 +173,13 @@ c        end if
             call ConvertComplexToMath(string)
             longstring = trim(adjustl(longstring)) // string // ", "
             call StripSpaces(longstring)
+
             write(string,'(SP,"(",E24.18,",",E24.18,")")') Resulty(twoMzp,twoMz)
+            call ConvertComplexToMath(string)
+            longstring = trim(adjustl(longstring)) // string // ", "
+            call StripSpaces(longstring)
+
+            write(string,'(SP,"(",E24.18,",",E24.18,")")') Resultz(twoMzp,twoMz)
             call ConvertComplexToMath(string)
             longstring = trim(adjustl(longstring)) // string // ", "
             call StripSpaces(longstring)
