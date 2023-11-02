@@ -434,10 +434,14 @@ c
       return
       end 
 
-      subroutine calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,q1,kp,thetacm,mPion,mNucl,verbosity)
+c     subroutine calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,q1,kp,thetacm,mPion,mNucl,verbosity)
+      subroutine calculateqsmass(px,py,pz,ppx,ppy,ppz,q,k,q1,kp,k1,k2,k1p,k2p,thetacm,mPion,mNucl,verbosity)
 
 c     Derivation for the kinematics can be found in pionpionAngle.pdf
 c     OneDrive/thesis/Kinematics/pionpionAngle.pdf
+c     The conversion from lenkewitz to our variables is found in
+c     OneDrive/thesis/NeutralPionDerivation/Alex-TwobodyDiagrams-AandB
+
       implicit none
 c
 c**********************************************************************
@@ -483,7 +487,7 @@ c     q1:First propogatior for diagram B, q1=q-k
 
       k1=p-(kVec/2)
       k2=(-1*p)-(kVec/2)
-      k1p=pp-kp/2
+      k1p=pp-(kp/2)
       k2p=(-1*pp)-kp/2
 
       q = (p-pp)+((kVec+kp)/2)

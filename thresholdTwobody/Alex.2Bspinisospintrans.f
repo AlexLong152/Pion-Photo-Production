@@ -140,9 +140,13 @@ c     p=(/px,py,pz/)
 c     pp=(/ppx,ppy,ppz/)
 
 
-      p12=(k1-k2)/2
-      p12p=(k1p-k2p)/2
+c     p12=(k1-k2)/2
+c     p12p=(k1p-k2p)/2
       K2n=(0.135*0.001/135)*197.3 !fm^2
+c     write(*,*) "In 2Bspinisospintrans.f: (/px,py,pz)=",(/px,py,pz/) 
+c     write(*,*) "In 2Bspinisospintrans.f: (/ppx,ppy,ppz)=",(/ppx,ppy,ppz/) 
+c     p=(/px,py,pz/)
+c     write(*,*) "In 2Bspinisospintrans.f: p-kVec/2=",p-kVec/2 
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     OQ3 MEC contributions
@@ -164,7 +168,9 @@ c----------------------------------------------------------------------
 c     Calculate two-body diagram A, symmetric part
 c     In my derivation I just got 1/q^2 at threshold
 c----------------------------------------------------------------------
-            denomVec=p12-p12p+(kVec/2)!q
+c           factorA=((-1)**t12)*1.5* K2n/(DOT_PRODUCT(q,q))
+c           denomVec=p12-p12p+(kVec/2) ! This is the Lenkewitz version
+            denomVec=q
             eps=(/1.d0,0.d0,0.d0/)
             factorA=((-1)**t12)*K2n*0.5/(DOT_PRODUCT(denomVec,denomVec)+mu)
             call CalcPionPhoto2BA(PiPhoto2Bx,factorA,
@@ -186,38 +192,32 @@ c    &     vec,Sp,S,verbosity)
 c     Where vec is the vector being dotted into sigma_1+sigma_2
 c----------------------------------------------------------------------
             eps=(/1.d0,0.d0,0.d0/)
-            q1=p12-p12p-(kVec/2)
-            q=p12-p12p+(kVec/2)
             factorB=K2n*((-1)**t12)*
-     &          (DOT_PRODUCT(eps,p12-p12p))/(
+     &          (DOT_PRODUCT(eps,q1+q))/(
      &          (DOT_PRODUCT(q1,q1)+mPion**2)*
      &          (DOT_PRODUCT(q,q))
      &             +mu)
+
             call CalcPionPhoto2BB(PiPhoto2Bx,factorB,
      &          q1,s12p,s12,verbosity)
 
+
             eps=(/0.d0,1.d0,0.d0/)
-            q1=p12-p12p-(kVec/2)
-            q=p12-p12p+(kVec/2)
-            factorB=K2n*((-1)**t12)*
-     &          (DOT_PRODUCT(eps,p12-p12p))/(
+            factorB=K2n*((-1)**t12)*(DOT_PRODUCT(eps,q1+q))/(
      &          (DOT_PRODUCT(q1,q1)+mPion**2)*
      &          (DOT_PRODUCT(q,q))
      &             +mu)
             call CalcPionPhoto2BB(PiPhoto2By,factorB,
      &          q1,s12p,s12,verbosity)
 
+
             eps=(/0.d0,0.d0,1.d0/)
-            q1=p12-p12p-(kVec/2)
-            q=p12-p12p+(kVec/2)
-            factorB=K2n*((-1)**t12)*
-     &          (DOT_PRODUCT(eps,p12-p12p))/(
+            factorB=K2n*((-1)**t12)*(DOT_PRODUCT(eps,q1+q))/(
      &          (DOT_PRODUCT(q1,q1)+mPion**2)*
      &          (DOT_PRODUCT(q,q))
      &             +mu)
             call CalcPionPhoto2BB(PiPhoto2Bz,factorB,
      &          q1,s12p,s12,verbosity)
-
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c        BEGIN ASYMMETRIC PART
          else                   !l12-l12p is odd;  s12-s12p=+/- 1 => spin asymmetric part of operator.               
@@ -228,9 +228,10 @@ c     Calculate two-body diagram A, anti-symmetric part
 c     
 c----------------------------------------------------------------------
 
-            denomVec=p12-p12p+(kVec/2)!q
-            eps=(/1.d0,0.d0,0.d0/)
+
+            denomVec=q
             factorAasy=((-1)**t12)*K2n*0.5/(DOT_PRODUCT(denomVec,denomVec)+mu)
+            eps=(/1.d0,0.d0,0.d0/)
             call CalcPionPhoto2BAasy(PiPhoto2Bx,factorAasy,
      &           eps,s12p,s12,verbosity)
 
@@ -247,34 +248,30 @@ c     Calculate two-body diagram B, anti-symmetric part
 c     recall q=q2
 c----------------------------------------------------------------------
 
-            q1=p12-p12p-(kVec/2)
-            q=p12-p12p+(kVec/2)
-
             eps=(/1.d0,0.d0,0.d0/)
-            factorB=K2n*((-1)**t12)*
-     &          (DOT_PRODUCT(eps,p12-p12p))/(
+            factorB=K2n*((-1)**t12)*(DOT_PRODUCT(eps,q1+q))/(
      &          (DOT_PRODUCT(q1,q1)+mPion**2)*
      &          (DOT_PRODUCT(q,q))
      &             +mu)
+
             call CalcPionPhoto2BBasy(PiPhoto2Bx,factorB,
      &          q1,s12p,s12,verbosity)
 
-
             eps=(/0.d0,1.d0,0.d0/)
-            factorB=K2n*((-1)**t12)*
-     &          (DOT_PRODUCT(eps,p12-p12p))/(
+            factorB=K2n*((-1)**t12)*(DOT_PRODUCT(eps,q1+q))/(
      &          (DOT_PRODUCT(q1,q1)+mPion**2)*
      &          (DOT_PRODUCT(q,q))
      &             +mu)
+
             call CalcPionPhoto2BBasy(PiPhoto2By,factorB,
      &          q1,s12p,s12,verbosity)
 
             eps=(/0.d0,0.d0,1.d0/)
-            factorB=K2n*((-1)**t12)*
-     &          (DOT_PRODUCT(eps,p12-p12p))/(
+            factorB=K2n*((-1)**t12)*(DOT_PRODUCT(eps,q1+q))/(
      &          (DOT_PRODUCT(q1,q1)+mPion**2)*
      &          (DOT_PRODUCT(q,q))
      &             +mu)
+
             call CalcPionPhoto2BBasy(PiPhoto2Bz,factorB,
      &          q1,s12p,s12,verbosity)
          end if                 ! s12 question

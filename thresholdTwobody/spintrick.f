@@ -80,6 +80,7 @@ c
 c********************************************************************
 c     
 c     Calculates symmetric part of diagram B.
+c     "vec" gets dotted into sigma_1+sigma_2
 c     
 c     Indices in Pion2Bab are that first index gives NN spin state:
 c     S=0 or S=1, second index gives spin projection. This is for final
@@ -205,6 +206,7 @@ c     factor=1.d0
 
 cccc  new subroutine to calculate the matrix elements of factor*A.S ccc
 cccc same should be created in spintrickasy.f for factor*A.(sigma1-sigma2)      
+
       subroutine singlesigma(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
 c     calculates 2*S.A, where S=(sigma1+sigma2)/2
 c     

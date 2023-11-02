@@ -126,8 +126,8 @@ c
 c     
 c********************************************************************
 c     
-c     Calculates symmetric part of diagram A for x->y.
-c     
+c     Asymetric part of diagram B
+c     q1 gets dotted into sigma_1-sigma_2
 c     Indices in Pion2Bab are that first index gives NN spin state:
 c     S=0 or S=1, second index gives spin projection. This is for final
 c     state. Third and fourth indices give same for initial state. 
@@ -155,8 +155,7 @@ c
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
-c     hold-contains sig1.A sig.2B structure, symmetric part
-c     factor-contains meson propagator
+c     factor-contains scalar terms
 c     Sp,S-final- and initial-state total spin of pair      
 c     
 c********************************************************************
@@ -267,15 +266,15 @@ c
       Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
       hold=c0
       
-c     if ((Sp .eq. 0) .and. (S .eq. 1)) then
-c        hold(0,0,1,1)=-factor*2.d0*Aplus
-c        hold(0,0,1,0)=factor*2.d0*Az
-c        hold(0,0,1,-1)=-factor*2.d0*Aminus
-c     else if ((Sp .eq. 1) .and. (S .eq. 0)) then
-c        hold(1,1,0,0)=-factor*2.d0*Aminus
-c        hold(1,0,0,0)=factor*2.d0*Az
-c        hold(1,-1,0,0)=-factor*2.d0*Aplus
-c     end if
+      if ((Sp .eq. 0) .and. (S .eq. 1)) then
+         hold(0,0,1,1)=-factor*2.d0*Aplus
+         hold(0,0,1,0)=factor*2.d0*Az
+         hold(0,0,1,-1)=-factor*2.d0*Aminus
+      else if ((Sp .eq. 1) .and. (S .eq. 0)) then
+         hold(1,1,0,0)=-factor*2.d0*Aminus
+         hold(1,0,0,0)=factor*2.d0*Az
+         hold(1,-1,0,0)=-factor*2.d0*Aplus
+      end if
 c     hold=0.10
       if (verbosity.eq.1000) continue
       end

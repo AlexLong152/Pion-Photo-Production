@@ -111,6 +111,7 @@ c                           write(*,*) l12p,s12p,j12p,mt12p,m12p,twoMzp
 c                           write(*,*) "rindx = ",rindx," ; alpha2N  = ",alpha2N," ; alpha2Np = ",alpha2Np
 c                           write(*,*) "             ρ12 = ",rho(ip12,ip12,rindx)
                            Int3=rho(ip12,ip12p,rindx)
+c                          Int3=cmplx(1e-5,0)
 
 c                          rindxtmp=rhoindx(alpha2Np, alpha2N)
 c                          Int3tmp=rho(ip12p,ip12,rindxtmp)
