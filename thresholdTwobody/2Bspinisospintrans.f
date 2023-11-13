@@ -1,5 +1,5 @@
 c     Alex 2023: Pion Photoproduction 
-c          Based on Alex's derivation
+c          Based on Lenkewitz derivation
 c     hgrie Aug 2020: v1.0 fewbody-Compton
 c     new Aug 2020, based on 3He density codes with the following datings/changes:
       subroutine Calc2Bspinisospintrans(PiPhoto2Bx,PiPhoto2By,PiPhoto2Bz,
