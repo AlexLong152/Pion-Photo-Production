@@ -1,0 +1,23 @@
+ cm omega =    131.85700000000000      thetacm =    60.000000000000000     
+ 
+ x polarization - epsilon=<1,0,0>
+.00009317+.00000068i    sigmax(twoMzp,twoMz)=+0.+0.i
+.02033876+.00000258i    sigmax(twoMzp,twoMz)=+1.+0.i
+.02034020-.00000258i    sigmax(twoMzp,twoMz)=+1.+0.i
+-.00009469+.00000068i    sigmax(twoMzp,twoMz)=+0.+0.i
+sum=.04067896+.00000001i
+ 
+ y polarization - epsilon=<0,1,0>
+.00000406+.00023165i    sigmay(twoMzp,twoMz)=+0.+0.i
+-.00000265-.02026147i    sigmay(twoMzp,twoMz)=+0.-1.i
+-.00000265+.02026250i    sigmay(twoMzp,twoMz)=+0.+1.i
+-.00000406+.00023078i    sigmay(twoMzp,twoMz)=+0.+0.i
+sum=.04052397-.00000001i
+ 
+ z polarization - epsilon=<0,0,1>
+.04645960+.00000173i    sigmaz(twoMzp,twoMz)=+1.+0.i
+.00180089+.00000453i    sigmaz(twoMzp,twoMz)=+0.+0.i
+.00180083-.00000453i    sigmaz(twoMzp,twoMz)=+0.+0.i
+-.04646103+.00000173i    sigmaz(twoMzp,twoMz)=-1.+0.i
+sum=.09292063+.00000000i
+ 

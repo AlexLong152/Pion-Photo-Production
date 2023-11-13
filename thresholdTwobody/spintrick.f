@@ -253,7 +253,7 @@ c     why only Sp=1=S case ???
       if ((Sp .eq. 1) .and. (S .eq. 1)) then
           hold(1,1,1,1)=factor*Az
           hold(1,-1,1,-1)=-1.d0*factor*Az
-          hold(1,0,1,1)=-1.d0*Aplus
+          hold(1,0,1,1)=-1.d0*factor*Aplus
           hold(1,1,1,0)=factor*Aminus   
           hold(1,-1,1,0)=-factor*Aplus
           hold(1,0,1,-1)=factor*Aminus
@@ -270,5 +270,6 @@ c     why only Sp=1=S case ???
           hold(1,0,0,0)=factor*Az
           hold(1,1,0,0)=factor*Aplus
       end if
+c     hold=factor*cmplx(1.d0,0)/20
       if (verbosity.eq.1000) continue
       end

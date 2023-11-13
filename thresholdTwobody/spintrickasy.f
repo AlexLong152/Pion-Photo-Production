@@ -275,7 +275,8 @@ c
          hold(1,0,0,0)=factor*2.d0*Az
          hold(1,-1,0,0)=-factor*2.d0*Aplus
       end if
-c     hold=0.10
+c     hold=0.10*factor
+        
       if (verbosity.eq.1000) continue
       end
 c

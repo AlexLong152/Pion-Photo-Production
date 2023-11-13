@@ -1,7 +1,6 @@
 # no arguments ---------------------------- runs input.dat
 # argument "test", or "t", just passes ---- runs testInput.dat
 # argument "physical" or "p" -------------- runs physicalInput.dat
-rm *.tmp
 clear
 make clean
 make
