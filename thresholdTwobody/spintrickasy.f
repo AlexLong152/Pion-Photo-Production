@@ -1,4 +1,4 @@
-c     hgrie Aug 2020: v1.0 fewbody-Compton
+c     hgrie Oct 2022: v2.0 fewbody-Compton
 c     new Aug 2020, based on 3He density codes with the following datings/changes:
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     hgrie May 2018: used to be part of 3HeCompt/twobody/
@@ -6,29 +6,43 @@ c     now part of twobodyvia2Ndensity/, backward compatibility deliberately brok
 c     no changes yet
 c     twoSmax/twoMz dependence: none, only on quantum numbers of (12) subsystem
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c     contains: CalcPionPhoto2BAx()
+c     contains: CalcCompton2BAxxasy()
+c               CalcCompton2BAxyasy()
+c               CalcCompton2BAyxasy()
+c               CalcCompton2BAyyasy()
+c               CalcCompton2BBasy()
+c               CalcCompton2BCxasy
+c               CalcCompton2BCyasy
+c               CalcCompton2BDxasy
+c               CalcCompton2BDyasy
+c               CalcCompton2BEasy
+c               CalcCompton2BFgasy
+c               CalcCompton2BFg2asy
+c               CalcCompton2Bhiasy
+c               CalcCompton2Bhi2asy
+c               CalcCompton2Bjmasy
+c               CalcCompton2Bnoasy
+c               CalcCompton2Bfgfg2niasy
+c               CalcCompton2Bhiniasy
+c               CalcCompton2Bhini2asy
+c               CalcCompton2Baa2hihi2niasy
+c               CalcCompton2Bd2jmniasy
+c               CalcCompton2Bdnoniasy
 c               Calcholdasy
 c               singlesigmaasy
 c               
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c     DRP Feb 2017: check of all factors and extensive commenting. 
-ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c     Aug-Oct 2016/hgrie Feb 2017: Arman added OQ4 diagrams, corrected
-c     isospin factor:
-c     in subroutine Calcholdasy, all hold(..) must be multiplied by 2.d0
-c     This is presently taken care of through the "factor" factors
-c====================================================================
-c     
-      subroutine CalcPionPhoto2BAasy(PiPhoto2B,factor,
-     &     eps,Sp,S,verbosity)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      
+      subroutine CalcCompton2BAasy(Comp2Bxx,Comp2Byx,Comp2Bxy,Comp2Byy,
+     &     factor,
+     &     Sp,S,verbosity)
 c     
 c********************************************************************
 c     
-c     Calculates anti-symmetric part of diagram A for x->x.
+c     Calculates diagram C for x->x and y->x.
 c     
-c     Indices in Comp2Bab are that first index gives NN spin state:
-c     S=0 or S=1, second index gives spin projection. This is for final
-c     state. Third and fourth indices give same for initial state. 
+c     Note: 1=+,2=-
 c     
 c********************************************************************
 c     
@@ -42,189 +56,112 @@ c********************************************************************
 c     
 c     INPUT/OUTPUT VARIABLE:
 c     
-      complex*16 PiPhoto2B(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
+      complex*16 Comp2Bxx(0:1,-1:1,0:1,-1:1),Comp2Byx(0:1,-1:1,0:1,-1:1)
+      complex*16  Comp2Bxy(0:1,-1:1,0:1,-1:1),Comp2Byy(0:1,-1:1,0:1,-1:1)
+      complex*16 Comp2Bpx(0:1,-1:1,0:1,-1:1),Comp2Bpy(0:1,-1:1,0:1,-1:1)
+      complex*16  hold(0:1,-1:1,0:1,-1:1)
 c     
 c********************************************************************
 c     
 c     INPUT VARIABLES:
 c     
-      real*8 factor
-      real*8 eps(3)
+      real*8 thetacm,factor,factor12,polnfacx,polnfacy,polnfac12x
+      real*8 polnfac12y,k
+      real*8 qpppx,qpppy,qppx,qppy,qppz
+      real*8 qppp12x,qppp12y,qpp12x,qpp12y,qpp12z
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
-c     singlesigma contains (sig_1+sig_2).A structure, antisymmetric part
-c     factor-contains meson propagator, overall factor
-c     Sp,S-final- and initial-state total spin of pair: 0 or 1
-c     
-c********************************************************************
-c     
-      call singlesigmaasy(hold,eps(1),eps(2),eps(3),factor,Sp,S,verbosity)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     εx: mapped to xx
+c      call singlesigmaasy(hold,-qppx,-qppy,-qppz,factor,Sp,S,verbosity)   
+      call singlesigmaasy(hold, 1.d0, 0.d0, 0.d0, factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
-            PiPhoto2B(Sp,Msp,S,Ms)=PiPhoto2B(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+            Comp2Bxx(Sp,Msp,S,Ms)=Comp2Bxx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
          end do
-      end do
-c     
-      if (verbosity.eq.1000) continue
-      return
-      end
-
-      subroutine CalcPionPhoto2BAyasy(PiPhoto2Bx,factor,
-     &     eps,Sp,S,verbosity)
-c     
-c********************************************************************
-c     
-c     Calculates anti-symmetric part of diagram A for x->x.
-c     
-c     Indices in Comp2Bab are that first index gives NN spin state:
-c     S=0 or S=1, second index gives spin projection. This is for final
-c     state. Third and fourth indices give same for initial state. 
-c     
-c********************************************************************
-c     
-      implicit none
-c     
-c********************************************************************
-c     
-      include '../common-densities/constants.def'
-c     
-c********************************************************************
-c     
-c     INPUT/OUTPUT VARIABLE:
-c     
-      complex*16 PiPhoto2Bx(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
-c     
-c********************************************************************
-c     
-c     INPUT VARIABLES:
-c     
-      real*8 factor
-      real*8 eps(3)
-      integer Ms,Msp,Sp,S
-      integer verbosity
-c     
-c     singlesigma contains (sig_1+sig_2).A structure, antisymmetric part
-c     factor-contains meson propagator, overall factor
-c     Sp,S-final- and initial-state total spin of pair: 0 or 1
-c     
-c********************************************************************
-c     
-      call singlesigmaasy(hold,eps(1),eps(2),eps(3),factor,Sp,S,verbosity)
+      end do  
+c     εy: mapped to xy
+c      call singlesigmaasy(hold,-qppx,-qppy,-qppz,factor,Sp,S,verbosity)   
+      call singlesigmaasy(hold, 0.d0, 1.d0, 0.d0, factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
-            PiPhoto2Bx(Sp,Msp,S,Ms)=PiPhoto2Bx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+            Comp2Bxy(Sp,Msp,S,Ms)=Comp2Bxy(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
          end do
-      end do
-c     
-      if (verbosity.eq.1000) continue
-      return
-      end
-
-      subroutine CalcPionPhoto2BBasy(Pion2Bout,factor,
-     &     q1,Sp,S,verbosity)
-c     
-c********************************************************************
-c     
-c     Asymetric part of diagram B
-c     q1 gets dotted into sigma_1-sigma_2
-c     Indices in Pion2Bab are that first index gives NN spin state:
-c     S=0 or S=1, second index gives spin projection. This is for final
-c     state. Third and fourth indices give same for initial state. 
-c     
-c********************************************************************
-c     
-      implicit none
-c     
-c********************************************************************
-c     
-      include '../common-densities/constants.def'
-c     
-c********************************************************************
-c     
-c     INPUT/OUTPUT VARIABLE:
-c     
-      complex*16 Pion2Bout(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
-c     
-c********************************************************************
-c     
-c     INPUT VARIABLES:
-c     
-      real*8 factor
-      real*8 q1(3)
-      integer Ms,Msp,Sp,S
-      integer verbosity
-c     
-c     factor-contains scalar terms
-c     Sp,S-final- and initial-state total spin of pair      
-c     
-c********************************************************************
-c     
-      call singlesigmaasy(hold,q1(1),q1(2),q1(3),factor,Sp,S,verbosity)
+      end do  
+c     εz: mapped to yx
+c      call singlesigmaasy(hold,-qppx,-qppy,-qppz,factor,Sp,S,verbosity)   
+      call singlesigmaasy(hold, 0.d0, 0.d0, 1.d0, factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
-            Pion2Bout(Sp,Msp,S,Ms)=Pion2Bout(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+            Comp2Byx(Sp,Msp,S,Ms)=Comp2Byx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
          end do
-      end do
-c     
-      if (verbosity.eq.1000) continue
-      return
-      end
-c
-c
-      subroutine Calcholdasy(hold,Ax,Ay,Az,Bx,By,Bz,factor,Sp,S,verbosity)   
-c     
-c     Calculates anti-symmetric part of spin structure sig1.A sig2.B.
-c     
-c********************************************************************
-c     
-      implicit none
-c     
-c********************************************************************
-c     
-      include '../common-densities/constants.def'
-c     
-c********************************************************************
-c     
-c     OUTPUT VARIABLE:
-      complex*16 hold(0:1,-1:1,0:1,-1:1)
-c     
-c********************************************************************
-c     
-c     INPUT VARIABLES:
-c     
-      real*8 Ax,Ay,Az,Bx,By,Bz,factor
-      integer Sp,S
-      integer verbosity
-c
-c     factor-overall factor
-c     Sp,S-final- and initial-state spin
-c     
-c********************************************************************
-c     
-c     LOCAL VARIABLES:
-      complex*16 Aplus,Aminus,Bplus,Bminus
-c     
-c********************************************************************
-c     
-      hold=c0
-      Aplus=-(Ax+ci*Ay)/(dsqrt(2.d0))
-      Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
-      Bplus=-(Bx+ci*By)/(dsqrt(2.d0))
-      Bminus=(Bx-ci*By)/(dsqrt(2.d0))
-      if ((Sp .eq. 0) .and. (S .eq. 1)) then
-         hold(0,0,1,1)=factor*2.d0*(-Aplus*Bz+Az*Bplus)
-         hold(0,0,1,0)=-factor*2.d0*(Aplus*Bminus-Aminus*Bplus)
-         hold(0,0,1,-1)=factor*2.d0*(Aminus*Bz-Az*Bminus)
-      else if ((Sp .eq. 1) .and. (S .eq. 0)) then
-         hold(1,1,0,0)=factor*2.d0*(Aminus*Bz-Az*Bminus)
-         hold(1,0,0,0)=factor*2.d0*(Aplus*Bminus-Aminus*Bplus)
-         hold(1,-1,0,0)=factor*2.d0*(-Aplus*Bz+Az*Bplus)
-      end if
+      end do  
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc 
       
       if (verbosity.eq.1000) continue
+      return
       end
-c
+c====================================================================
+
+c====================================================================
+c     
+      subroutine CalcCompton2BBasy(Comp2Bxx,Comp2Byx,Comp2Bxy,Comp2Byy,
+     &     factor,
+     &     Ax,Ay,Az,Bx,By,Bz, ! A.σ, B.ε
+     &     Sp,S,verbosity)    
+c     
+c********************************************************************
+c     
+c     Calculates diagram B
+c     
+c********************************************************************
+c     
+      implicit none
+c     
+c********************************************************************
+c     
+      include '../common-densities/constants.def'
+c     
+c********************************************************************
+c     
+c     INPUT/OUTPUT VARIABLE:
+c     
+      complex*16 Comp2Bxx(0:1,-1:1,0:1,-1:1),Comp2Byx(0:1,-1:1,0:1,-1:1)
+      complex*16  Comp2Bxy(0:1,-1:1,0:1,-1:1),Comp2Byy(0:1,-1:1,0:1,-1:1)
+      complex*16 Comp2Bpx(0:1,-1:1,0:1,-1:1),Comp2Bpy(0:1,-1:1,0:1,-1:1)
+      complex*16  hold(0:1,-1:1,0:1,-1:1)
+c     
+c********************************************************************
+c     
+c     INPUT VARIABLES:
+c     
+      real*8 thetacm,factor
+      real*8 Ax,Ay,Az,Bx,By,Bz
+      integer Ms,Msp,Sp,S
+      integer verbosity
+c     
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     singlesigmaasy(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
+c     calculates 2*S.A, where S=(sigma1-sigma2)/2
+c      call singlesigmaasy(hold,-qppx,-qppy,-qppz,factor,Sp,S,verbosity)   
+      call singlesigmaasy(hold, Ax, Ay, Az, factor,Sp,S,verbosity)
+      do Msp=-Sp,Sp
+         do Ms=-S,S
+c     εx: mapped to xx   
+            Comp2Bxx(Sp,Msp,S,Ms)=Comp2Bxx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)*Bx
+c     εy: mapped to xy   
+            Comp2Bxy(Sp,Msp,S,Ms)=Comp2Bxy(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)*By
+c     εz: mapped to yx   
+            Comp2Byx(Sp,Msp,S,Ms)=Comp2Byx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)*Bz
+         end do
+      end do  
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc 
+      
+      if (verbosity.eq.1000) continue
+      return
+      end
+c====================================================================
 c********************************************************************
 c********************************************************************
       subroutine singlesigmaasy(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
@@ -244,7 +181,6 @@ c
 c     OUTPUT VARIABLE:
 c     
       complex*16 hold(0:1,-1:1,0:1,-1:1)
-c     arguments for hold are (Sp,Msp,S,Ms)
 c     
 c********************************************************************
 c     
@@ -275,8 +211,6 @@ c
          hold(1,0,0,0)=factor*2.d0*Az
          hold(1,-1,0,0)=-factor*2.d0*Aplus
       end if
-c     hold=0.10*factor
-        
       if (verbosity.eq.1000) continue
       end
 c

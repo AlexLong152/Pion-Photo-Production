@@ -174,15 +174,15 @@ c        end if
             longstring = trim(adjustl(longstring)) // string // ", "
             call StripSpaces(longstring)
 
-            write(string,'(SP,"(",E24.18,",",E24.18,")")') Resulty(twoMzp,twoMz)
-            call ConvertComplexToMath(string)
-            longstring = trim(adjustl(longstring)) // string // ", "
-            call StripSpaces(longstring)
+c           write(string,'(SP,"(",E24.18,",",E24.18,")")') Resulty(twoMzp,twoMz)
+c           call ConvertComplexToMath(string)
+c           longstring = trim(adjustl(longstring)) // string // ", "
+c           call StripSpaces(longstring)
 
-            write(string,'(SP,"(",E24.18,",",E24.18,")")') Resultz(twoMzp,twoMz)
-            call ConvertComplexToMath(string)
-            longstring = trim(adjustl(longstring)) // string // ", "
-            call StripSpaces(longstring)
+c           write(string,'(SP,"(",E24.18,",",E24.18,")")') Resultz(twoMzp,twoMz)
+c           call ConvertComplexToMath(string)
+c           longstring = trim(adjustl(longstring)) // string // ", "
+c           call StripSpaces(longstring)
          end do
       end do
       longstring = '{' // trim(adjustl(longstring)) // '}'    

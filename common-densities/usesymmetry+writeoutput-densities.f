@@ -310,7 +310,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
              write(*,formt) Resultx(twoMzp,twoMz),"sigmax(twoMzp,twoMz)=",sigmax(twoMzp,twoMz)
           end do
        end do
-       call printsum(outUnitno, sigmax, Resultx, twoSnucl,twoMzplimit)
+c      call printsum(outUnitno, sigmax, Resultx, twoSnucl,twoMzplimit)
        write(outUnitno,*) ""
        write(*,*) ""
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -323,7 +323,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
              write(*,formt) Resulty(twoMzp,twoMz),"sigmay(twoMzp,twoMz)=",sigmay(twoMzp,twoMz) 
           end do
        end do
-       call printsum(outUnitno, sigmay, Resulty, twoSnucl,twoMzplimit)
+c      call printsum(outUnitno, sigmay, Resulty, twoSnucl,twoMzplimit)
 
        write(outUnitno,*) ""
        write(*,*) ""
@@ -339,7 +339,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
           end do
        end do
 
-       call printsum(outUnitno, sigmaz, Resultz, twoSnucl,twoMzplimit)
+c      call printsum(outUnitno, sigmaz, Resultz, twoSnucl,twoMzplimit)
        write(outUnitno,*) ""
        write(*,*) ""
 c     hgrie Aug 2020: if so wanted, output first independent MEs also to screen in a form that can directly be pasted into mathematica
@@ -414,6 +414,6 @@ c      label=trim(label)
        end do
 
        write(*,*) ""
-c           if (verbosity.ge.0) call outputtomathPiPhoto(Resultx,Resulty,twoSnucl,verbosity)
+            if (verbosity.ge.0) call outputtomathPiPhoto(Resultx,Resulty,twoSnucl,verbosity)
       return
       end                       ! SingleDiagramOutput

@@ -1,4 +1,25 @@
-c     hgrie Aug 2020: v1.0 fewbody-Compton
+c     hgrie Oct 2022: v2.0 fewbody-Compton
+c     ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     hgrie 25 Sep 2023: correction in subroutine singlesigma()
+c     which computes (σ1+σ2).A and enters in Compton at e²δ⁴ (i.e. affects no publication!)
+c     Alex Long found a missing sign in line 2420, which should read
+c          hold(1,-1,1,-1)= - hold(1,1,1,1) ! minus sign added!!!
+c     Rationale and confirmation by Daniel documented in 
+c          documentation/corrections/spintrick-singlesigma.signerror-corrected.20230925.pdf
+c     which are scans of manuscript Compton Densities Approach pp. 65a-f.
+c     These notes show computation of the MEs of (σ1±σ2).A and claim to show that these are
+c     now correctly implemented.
+c     These notes therefore also clarify that there is NO mistake in spintrickasy.f's
+c     corresponding subroutine singlesigmaasy(),
+c     and also checked that the implementation in the deuteron's twobodypolnamp.f,
+c     subroutine CalcSdotA(), is correct.
+c     Fortunately, we have not yet actually RUN anything of the twobody code at e²δ⁴, so
+c     the coding mistake does NOT affect published or produced results.
+c     Remember that the e²δ⁴ twobody parts were coded by Arman in analogy to the Beame/... 2003
+c     paper for the deuteron,e xtended to inlcude the spin-asymmetric piece (σ1-σ2).A .
+c     However, we have as of Sep 2023 not yet CHECKED that/if Arman's code is a correct implementation.
+c     So this is the first mistake we find in that part. 
+c     ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     new Aug 2020, based on 3He density codes with the following datings/changes:
 c     ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     hgrie May 2018: used to be part of 3HeCompt/twobody/
@@ -6,10 +27,30 @@ c     now part of twobodyvia2Ndensity/, backward compatibility deliberately brok
 c     no changes yet
 c     twoSmax/twoMz dependence: none, only on quantum numbers of (12) subsystem
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c   TODO: rewrite in term of S_Dot_A instead of singlesigma
 c     contains:
-c              CalcPionPhoto2BAx
-c              CalcPionPhoto2BAy
+c              
+c              CalcCompton2BAxx
+c              CalcCompton2BAxy
+c              CalcCompton2BAyx
+c              CalcCompton2BAyy
+c              CalcCompton2BB
+c              CalcCompton2BCx
+c              CalcCompton2BCy
+c              CalcCompton2BDx
+c              CalcCompton2BDy
+c              CalcCompton2BE
+c              CalcCompton2Bfg
+c              CalcCompton2Bfg2
+c              CalcCompton2Bhi
+c              CalcCompton2Bhi2
+c              CalcCompton2Bjm
+c              CalcCompton2Bno
+c              CalcCompton2Bfgfg2ni
+c              CalcCompton2Bhini
+c              CalcCompton2Bhini2
+c              CalcCompton2Baa2hihi2ni
+c              CalcCompton2Bd2jmni
+c              CalcCompton2Bdnoni
 c              Calchold
 c              singlesigma
 c              
@@ -18,17 +59,16 @@ c     DRP Feb 2017: check of all factors and extensive commenting.
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     Aug-Oct 2016/hgrie Feb 2017: Arman added OQ4 diagrams
 c====================================================================
-
-      subroutine CalcPionPhoto2BA(PiPhoto2B,factor,
-     &     eps,Sp,S,verbosity)
+c     
+      subroutine CalcCompton2BA(Comp2Bxx,Comp2Byx,Comp2Bxy,Comp2Byy,
+     &     factor,
+     &     Sp,S,verbosity)
 c     
 c********************************************************************
 c     
-c     Calculates symmetric part of diagram A for x->x.
+c     Calculates diagram A
 c     
-c     Indices in Pion2Bab are that first index gives NN spin state:
-c     S=0 or S=1, second index gives spin projection. This is for final
-c     state. Third and fourth indices give same for initial state. 
+c     Note: 1=+,2=-
 c     
 c********************************************************************
 c     
@@ -42,94 +82,65 @@ c********************************************************************
 c     
 c     INPUT/OUTPUT VARIABLE:
 c     
-      complex*16 PiPhoto2B(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
-c     complex*16 PiPhoto2By(0:1,-1:1,0:1,-1:1)
+      complex*16 Comp2Bxx(0:1,-1:1,0:1,-1:1),Comp2Byx(0:1,-1:1,0:1,-1:1)
+      complex*16  Comp2Bxy(0:1,-1:1,0:1,-1:1),Comp2Byy(0:1,-1:1,0:1,-1:1)
+      complex*16 Comp2Bpx(0:1,-1:1,0:1,-1:1),Comp2Bpy(0:1,-1:1,0:1,-1:1)
+      complex*16  hold(0:1,-1:1,0:1,-1:1)
 c     
 c********************************************************************
 c     
 c     INPUT VARIABLES:
 c     
-      real*8 factor
-c     real*8 Ax,Ay,Az
-      real*8 eps(3)
+      real*8 thetacm,factor,factor12,polnfacx,polnfacy,polnfac12x
+      real*8 polnfac12y,k
+      real*8 qpppx,qpppy,qppx,qppy,qppz
+      real*8 qppp12x,qppp12y,qpp12x,qpp12y,qpp12z
       integer Ms,Msp,Sp,S
       integer verbosity
 c     
-c     singlesigma contains (sig_1+sig_2).A structure, symmetric part
-c     factor-contains meson propagator, overall factor
-c     Sp,S-final- and initial-state total spin of pair
-c     
-c********************************************************************
-c     
-
-      call S_Dot_A(hold,factor,eps,Sp,S,verbosity)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     εx: mapped to xx   
+c     singlesigma(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
+c     calculates 2*S.A, where S=(sigma1+sigma2)/2
+c      call singlesigma(hold,-qppx,-qppy,-qppz,factor,Sp,S,verbosity)   
+      call singlesigma(hold, 1.d0, 0.d0, 0.d0, factor,Sp,S,verbosity)
       do Msp=-Sp,Sp
          do Ms=-S,S
-            PiPhoto2B(Sp,Msp,S,Ms)=PiPhoto2B(Sp,Msp,S,Ms)+factor*hold(Sp,Msp,S,Ms)
+            Comp2Bxx(Sp,Msp,S,Ms)=Comp2Bxx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
          end do
-      end do
-c     
-      if (verbosity.eq.1000) continue
-      return
-      end
+      end do  
+c     εy: mapped to xy
+c      call singlesigma(hold,-qppx,-qppy,-qppz,factor,Sp,S,verbosity)   
+      call singlesigma(hold, 0.d0, 1.d0, 0.d0, factor,Sp,S,verbosity)
+      do Msp=-Sp,Sp
+         do Ms=-S,S
+            Comp2Bxy(Sp,Msp,S,Ms)=Comp2Bxy(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+         end do
+      end do  
+c     εz: mapped to yx
+c      call singlesigma(hold,-qppx,-qppy,-qppz,factor,Sp,S,verbosity)   
+      call singlesigma(hold, 0.d0, 0.d0, 1.d0, factor,Sp,S,verbosity)
+      do Msp=-Sp,Sp
+         do Ms=-S,S
+            Comp2Byx(Sp,Msp,S,Ms)=Comp2Byx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
+         end do
+      end do  
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc 
       
-c
-      subroutine CalcPionPhoto2BB(Pion2Bout,factor,
-     &     vec,Sp,S,verbosity)
-c     
-c********************************************************************
-c     
-c     Calculates symmetric part of diagram B.
-c     "vec" gets dotted into sigma_1+sigma_2
-c     
-c     Indices in Pion2Bab are that first index gives NN spin state:
-c     S=0 or S=1, second index gives spin projection. This is for final
-c     state. Third and fourth indices give same for initial state. 
-c     
-c********************************************************************
-c     
-      implicit none
-c     
-c********************************************************************
-c     
-      include '../common-densities/constants.def'
-c     
-c********************************************************************
-c     
-c     INPUT/OUTPUT VARIABLE:
-c     
-      complex*16 Pion2Bout(0:1,-1:1,0:1,-1:1),hold(0:1,-1:1,0:1,-1:1)
-c     
-c********************************************************************
-c     
-c     INPUT VARIABLES:
-c     
-      real*8 factor
-      real*8 vec(3)
-      integer Ms,Msp,Sp,S
-      integer verbosity
-c     
-c     Sp,S-final- and initial-state total spin of pair      
-c     
-c********************************************************************
-c     
-      call singlesigma(hold,vec(1),vec(2),vec(3),factor,Sp,S,verbosity)
-      do Msp=-Sp,Sp
-         do Ms=-S,S
-            Pion2Bout(Sp,Msp,S,Ms)=Pion2Bout(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)
-         end do
-      end do
-c     
       if (verbosity.eq.1000) continue
       return
       end
-
-c
 c====================================================================
-c
-      subroutine Calchold(hold,Ax,Ay,Az,Bx,By,Bz,factor,Sp,S,verbosity)
+c====================================================================
 c     
-c     Calculates symmetric part of spin structure sig.A sig.B.
+      subroutine CalcCompton2BB(Comp2Bxx,Comp2Byx,Comp2Bxy,Comp2Byy,
+     &     factor,
+     &     Ax,Ay,Az,Bx,By,Bz, ! A.σ, B.ε
+     &     Sp,S,verbosity)
+c     
+c********************************************************************
+c     
+c     Calculates diagram B
 c     
 c********************************************************************
 c     
@@ -141,73 +152,48 @@ c
 c     
 c********************************************************************
 c     
-c     OUTPUT VARIABLE:
+c     INPUT/OUTPUT VARIABLE:
 c     
-      complex*16 hold(0:1,-1:1,0:1,-1:1)
+      complex*16 Comp2Bxx(0:1,-1:1,0:1,-1:1),Comp2Byx(0:1,-1:1,0:1,-1:1)
+      complex*16  Comp2Bxy(0:1,-1:1,0:1,-1:1),Comp2Byy(0:1,-1:1,0:1,-1:1)
+      complex*16 Comp2Bpx(0:1,-1:1,0:1,-1:1),Comp2Bpy(0:1,-1:1,0:1,-1:1)
+      complex*16  hold(0:1,-1:1,0:1,-1:1)
 c     
 c********************************************************************
 c     
 c     INPUT VARIABLES:
 c     
-      real*8 Ax,Ay,Az,Bx,By,Bz,factor,AdotB
+      real*8 thetacm,factor
+      real*8 Ax,Ay,Az,Bx,By,Bz
+      integer Ms,Msp,Sp,S
       integer verbosity
-      integer Sp,S
 c     
-c     factor-overall factor
-c     Sp,S-final- and initial-state spin
-c     
-c********************************************************************
-c     
-c     LOCAL VARIABLES:
-c     
-      complex*16 Aplus,Aminus,Bplus,Bminus
-c     
-c     
-c********************************************************************
-c     
-      hold=c0
-      AdotB=Ax*Bx+Ay*By+Az*Bz
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     singlesigma(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
+c     calculates 2*S.A, where S=(sigma1+sigma2)/2
+c      call singlesigma(hold,-qppx,-qppy,-qppz,factor,Sp,S,verbosity)   
+      call singlesigma(hold, Ax, Ay, Az, factor,Sp,S,verbosity)
+      do Msp=-Sp,Sp
+         do Ms=-S,S
+c     εx: mapped to xx   
+            Comp2Bxx(Sp,Msp,S,Ms)=Comp2Bxx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)*Bx
+c     εy: mapped to xy   
+            Comp2Bxy(Sp,Msp,S,Ms)=Comp2Bxy(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)*By
+c     εz: mapped to yx   
+            Comp2Byx(Sp,Msp,S,Ms)=Comp2Byx(Sp,Msp,S,Ms)+hold(Sp,Msp,S,Ms)*Bz
+         end do
+      end do  
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc 
       
-      if ((Sp .eq. 0) .and. (S .eq. 0)) then
-         hold(0,0,0,0)=-factor*2.d0*AdotB
-      else if ((Sp .eq. 1) .and. (S .eq. 1)) then
-         
-         Aplus=-(Ax+ci*Ay)/(dsqrt(2.d0))
-         Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
-         Bplus=-(Bx+ci*By)/(dsqrt(2.d0))
-         Bminus=(Bx-ci*By)/(dsqrt(2.d0))
-         
-         hold(1,1,1,1)=factor*(2.d0*Az*Bz)
-         hold(1,0,1,1)=-factor*2.d0*(Az*Bplus+Aplus*Bz)
-         hold(1,-1,1,1)=factor*4.d0*Aplus*Bplus
-         hold(1,1,1,0)=factor*2.d0*(Aminus*Bz+Az*Bminus)
-         hold(1,0,1,0)=-2.d0*factor*(Aplus*Bminus+Aminus*Bplus+Az*Bz)
-         hold(1,-1,1,0)=-hold(1,0,1,1)
-         hold(1,1,1,-1)=factor*4.d0*Aminus*Bminus
-         hold(1,0,1,-1)=-hold(1,1,1,0)
-         hold(1,-1,1,-1)=hold(1,1,1,1)
-      end if
       if (verbosity.eq.1000) continue
+      return
       end
-c
-      
-      subroutine S_Dot_A(output,factor,A,Sp,S,verbosity)
-c     This is an interface to singlesigma thats more useful for my case
-c********************************************************************
-      complex*16 output(0:1,-1:1,0:1,-1:1)!same as hold
-      real*8 factor
-      real*8 A(3)
-      integer verbosity
-      integer Sp,S
-c     factor=1.d0
-      call singlesigma(output,A(1),A(2),A(3),factor,Sp,S,verbosity)
-      end subroutine
-
+c====================================================================
 
 cccc  new subroutine to calculate the matrix elements of factor*A.S ccc
 cccc same should be created in spintrickasy.f for factor*A.(sigma1-sigma2)      
-
       subroutine singlesigma(hold,Ax,Ay,Az,factor,Sp,S,verbosity)
+c     
 c     calculates 2*S.A, where S=(sigma1+sigma2)/2
 c     
 c********************************************************************
@@ -223,7 +209,7 @@ c
 c     OUTPUT VARIABLE:
 c     
       complex*16 hold(0:1,-1:1,0:1,-1:1)
-c     arguments for hold are (Sp,Msp,S,Ms)
+c     
 c********************************************************************
 c     
 c     INPUT VARIABLES:
@@ -244,32 +230,22 @@ c
 c     
 c********************************************************************
 c     
-      hold=c0
-c     why only Sp=1=S case ??? 
-
-      Aplus=-(Ax+ci*Ay)/(dsqrt(2.d0))
-      Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
-
+      hold=c0 ! set all MEs to zero -- only Sp=S=1 MEs are nonzero
+      
       if ((Sp .eq. 1) .and. (S .eq. 1)) then
-          hold(1,1,1,1)=factor*Az
-          hold(1,-1,1,-1)=-1.d0*factor*Az
-          hold(1,0,1,1)=-1.d0*factor*Aplus
-          hold(1,1,1,0)=factor*Aminus   
-          hold(1,-1,1,0)=-factor*Aplus
-          hold(1,0,1,-1)=factor*Aminus
+         
+         Aplus=-(Ax+ci*Ay)/(dsqrt(2.d0))
+         Aminus=(Ax-ci*Ay)/(dsqrt(2.d0))
+         
+         hold(1, 1,1, 1) =  factor*2.d0*Az
+c     hgre 25 Sep 2023: following contains added MINUS sign as described at top of file
+         hold(1,-1,1,-1) = -hold(1,1,1,1)
+         hold(1, 0,1, 1) = -factor*2.d0*Aplus
+         hold(1, 1,1, 0) =  factor*2.d0*Aminus   
+         hold(1,-1,1, 0) = -factor*2.d0*Aplus !check: is -CONJG(hold(1,1,1,0))
+         hold(1, 0,1,-1) =  factor*2.d0*Aminus
       end if
-
-      if ((Sp .eq. 1) .and. (S .eq. 0)) then
-          hold(0,0,1,-1)=factor*Aplus
-          hold(0,0,1,0)=factor*Az
-          hold(0,0,1,1)=factor*Aminus
-      end if
-
-      if ((Sp .eq. 0) .and. (S .eq. 1)) then
-          hold(1,-1,0,0)=factor*Aminus
-          hold(1,0,0,0)=factor*Az
-          hold(1,1,0,0)=factor*Aplus
-      end if
-c     hold=factor*cmplx(1.d0,0)/20
+      
       if (verbosity.eq.1000) continue
       end
+c     

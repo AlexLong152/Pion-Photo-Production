@@ -1,25 +1,22 @@
  cm omega =    131.85700000000000      thetacm =    60.000000000000000     
  
  x polarization - epsilon=<1,0,0>
--.00012407+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
-.00004601+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
-.00004594+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
-.00012105+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
-sum=.00009195+.00000000i
+.04484198+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+-6.21347013-.00000056i    sigmax(twoMzp,twoMz)=+1.+0.i
+-6.20739738+.00000056i    sigmax(twoMzp,twoMz)=+1.+0.i
+-.03881012+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
  
  y polarization - epsilon=<0,1,0>
--.00012407+.00000000i    sigmay(twoMzp,twoMz)=+0.+0.i
-.00004601+.00000000i    sigmay(twoMzp,twoMz)=+0.-1.i
-.00004594+.00000000i    sigmay(twoMzp,twoMz)=+0.+1.i
-.00012105+.00000000i    sigmay(twoMzp,twoMz)=+0.+0.i
-sum=-.00000000+.00000007i
+-.00000000+.00171082i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000056+6.19929586i    sigmay(twoMzp,twoMz)=+0.-1.i
+.00000056-6.19822936i    sigmay(twoMzp,twoMz)=+0.+1.i
+.00000000+.00966924i    sigmay(twoMzp,twoMz)=+0.+0.i
  
  z polarization - epsilon=<0,0,1>
--.00012407+.00000000i    sigmaz(twoMzp,twoMz)=+1.+0.i
-.00004601+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
-.00004594+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
-.00012105+.00000000i    sigmaz(twoMzp,twoMz)=-1.+0.i
-sum=-.00024512-.00000000i
+-4.10987647-.00000000i    sigmaz(twoMzp,twoMz)=+1.+0.i
+-.01816830-.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
+-.02600006+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
+4.11419464-.00000000i    sigmaz(twoMzp,twoMz)=-1.+0.i
  
 
  ===================================================================================================
@@ -113,25 +110,22 @@ Calculation of rho for ...
  *********Now convoluting 2N helicity amplitudes with 2N density matrix.*********
  
  x polarization - epsilon=<1,0,0>
--.00012407+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
-.00004601+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
-.00004594+.00000000i    sigmax(twoMzp,twoMz)=+1.+0.i
-.00012105+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
- sum=.00009195+.00000000i
+.04484198+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+-6.21347013-.00000056i    sigmax(twoMzp,twoMz)=+1.+0.i
+-6.20739738+.00000056i    sigmax(twoMzp,twoMz)=+1.+0.i
+-.03881012+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
  
  y polarization - epsilon=<0,1,0>
--.00012407+.00000000i    sigmay(twoMzp,twoMz)=+0.+0.i
-.00004601+.00000000i    sigmay(twoMzp,twoMz)=+0.-1.i
-.00004594+.00000000i    sigmay(twoMzp,twoMz)=+0.+1.i
-.00012105+.00000000i    sigmay(twoMzp,twoMz)=+0.+0.i
- sum=-.00000000+.00000007i
+-.00000000+.00171082i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000056+6.19929586i    sigmay(twoMzp,twoMz)=+0.-1.i
+.00000056-6.19822936i    sigmay(twoMzp,twoMz)=+0.+1.i
+.00000000+.00966924i    sigmay(twoMzp,twoMz)=+0.+0.i
  
  z polarization - epsilon=<0,0,1>
--.00012407+.00000000i    sigmaz(twoMzp,twoMz)=+1.+0.i
-.00004601+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
-.00004594+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
-.00012105+.00000000i    sigmaz(twoMzp,twoMz)=-1.+0.i
- sum=-.00024512-.00000000i
+-4.10987647-.00000000i    sigmaz(twoMzp,twoMz)=+1.+0.i
+-.01816830-.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
+-.02600006+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
+4.11419464-.00000000i    sigmaz(twoMzp,twoMz)=-1.+0.i
  
  Note the following code has not been checked for a full output to mathematica, and might need fixing
          }
@@ -143,7 +137,7 @@ Calculation of rho for ...
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
  *** Wrote output to file: 3He-AlexCalc.dat
-Production date: 2023-11-13 10:11:59-05:00
+Production date: 2023-11-16 11:57:43-05:00
 Real Time used: 5 seconds on host along-desktop
 **************************************************
 *********            INPUT FILE          *********
