@@ -141,9 +141,9 @@ c
      &     qsq,qpsq,qppsq,qpppsq,q12sq,qp12sq,qpp12sq,qppp12sq,px,py,pz,
      &     ppx,ppy,ppz,
      &     k,thetacm,verbosity)
-      p=(/px,py,pz/)
-      pp=(/ppx,ppy,ppz/)
-      kVec=(/0,0,k/)
+c     p=(/px,py,pz/)
+c     pp=(/ppx,ppy,ppz/)
+c     kVec=(/0,0,k/)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c     OQ3 MEC contributions
@@ -154,18 +154,18 @@ c     symmetric part! so that ResultXYXY in fm¹: twobody kernel should have uni
       factorB=+2*(-1)**(t12)*(1.d0/((px-ppx)**2+(py-ppy)**2+(pz-ppz+k/2)**2))*
      &     (1.d0/((px-ppx)**2+(py-ppy)**2+(pz-ppz-k/2)**2+mpi2))/HC
 
-      factorA2=  -(-1)**(t12)*(1.d0/(DOT_PRODUCT(p-pp+kVec/2,p-pp+kVec/2)))/HC
-      factorB2=+2*(-1)**(t12)*(1.d0/(DOT_PRODUCT(p-pp+kVec/2,p-pp+kVec/2)))*
-     &     (1.d0/(DOT_PRODUCT(p-pp+kVec/2,p-pp+kVec/2)+mpi2)/HC
-      if(factorA.ne.factorA2) then
-          write(*,*) "factorA!=factorA2"
-      end if
-      if(factorB.ne.factorB2) then
-          write(*,*) "factorB!=factorB2"
-      end if
+c     factorA2=  -(-1)**(t12)*(1.d0/(DOT_PRODUCT(p-pp+kVec/2,p-pp+kVec/2)))/HC
+c     factorB2=+2*(-1)**(t12)*(1.d0/(DOT_PRODUCT(p-pp+kVec/2,p-pp+kVec/2)))*
+c    &     (1.d0/(DOT_PRODUCT(p-pp+kVec/2,p-pp+kVec/2)+mpi2)/HC
+c     if(factorA.ne.factorA2) then
+c         write(*,*) "factorA!=factorA2"
+c     end if
+c     if(factorB.ne.factorB2) then
+c         write(*,*) "factorB!=factorB2"
+c     end if
 c     antisymmetric part: turns out to be the same, only the vaue of t12 will be different
-      factorAasy=factorA
-      factorBasy=factorB
+c     factorAasy=factorA
+c     factorBasy=factorB
       
       if ((t12 .eq. t12p) .and. (mt12 .eq. 0) .and.(mt12p .eq. 0)) then
          if (s12p .eq. s12) then ! s12-s12p=0 => l12-l12p is even; spin symmetric part only

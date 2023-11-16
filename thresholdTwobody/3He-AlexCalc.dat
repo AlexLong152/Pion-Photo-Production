@@ -1,22 +1,22 @@
  cm omega =    131.85700000000000      thetacm =    60.000000000000000     
  
  x polarization - epsilon=<1,0,0>
-.04484198+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
--6.21347013-.00000056i    sigmax(twoMzp,twoMz)=+1.+0.i
--6.20739738+.00000056i    sigmax(twoMzp,twoMz)=+1.+0.i
--.03881012+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+.00870410+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+-6.19801524-.00000055i    sigmax(twoMzp,twoMz)=+1.+0.i
+-6.19195368+.00000055i    sigmax(twoMzp,twoMz)=+1.+0.i
+-.00265047+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
  
  y polarization - epsilon=<0,1,0>
--.00000000+.00171082i    sigmay(twoMzp,twoMz)=+0.+0.i
-.00000056+6.19929586i    sigmay(twoMzp,twoMz)=+0.-1.i
-.00000056-6.19822936i    sigmay(twoMzp,twoMz)=+0.+1.i
-.00000000+.00966924i    sigmay(twoMzp,twoMz)=+0.+0.i
+-.00000000+.00071772i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000055+6.18373088i    sigmay(twoMzp,twoMz)=+0.-1.i
+.00000055-6.18266981i    sigmay(twoMzp,twoMz)=+0.+1.i
+.00000000+.00868401i    sigmay(twoMzp,twoMz)=+0.+0.i
  
  z polarization - epsilon=<0,0,1>
--4.10987647-.00000000i    sigmaz(twoMzp,twoMz)=+1.+0.i
--.01816830-.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
--.02600006+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
-4.11419464-.00000000i    sigmaz(twoMzp,twoMz)=-1.+0.i
+-4.15683209+.00000000i    sigmaz(twoMzp,twoMz)=+1.+0.i
+-.00051081-.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
+-.00834237+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
+4.16115043-.00000000i    sigmaz(twoMzp,twoMz)=-1.+0.i
  
 
  ===================================================================================================
@@ -110,25 +110,25 @@ Calculation of rho for ...
  *********Now convoluting 2N helicity amplitudes with 2N density matrix.*********
  
  x polarization - epsilon=<1,0,0>
-.04484198+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
--6.21347013-.00000056i    sigmax(twoMzp,twoMz)=+1.+0.i
--6.20739738+.00000056i    sigmax(twoMzp,twoMz)=+1.+0.i
--.03881012+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+.00870410+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
+-6.19801524-.00000055i    sigmax(twoMzp,twoMz)=+1.+0.i
+-6.19195368+.00000055i    sigmax(twoMzp,twoMz)=+1.+0.i
+-.00265047+.00000000i    sigmax(twoMzp,twoMz)=+0.+0.i
  
  y polarization - epsilon=<0,1,0>
--.00000000+.00171082i    sigmay(twoMzp,twoMz)=+0.+0.i
-.00000056+6.19929586i    sigmay(twoMzp,twoMz)=+0.-1.i
-.00000056-6.19822936i    sigmay(twoMzp,twoMz)=+0.+1.i
-.00000000+.00966924i    sigmay(twoMzp,twoMz)=+0.+0.i
+-.00000000+.00071772i    sigmay(twoMzp,twoMz)=+0.+0.i
+.00000055+6.18373088i    sigmay(twoMzp,twoMz)=+0.-1.i
+.00000055-6.18266981i    sigmay(twoMzp,twoMz)=+0.+1.i
+.00000000+.00868401i    sigmay(twoMzp,twoMz)=+0.+0.i
  
  z polarization - epsilon=<0,0,1>
--4.10987647-.00000000i    sigmaz(twoMzp,twoMz)=+1.+0.i
--.01816830-.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
--.02600006+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
-4.11419464-.00000000i    sigmaz(twoMzp,twoMz)=-1.+0.i
+-4.15683209+.00000000i    sigmaz(twoMzp,twoMz)=+1.+0.i
+-.00051081-.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
+-.00834237+.00000000i    sigmaz(twoMzp,twoMz)=+0.+0.i
+4.16115043-.00000000i    sigmaz(twoMzp,twoMz)=-1.+0.i
  
  Note the following code has not been checked for a full output to mathematica, and might need fixing
-         }
+         {+.870410446419465043*10^(-02)+.171280066188663557*10^(-08)*I,-.619801523533855558*10^(+01)-.546749238896852763*10^(-06)*I,-.619195367759929383*10^(+01)+.546753186147996361*10^(-06)*I,-.265047294976504403*10^(-02)+.178821062744181873*10^(-08)*I}
  
  Lenkewitz Results at threshold https://arxiv.org/pdf/1103.3400.pdf
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -137,8 +137,8 @@ Calculation of rho for ...
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
  *** Wrote output to file: 3He-AlexCalc.dat
-Production date: 2023-11-16 11:57:43-05:00
-Real Time used: 5 seconds on host along-desktop
+Production date: 2023-11-16 15:14:45-05:00
+Real Time used: 4 seconds on host along-desktop
 **************************************************
 *********            INPUT FILE          *********
 **************************************************
