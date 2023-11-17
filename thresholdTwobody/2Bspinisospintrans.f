@@ -164,8 +164,8 @@ c     if(factorB.ne.factorB2) then
 c         write(*,*) "factorB!=factorB2"
 c     end if
 c     antisymmetric part: turns out to be the same, only the vaue of t12 will be different
-c     factorAasy=factorA
-c     factorBasy=factorB
+      factorAasy=factorA
+      factorBasy=factorB
       
       if ((t12 .eq. t12p) .and. (mt12 .eq. 0) .and.(mt12p .eq. 0)) then
          if (s12p .eq. s12) then ! s12-s12p=0 => l12-l12p is even; spin symmetric part only
