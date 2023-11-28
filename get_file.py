@@ -14,7 +14,14 @@ def main():
     # connect to database, choose working directory for downloading densities
     # workdir = os.environ["HOME"]+"/work/densitywork"
     workdir = os.environ["HOME"]+r"/OneDrive/"
-    densdf = access.database(workdir=workdir)
+    try:
+        densdf = access.database(workdir=workdir)
+    except BaseException:
+        # use mirror if server is offline
+        densdf = access.database(
+            workdir=workdir,
+            webbase="https://datapub.fz-juelich.de/anogga/files/densindx/")
+
     print("Proceeding with workdir="+workdir)
     myState = state(densdf, workdir)
     # print(myState)
@@ -28,7 +35,6 @@ def main():
         myState.omega = getOmega(myState)
         for theta in thetas:
             myState.theta = theta
-            # print(myState)
             # label is a dict with all the properties of the density
             myState.label = getlabel(myState)
 
@@ -194,6 +200,9 @@ def downloadFile(mState):
     densdf = mState.densdf
     label = mState.label
     workdir = mState.workdir
+    df = mState.densdf.pddf
+
+    # print(mState)
 
     densName0 = name + "-"+str(angle)+"=theta-"+str(omega)\
         + "=MeV-"+kind+"body.h5"
@@ -206,7 +215,26 @@ def downloadFile(mState):
         + str(LambdaNN)+"=LambdaNN"\
         + ".h5"
 
-    densNames = [densName0, densName1]
+    # densName2 = kind+"-"+l
+    # rowVal = getRowFromHash(
+
+    # selection = densdf.pddf.hash == mState.hash
+    row = df[df["hashname"] == label["hashname"]].index[0]
+    print("row=", row)
+
+    densName2 = [kind+"Body",
+                 name,
+                 "theta="+str(angle),
+                 "omega="+str(omega),
+                 label["MODENN"],
+                 label["orderNN"],
+                 "lambda="+str(label["LambdaNN"]),
+                 "hash="+label["hashname"],
+                 "row="+str(row)
+                 ]
+    densName2 = ("-".join(densName2))+".h5"
+
+    densNames = [densName0, densName1, densName2]
 
     print("Download file with which name")
     print("------------------------------")
